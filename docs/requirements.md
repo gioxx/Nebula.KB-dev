@@ -10,10 +10,12 @@ tags:
   - Requirements
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # Requirements
 
 <img
-  src="/img/Nebula-Header-Cropped.jpg"
+  src={useBaseUrl('/img/Nebula-Header-Cropped.jpg')}
   alt="Nebula"
 />
 

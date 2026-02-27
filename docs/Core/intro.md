@@ -9,8 +9,10 @@ tags:
   - Nebula.Core
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 <img
-  src="/img/Nebula.Core.png"
+  src={useBaseUrl('/img/Nebula.Core.png')}
   alt="Nebula.Core"
   className="nebula-doc-icon"
   style={{ float: "right", maxWidth: "140px", marginLeft: "1rem" }}

@@ -9,8 +9,10 @@ tags:
   - Nebula.Automations
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 <img
-  src="/img/Nebula.Automations.png"
+  src={useBaseUrl('/img/Nebula.Automations.png')}
   alt="Nebula.Automations"
   className="nebula-doc-icon"
   style={{ float: "right", maxWidth: "140px", marginLeft: "1rem" }}
