@@ -1,11 +1,11 @@
 ---
-sidebar_position: 6
+sidebar_position: 3
 title: "Logging"
 id: logging
 description: Functions related to log writing and fallback logging behavior.
 tags:
-  - Write-Log
   - Log-Message
+  - Write-Log
   - Write-NALog
   - Nebula.Automations
 ---
@@ -13,6 +13,14 @@ tags:
 # Logging
 
 This page contains logging compatibility helpers used by Nebula.Automations. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
+
+## Log-Message
+
+Alias of `Write-Log` with the same parameters and behavior.
+
+**Parameters**
+
+Uses the same parameters as `Write-Log`.
 
 ## Write-Log
 
@@ -26,12 +34,12 @@ Write-Log [-Message <String>] [-Level <INFO|SUCCESS|WARNING|DEBUG|ERROR>] [-LogL
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `Message` | `String` | No | - | Log message text. |
-| `Level` | `String` | No | `INFO` | Log severity level. |
-| `LogLocation` | `String` | No | Current location | Optional target log path/directory. |
-| `WriteToFile` | `Switch` | No | `False` | Compatibility switch (ignored in fallback mode). |
+| `Message` | `String` | Log message text to write. | No | `None` |
+| `Level` | `String` | Severity level (`INFO`, `SUCCESS`, `WARNING`, `DEBUG`, `ERROR`). | No | `INFO` |
+| `LogLocation` | `String` | Log file path or destination location. | No | `None` |
+| `WriteToFile` | `Switch` | Forces file output when supported by the active logger. | No | `False` |
 
 **Example**
 
@@ -43,7 +51,3 @@ Write-Log -Message "Nightly sync completed" -Level INFO -LogLocation "C:\Logs\sy
 
 - If `Nebula.Log` exists, its native `Write-Log` is used.
 - Otherwise, Nebula.Automations exposes a compatible `Write-Log`/`Log-Message` flow.
-
-## Log-Message
-
-Alias of `Write-Log` with the same parameters and behavior.

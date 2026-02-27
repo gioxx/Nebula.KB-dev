@@ -1,18 +1,67 @@
 ---
-sidebar_position: 4
+sidebar_position: 6
 title: "Scheduled Tasks"
 id: scheduled-tasks
 description: Functions to register, unregister, and orchestrate scheduled script tasks.
 tags:
+  - Invoke-ScriptTaskLifecycle
   - Register-ScriptScheduledTask
   - Unregister-ScriptScheduledTask
-  - Invoke-ScriptTaskLifecycle
   - Nebula.Automations
 ---
 
 # Scheduled Tasks
 
 This page groups the Task Scheduler lifecycle functions. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
+
+## Invoke-ScriptTaskLifecycle
+
+Orchestrate create/update/remove flow for scheduled tasks through a single lifecycle entry point.
+
+**Syntax**
+
+```powershell
+Invoke-ScriptTaskLifecycle -RegisterTask -TaskName <String> -ScriptPath <String> [-TaskPath <String>]
+  [-TaskTime <String>] [-ScheduleType <Daily|Once>] [-Description <String>] [-PwshPath <String>]
+  [-WorkingDirectory <String>] [-ExecutionPolicy <String>] [-PromptForCredential]
+  [-DefaultUserName <String>] [-Credential <PSCredential>] [-Force] [-LogLocation <String>]
+
+Invoke-ScriptTaskLifecycle -UnregisterTask -TaskName <String> [-TaskPath <String>] [-LogLocation <String>]
+```
+
+**Parameters**
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | --- | --- |
+| `RegisterTask` | `Switch` | Enables register/update lifecycle mode. | Conditional | `False` |
+| `UnregisterTask` | `Switch` | Enables unregister lifecycle mode. | Conditional | `False` |
+| `TaskName` | `String` | Scheduled task name. | Yes | N/A |
+| `TaskPath` | `String` | Task Scheduler folder path (for example `\Nebula\`). | No | `\` |
+| `ScriptPath` | `String` | Script file to execute when registering. | Required for register | N/A |
+| `TaskTime` | `String` | Trigger time string used by lifecycle registration flow. | No | `02:00` |
+| `ScheduleType` | `String` | Trigger type (`Daily` or `Once`). | No | `Daily` |
+| `Description` | `String` | Task description text. | No | `None` |
+| `PwshPath` | `String` | Path to PowerShell executable. | No | `Auto-detect (pwsh.exe fallback path)` |
+| `WorkingDirectory` | `String` | Working directory for task execution. | No | `None` |
+| `ExecutionPolicy` | `String` | Execution policy passed to PowerShell. | No | `Bypass` |
+| `PromptForCredential` | `Switch` | Prompts for credentials when needed. | No | `False` |
+| `DefaultUserName` | `String` | Default username used with credential prompting. | No | `$Env:UserDomain\$Env:UserName` |
+| `Credential` | `PSCredential` | Explicit credentials for task principal. | No | `None` |
+| `Force` | `Switch` | Replaces existing task when applicable. | No | `False` |
+| `LogLocation` | `String` | Log path used for lifecycle diagnostics. | No | `None` |
+
+**Example**
+
+```powershell
+Invoke-ScriptTaskLifecycle `
+  -RegisterTask `
+  -TaskName "Daily-InventorySync" `
+  -TaskPath "\Nebula\" `
+  -ScriptPath "C:\Ops\Inventory\Sync.ps1" `
+  -TaskTime "03:00" `
+  -ScheduleType Daily `
+  -Force
+```
 
 ## Register-ScriptScheduledTask
 
@@ -30,27 +79,27 @@ Register-ScriptScheduledTask -TaskName <String> [-TaskPath <String>] [-Mode <Sta
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TaskName` | `String` | Yes | - | Scheduled task name. |
-| `TaskPath` | `String` | No | `\` | Task Scheduler path (for example `\Nebula\`). |
-| `Mode` | `String` | No | `Standard` | Registration mode: `Standard` or `Xml`. |
-| `ScriptPath` | `String` | Cond. | - | Script file path (`required in Standard mode`). |
-| `PwshPath` | `String` | No | `pwsh.exe` | PowerShell executable path (Standard mode). |
-| `ScriptArguments` | `String` | No | - | Additional arguments appended after `-File`. |
-| `WorkingDirectory` | `String` | No | Script folder | Working directory used at runtime. |
-| `ExecutionPolicy` | `String` | No | `Bypass` | Execution policy for PowerShell action. |
-| `StartTime` | `DateTime` | No | `Now + 5 minutes` | Trigger start time (Standard mode). |
-| `ScheduleType` | `String` | No | `Daily` | Trigger type: `Daily` or `Once` (Standard mode). |
-| `RepetitionIntervalMinutes` | `Int` | No | `0` | Repetition interval in minutes (`0..1440`). |
-| `RepetitionDurationHours` | `Int` | No | `0` | Repetition duration in hours (`0..744`). |
-| `TaskXml` | `String` | Cond. | - | Raw task XML content (`required in Xml mode, alternative to TaskXmlPath`). |
-| `TaskXmlPath` | `String` | Cond. | - | Path to task XML file (`required in Xml mode, alternative to TaskXml`). |
-| `Description` | `String` | No | - | Optional task description. |
-| `Credential` | `PSCredential` | No | - | Account credential for scheduled task. |
-| `RunElevated` | `Switch` | No | `False` | Registers task with highest privileges. |
-| `Force` | `Switch` | No | `False` | Recreates task if already present. |
-| `LogLocation` | `String` | No | - | Optional logging location. |
+| `TaskName` | `String` | Scheduled task name. | Yes | N/A |
+| `TaskPath` | `String` | Task Scheduler folder path. | No | `\` |
+| `Mode` | `String` | Registration mode (`Standard` or `Xml`). | No | `Standard` |
+| `ScriptPath` | `String` | Script file path (used in `Standard` mode). | Conditional | N/A |
+| `PwshPath` | `String` | Path to `pwsh.exe`/`powershell.exe`. | No | `pwsh.exe` |
+| `ScriptArguments` | `String` | Extra arguments passed to the script. | No | `None` |
+| `WorkingDirectory` | `String` | Working directory for the task action. | No | `Script parent folder` |
+| `ExecutionPolicy` | `String` | Execution policy passed to PowerShell. | No | `Bypass` |
+| `StartTime` | `DateTime` | Trigger start time (standard mode). | No | `Now + 5 minutes` |
+| `ScheduleType` | `String` | Schedule type (`Daily` or `Once`). | No | `Daily` |
+| `RepetitionIntervalMinutes` | `Int` | Repetition interval in minutes. | No | `0` |
+| `RepetitionDurationHours` | `Int` | Repetition window duration in hours. | No | `0` |
+| `TaskXml` | `String` | Raw task XML content (xml mode). | Conditional | `None` |
+| `TaskXmlPath` | `String` | Path to task XML file (xml mode). | Conditional | `None` |
+| `Description` | `String` | Task description. | No | `None` |
+| `Credential` | `PSCredential` | Credentials used for the task principal. | No | `None` |
+| `RunElevated` | `Switch` | Runs task with highest available privileges. | No | `False` |
+| `Force` | `Switch` | Replaces existing task when present. | No | `False` |
+| `LogLocation` | `String` | Log destination for registration operations. | No | `None` |
 
 **Example**
 
@@ -76,11 +125,11 @@ Unregister-ScriptScheduledTask -TaskName <String> [-TaskPath <String>] [-LogLoca
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TaskName` | `String` | Yes | - | Scheduled task name. |
-| `TaskPath` | `String` | No | `\` | Task Scheduler path (for example `\Nebula\`). |
-| `LogLocation` | `String` | No | - | Optional logging location. |
+| `TaskName` | `String` | Name of the task to remove. | Yes | N/A |
+| `TaskPath` | `String` | Task Scheduler folder path. | No | `\` |
+| `LogLocation` | `String` | Log destination for removal operations. | No | `None` |
 
 **Example**
 
@@ -89,39 +138,3 @@ Unregister-ScriptScheduledTask `
   -TaskName "Legacy-InventorySync" `
   -TaskPath "\Nebula\" `
 ```
-
-## Invoke-ScriptTaskLifecycle
-
-Orchestrate create/update/remove flow for scheduled tasks through a single lifecycle entry point.
-
-**Syntax**
-
-```powershell
-Invoke-ScriptTaskLifecycle -RegisterTask -TaskName <String> -ScriptPath <String> [-TaskPath <String>]
-  [-TaskTime <String>] [-ScheduleType <Daily|Once>] [-Description <String>] [-PwshPath <String>]
-  [-WorkingDirectory <String>] [-ExecutionPolicy <String>] [-PromptForCredential]
-  [-DefaultUserName <String>] [-Credential <PSCredential>] [-Force] [-LogLocation <String>]
-
-Invoke-ScriptTaskLifecycle -UnregisterTask -TaskName <String> [-TaskPath <String>] [-LogLocation <String>]
-```
-
-**Parameters**
-
-| Parameter | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| `RegisterTask` | `Switch` | Yes* | `False` | Selects register lifecycle path (`*register parameter set`). |
-| `UnregisterTask` | `Switch` | Yes* | `False` | Selects unregister lifecycle path (`*unregister parameter set`). |
-| `TaskName` | `String` | Yes | - | Scheduled task name. |
-| `TaskPath` | `String` | No | `\` | Task Scheduler path. |
-| `ScriptPath` | `String` | Cond. | - | Script path to execute (`required with -RegisterTask`). |
-| `TaskTime` | `String` | No | `02:00` | Start time in `h:mm` or `HH:mm` format. |
-| `ScheduleType` | `String` | No | `Daily` | Schedule type for register flow (`Daily`/`Once`). |
-| `Description` | `String` | No | - | Optional task description. |
-| `PwshPath` | `String` | No | Auto-discovered | PowerShell executable path for register flow. |
-| `WorkingDirectory` | `String` | No | - | Optional working directory. |
-| `ExecutionPolicy` | `String` | No | `Bypass` | Execution policy used at registration. |
-| `PromptForCredential` | `Switch` | No | `False` | Prompts for credential if not provided. |
-| `DefaultUserName` | `String` | No | `$Env:UserDomain\$Env:UserName` | Default username for credential prompt. |
-| `Credential` | `PSCredential` | No | - | Credential used for registration. |
-| `Force` | `Switch` | No | `False` | Recreates task if already existing. |
-| `LogLocation` | `String` | No | - | Optional logging location. |

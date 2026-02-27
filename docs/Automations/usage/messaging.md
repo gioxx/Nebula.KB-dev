@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
 title: "Messaging"
 id: messaging
 description: Functions for sending emails and change-based reports.
@@ -27,20 +27,20 @@ Send-Mail -SMTPServer <String> -From <String> -To <String[]> -Subject <String> -
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `SMTPServer` | `String` | Yes | - | SMTP server address. |
-| `SMTPPort` | `Int` | No | `25` | SMTP port (`1..65535`). |
-| `From` | `String` | Yes | - | Sender e-mail address. |
-| `To` | `String[]` | Yes | - | Recipient e-mail addresses. |
-| `Cc` | `String[]` | No | - | Carbon copy recipients. |
-| `Bcc` | `String[]` | No | - | Blind carbon copy recipients. |
-| `Subject` | `String` | Yes | - | E-mail subject. |
-| `Body` | `String` | Yes | - | E-mail body content. |
-| `AttachmentPath` | `String[]` | No | - | File path(s) to attach. |
-| `PlainText` | `Switch` | No | `False` | Sends body as plain text (otherwise HTML). |
-| `Credential` | `PSCredential` | No | - | SMTP credential. |
-| `UseSsl` | `Switch` | No | `False` | Enables SSL/TLS for SMTP connection. |
+| `SMTPServer` | `String` | SMTP host name or IP address. | Yes | N/A |
+| `From` | `String` | Sender e-mail address. | Yes | N/A |
+| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | N/A |
+| `Subject` | `String` | E-mail subject. | Yes | N/A |
+| `Body` | `String` | Message body (HTML by default). | Yes | N/A |
+| `SMTPPort` | `Int` | SMTP port (for example `25`, `465`, `587`). | No | `25` |
+| `Cc` | `String[]` | CC recipient addresses. | No | `None` |
+| `Bcc` | `String[]` | BCC recipient addresses. | No | `None` |
+| `AttachmentPath` | `String[]` | One or more file paths to attach. | No | `None` |
+| `PlainText` | `Switch` | Sends body as plain text instead of HTML. | No | `False` |
+| `Credential` | `PSCredential` | Credentials used for authenticated SMTP. | No | `None` |
+| `UseSsl` | `Switch` | Enables SSL/TLS for SMTP connection. | No | `False` |
 
 **Example**
 
@@ -69,18 +69,18 @@ Send-ReportIfChanged -ModCounter <Int> -MailBody <String> -SmtpServer <String> -
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ModCounter` | `Int` | Yes | - | Number of detected changes. |
-| `MailBody` | `String` | Yes | - | HTML body prefix/content to finalize. |
-| `SmtpServer` | `String` | Yes | - | SMTP server address. |
-| `From` | `String` | Yes | - | Sender e-mail address. |
-| `To` | `String[]` | Yes | - | Recipient e-mail addresses. |
-| `Subject` | `String` | Yes | - | E-mail subject. |
-| `SendLogs` | `Boolean` | No | `True` | Enables/disables report sending flow. |
-| `AttachmentPath` | `String[]` | No | - | Optional attachment path(s). |
-| `ForceMailTo` | `Boolean` | No | `False` | Marks manual recipient override in logs. |
-| `LogLocation` | `String` | No | - | Optional log file/directory location. |
+| `ModCounter` | `Int` | Number of detected changes used to decide whether to send. | Yes | N/A |
+| `MailBody` | `String` | HTML body content for the report e-mail. | Yes | N/A |
+| `SmtpServer` | `String` | SMTP host used to send the report. | Yes | N/A |
+| `From` | `String` | Sender e-mail address. | Yes | N/A |
+| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | N/A |
+| `Subject` | `String` | Subject line for the report e-mail. | Yes | N/A |
+| `SendLogs` | `Boolean` | Include log artifacts when available. | No | `True` |
+| `AttachmentPath` | `String[]` | Additional attachment file paths. | No | `None` |
+| `ForceMailTo` | `Boolean` | Forces send behavior even when no changes are detected. | No | `False` |
+| `LogLocation` | `String` | Log file/location used for diagnostics. | No | `None` |
 
 **Example**
 

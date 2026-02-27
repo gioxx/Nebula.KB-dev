@@ -27,12 +27,12 @@ Import-PreferredModule -ModuleName <String> [-DevManifestPath <String>] [-Prefer
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ModuleName` | `String` | Yes | - | Module name to import. |
-| `DevManifestPath` | `String` | No | - | Optional path to a development manifest (`.psd1`). |
-| `PreferDev` | `Boolean` | No | `True` | Prefer `DevManifestPath` when available. |
-| `Force` | `Switch` | No | `False` | Forces module reload. |
+| `ModuleName` | `String` | Name of the module to import. | Yes | N/A |
+| `DevManifestPath` | `String` | Path to a development `.psd1` manifest used when `PreferDev` is enabled. | No | `None` |
+| `PreferDev` | `Boolean` | Prefer the development manifest when available. | No | `True` |
+| `Force` | `Switch` | Forces module import/reload behavior. | No | `False` |
 
 **Notes**
 
@@ -63,12 +63,12 @@ Initialize-ScriptRuntime -ConfigPath <String> [-ModulesToImport <String[]>] [-Lo
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ConfigPath` | `String` | Yes | - | Full path to the XML configuration file. |
-| `ModulesToImport` | `String[]` | No | `@('Nebula.Log', 'Nebula.Automations')` | Modules imported before execution. |
-| `LogDirectory` | `String` | No | - | Log directory path. |
-| `EnsureLogDirectory` | `Switch` | No | `False` | Creates `LogDirectory` when missing. |
+| `ConfigPath` | `String` | Path to the XML configuration file to load. | Yes | N/A |
+| `ModulesToImport` | `String[]` | One or more module names to import before loading configuration. | No | `@('Nebula.Log','Nebula.Automations')` |
+| `LogDirectory` | `String` | Target log directory used by runtime helpers. | No | `None` |
+| `EnsureLogDirectory` | `Switch` | Creates `LogDirectory` when it does not exist. | No | `False` |
 
 **Notes**
 
@@ -101,14 +101,14 @@ Resolve-ScriptConfigPaths -ScriptRoot <String> -ConfigRelativePath <String> `
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ScriptRoot` | `String` | Yes | - | Script root folder (typically `$PSScriptRoot`). |
-| `ConfigRelativePath` | `String` | Yes | - | Relative path to config file under config root. |
-| `ConfigRootPath` | `String` | No | Parent of `ScriptRoot` | Optional explicit config root path. |
-| `LogRelativePath` | `String` | No | - | Optional relative path for log directory. |
-| `OutputRelativePath` | `String` | No | - | Optional relative path for output file. |
-| `EnsureDirectories` | `Switch` | No | `False` | Creates missing log/output parent directories. |
+| `ScriptRoot` | `String` | Root path of the running script (typically `$PSScriptRoot`). | Yes | N/A |
+| `ConfigRelativePath` | `String` | Config file path relative to `ConfigRootPath` (or parent of `ScriptRoot`). | Yes | N/A |
+| `ConfigRootPath` | `String` | Explicit root folder for config path resolution. | No | `Parent of ScriptRoot` |
+| `LogRelativePath` | `String` | Relative path used to build the resolved log directory. | No | `None` |
+| `OutputRelativePath` | `String` | Relative path used to build the resolved output file path. | No | `None` |
+| `EnsureDirectories` | `Switch` | Creates missing parent directories for resolved log/output paths. | No | `False` |
 
 **Notes**
 
@@ -129,35 +129,6 @@ $paths = Resolve-ScriptConfigPaths `
 if (-not $paths.Success) { throw $paths.Message }
 ```
 
-## Test-ScriptActivityLog
-
-Evaluate script activity state based on a log/timestamp source.
-
-**Syntax**
-
-```powershell
-Test-ScriptActivityLog -LogLocation <String>
-```
-
-**Parameters**
-
-| Parameter | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| `LogLocation` | `String` | Yes | - | Log directory path to validate. |
-
-**Notes**
-
-- Uses `Test-ActivityLog` when available (typically from `Nebula.Log`).
-- Falls back to a write/delete probe file test if `Test-ActivityLog` is unavailable.
-- Returns `Success`, `Status` (`OK`/`KO`), `LogLocation`, and `Message`.
-
-**Example**
-
-```powershell
-$activity = Test-ScriptActivityLog -LogLocation "C:\Logs\TenantA"
-if ($activity.Status -ne "OK") { throw $activity.Message }
-```
-
 ## Start-ScriptTranscript
 
 Safely start transcript logging.
@@ -170,12 +141,12 @@ Start-ScriptTranscript -OutputDirectory <String> [-CleanupOld] [-CleanupPattern 
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `OutputDirectory` | `String` | Yes | - | Directory where transcript files are written. |
-| `CleanupOld` | `Switch` | No | `False` | Removes existing transcript files before starting. |
-| `CleanupPattern` | `String` | No | `PowerShell*.txt` | Filter used when `CleanupOld` is enabled. |
-| `IncludeInvocationHeader` | `Switch` | No | `False` | Includes invocation header in transcript output. |
+| `OutputDirectory` | `String` | Folder where transcript files are written. | Yes | N/A |
+| `CleanupOld` | `Switch` | Deletes old transcript files matching `CleanupPattern` before start. | No | `False` |
+| `CleanupPattern` | `String` | Filename pattern used when `CleanupOld` is enabled. | No | `PowerShell*.txt` |
+| `IncludeInvocationHeader` | `Switch` | Includes invocation header metadata in transcript output. | No | `False` |
 
 **Notes**
 
@@ -218,6 +189,35 @@ This function has no parameters.
 ```powershell
 $stop = Stop-ScriptTranscriptSafe
 Write-Output $stop.Message
+```
+
+## Test-ScriptActivityLog
+
+Evaluate script activity state based on a log/timestamp source.
+
+**Syntax**
+
+```powershell
+Test-ScriptActivityLog -LogLocation <String>
+```
+
+**Parameters**
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | --- | --- |
+| `LogLocation` | `String` | Path used to validate script activity logging capability. | Yes | N/A |
+
+**Notes**
+
+- Uses `Test-ActivityLog` when available (typically from `Nebula.Log`).
+- Falls back to a write/delete probe file test if `Test-ActivityLog` is unavailable.
+- Returns `Success`, `Status` (`OK`/`KO`), `LogLocation`, and `Message`.
+
+**Example**
+
+```powershell
+$activity = Test-ScriptActivityLog -LogLocation "C:\Logs\TenantA"
+if ($activity.Status -ne "OK") { throw $activity.Message }
 ```
 
 ## End-to-end bootstrap example

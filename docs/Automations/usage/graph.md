@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 title: "Microsoft Graph"
 id: graph
 description: Functions for Microsoft Graph connectivity and validation.
@@ -20,20 +20,20 @@ Validate and initialize Microsoft Graph connectivity, with optional auto-install
 **Syntax**
 
 ```powershell
-Test-MgGraphConnection [-TenantId <String>] [-ClientId <String>] [-ClientSecret <String>]
+Test-MgGraphConnection -TenantId <String> -ClientId <String> -ClientSecret <String>
                        [-AutoInstall] [-LogLocation <String>] [-ShowInformations]
 ```
 
 **Parameters**
 
-| Parameter | Type | Required | Default | Description |
+| Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TenantId` | `String` | Yes | - | Azure AD tenant ID (GUID or verified domain). |
-| `ClientId` | `String` | Yes | - | Application (client) ID. |
-| `ClientSecret` | `String` | Yes | - | Client secret associated with the application. |
-| `AutoInstall` | `Boolean` | No | `False` | Installs `Microsoft.Graph` if missing. |
-| `LogLocation` | `String` | No | - | Optional log file/location. |
-| `ShowInformations` | `Boolean` | No | `False` | Emits additional diagnostics (secret is masked). |
+| `TenantId` | `String` | Microsoft Entra tenant ID used for app authentication. | Yes | N/A |
+| `ClientId` | `String` | Application (client) ID. | Yes | N/A |
+| `ClientSecret` | `String` | Client secret for app-based authentication. | Yes | N/A |
+| `AutoInstall` | `Boolean` | Automatically installs `Microsoft.Graph` when missing. | No | `False` |
+| `LogLocation` | `String` | Log destination path for connection checks. | No | `None` |
+| `ShowInformations` | `Boolean` | Emits additional diagnostic information during validation. | No | `False` |
 
 **Example**
 
