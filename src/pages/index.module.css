@@ -1,0 +1,68 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+/* .heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+} */
+
+/* src/pages/index.module.css */
+.heroBanner {
+  background: 
+    linear-gradient(180deg, rgba(11, 18, 32, 0.45), rgba(11, 18, 32, 0.65)),
+    url('/img/Nebula-Strip.jpg') center center / cover no-repeat;
+  color: #fff;
+  padding: 6rem 0 4rem;
+}
+
+.heroContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.heroText {
+  flex: 1 1 55%;
+  text-align: left;
+}
+
+.heroImage {
+  flex: 1 1 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroLogo {
+  width: 280px;
+  height: auto;
+  color: var(--ifm-color-primary);
+  filter: drop-shadow(0 0 15px rgba(31, 102, 229, 0.45));
+}
+
+/* Responsive: stack on smaller screens */
+@media (max-width: 992px) {
+  .heroContent {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .heroText {
+    flex: 1 1 100%;
+  }
+
+  .heroImage {
+    flex: 1 1 100%;
+    margin-bottom: 2rem;
+  }
+
+  .heroLogo {
+    width: 200px;
+  }
+}

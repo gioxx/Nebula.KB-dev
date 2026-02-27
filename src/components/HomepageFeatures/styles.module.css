@@ -1,0 +1,248 @@
+.titleWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Icon next to the title */
+.titleIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--ifm-color-primary);
+  flex-shrink: 0;
+  /* Prevent it from shrinking with long titles */
+}
+
+/* Title style tweak (optional) */
+.featureTitle {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.playbookGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.playbookTitle {
+  margin: 0 0 0.25rem;
+}
+
+.playbookSubtitle {
+  margin: 0 0 0.5rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.playbookList {
+  padding-left: 1.25rem;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.moduleShowcase {
+  display: none;
+}
+
+.moduleStrip {
+  background:
+    linear-gradient(180deg, rgba(10, 17, 30, 0.82), rgba(10, 17, 30, 0.9)),
+    url('/img/Nebula-Strip.jpg') center center / cover no-repeat;
+  color: #f7fbff;
+  padding: 3rem 0;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.fullWidthBreakout {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+.moduleStripInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.moduleStripHeader {
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto 2rem;
+}
+
+.moduleStripHeader h2 {
+  margin-bottom: 0.5rem;
+}
+
+.moduleStripHeader p {
+  margin: 0;
+  color: rgba(247, 251, 255, 0.85);
+}
+
+.moduleStripGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.moduleStripCard {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 1rem;
+  backdrop-filter: blur(6px);
+  display: grid;
+  grid-template-rows: auto 24px 1fr;
+  gap: 0.5rem;
+}
+
+.moduleStripTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.moduleLogo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.moduleName {
+  margin: 0;
+}
+
+.moduleStripBlurb {
+  margin: 0;
+  color: rgba(247, 251, 255, 0.82);
+}
+
+.moduleStripFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.moduleVersion {
+  font-size: 0.9rem;
+  color: rgba(247, 251, 255, 0.75);
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+}
+
+.moduleVersion img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.moduleLink {
+  color: #bfe3ff;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.moduleLink:hover {
+  font-weight: 600;
+}
+
+.moduleDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ifm-color-primary) 20%, transparent);
+}
+
+.sectionHeading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.headingIcon {
+  color: var(--ifm-color-primary);
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  line-height: 1.1;
+}
+
+.psWindow {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  background: #0c1222;
+}
+
+.psTitlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, #0d1b36, #0b254f);
+  color: #dbe9ff;
+}
+
+.psDots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.psDots span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.psDotRed {
+  background: #ff5f56;
+}
+
+.psDotAmber {
+  background: #ffbd2e;
+}
+
+.psDotGreen {
+  background: #27c93f;
+}
+
+.psTitle {
+  font-weight: 600;
+}
+
+.psTitleHint {
+  margin-left: auto;
+  color: rgba(219, 233, 255, 0.75);
+  font-size: 0.9rem;
+}
+
+.psBody {
+  margin: 0;
+  padding: 1rem;
+  background: #0c1222;
+  color: #cdd7ff;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.95rem;
+}
+
+/* Optional: center-align on mobile */
+@media (max-width: 768px) {
+  .titleWithIcon {
+    justify-content: center;
+    text-align: center;
+  }
+}

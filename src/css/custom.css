@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;700&display=swap');
+
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+/* :root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+} */
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* [data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+} */
+
+/* Catppuccin scheme: Macchiato for light, Mocha for dark */
+
+:root {
+  /* Macchiato blues / accents */
+  --ifm-color-primary: #8aadf4; /* blue */
+  --ifm-color-primary-dark: #789ae2;
+  --ifm-color-primary-darker: #5f7fc2;
+  --ifm-color-primary-darkest: #44527a;
+  --ifm-color-primary-light: #a9c2f7;
+  --ifm-color-primary-lighter: #c5d6fa;
+  --ifm-color-primary-lightest: #e3ecff;
+
+  /* Light surfaces use default white; keep text contrast higher */
+  --ifm-color-emphasis-200: #e7e9f1;
+  --ifm-color-emphasis-300: #d0d5e6;
+  --ifm-color-emphasis-400: #a5adcb; /* brightWhite */
+  --ifm-color-emphasis-600: #494d64; /* black */
+
+  --docusaurus-highlighted-code-line-bg: rgba(138, 173, 244, 0.14);
+
+  /* Custom fonts */
+  --ifm-font-family-base: 'Inter', sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', monospace;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Light mode link contrast */
+html:not([data-theme='dark']) a {
+  color: #3f4f75; /* darker blue for white backgrounds */
+  transition: color .15s ease, text-decoration-color .15s ease;
+}
+
+html:not([data-theme='dark']) a:hover,
+html:not([data-theme='dark']) a:focus-visible {
+  color: var(--ifm-color-primary-darker);
+  text-decoration: none;
+}
+
+html:not([data-theme='dark']) a:active {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+/* Footer links in light theme: bump contrast */
+html:not([data-theme='dark']) .footer a {
+  color: var(--ifm-color-primary-darker);
+}
+
+html:not([data-theme='dark']) .footer a:hover,
+html:not([data-theme='dark']) .footer a:focus-visible {
+  color: var(--ifm-color-primary-dark);
+  text-decoration: underline;
+}
+
+html:not([data-theme='dark']) .footer a:active {
+  color: var(--ifm-color-primary);
+}
+
+.footer__link-item.nav-core-bold {
+  font-weight: 700;
+}
+
+html[data-theme='dark'] {
+  /* Mocha surfaces */
+  --ifm-background-color: #1e1e2e;
+  --ifm-background-surface-color: #181825;
+  --ifm-navbar-background-color: #1e1e2e;
+  --ifm-footer-background-color: #11111b;
+  --ifm-color-emphasis-200: #585b70; /* brightBlack */
+  --ifm-color-emphasis-300: #6c7086; /* overlay0-ish */
+  --ifm-color-emphasis-400: #a6adc8; /* brightWhite */
+  --ifm-color-emphasis-600: #cdd6f4; /* foreground */
+
+  --docusaurus-highlighted-code-line-bg: rgba(137, 180, 250, 0.22);
+}
+
+.hero--primary {
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(138, 173, 244, 0.28), transparent),
+    radial-gradient(800px 400px at 90% 20%, rgba(245, 189, 230, 0.32), transparent),
+    linear-gradient(180deg, #1e1e2e 0%, #24273a 100%);
+}
+
+.hero__title {
+  letter-spacing: 0.5px;
+}
+
+.button.button--secondary.button--lg {
+  border: 1px solid var(--ifm-color-primary);
+}
+
+/* Hero buttons: keep strong contrast on dark hero background */
+.hero .button {
+  color: #ffffff;
+}
+
+.hero .button.button--primary {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.hero .button.button--primary:hover,
+.hero .button.button--primary:focus-visible {
+  background: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+.hero .button.button--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.hero .button.button--secondary:hover,
+.hero .button.button--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.hero .button.button--secondary:active {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.46);
+}
+
+/* Light mode: stronger hover/active contrast on hero buttons */
+html:not([data-theme='dark']) .hero .button.button--primary {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+html:not([data-theme='dark']) .hero .button.button--primary:hover,
+html:not([data-theme='dark']) .hero .button.button--primary:focus-visible {
+  background: #9dbbf7;
+  border-color: #9dbbf7;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+html:not([data-theme='dark']) .hero .button.button--primary:active {
+  background: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+html:not([data-theme='dark']) .hero .button.button--secondary {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #ffffff;
+}
+
+html:not([data-theme='dark']) .hero .button.button--secondary:hover,
+html:not([data-theme='dark']) .hero .button.button--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+html:not([data-theme='dark']) .hero .button.button--secondary:active {
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.navbar-separator {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  margin: 0 12px;
+  background-color: var(--ifm-color-emphasis-300);
+  opacity: 0.6;
+  vertical-align: middle;
+}
+
+.nebula-doc-icon {
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: 12px;
+  padding: 6px;
+  background: var(--ifm-background-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform .2s ease;
+}
+
+.nebula-doc-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+  min-width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+table thead tr {
+  background-color: var(--ifm-color-primary);
+  color: #0f172a;
+  font-size: 1rem;
+  text-align: left;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+}
+
+/* Make all markdown tables full-width */
+.markdown table {
+  width: 100%;
+  table-layout: auto;
+}
+
+/* Responsive tables */
+@media screen and (max-width: 767px) {
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: var(--ifm-global-radius);
+    overflow: hidden;
+  }
+
+  table td {
+    display: block;
+    padding-left: 50%;
+    position: relative;
+    text-align: left;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 15px;
+    font-weight: 600;
+    text-align: left;
+  }
+}
+
+/* GitHub Icon */
+.header-github-link:before {
+  content: '';
+  width: 26px;
+  height: 26px;
+  display: flex;
+
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E") no-repeat;
+}
+
+html[data-theme='dark'] .header-github-link:before {
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E") no-repeat;
+}
+
+/* GitHub Icon Hover */
+.header-github-link:hover {
+  opacity: 0.6;
+}
+
+/* Feature cards */
+.nebula-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.nebula-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem 1.25rem;
+}
+
+html:not([data-theme='dark']) .nebula-card {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.nebula-card h3 {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.footer__copyright {
+  text-align: right;
+  font-size: small;
+  padding-top: 30px;
+}

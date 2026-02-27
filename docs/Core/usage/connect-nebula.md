@@ -1,0 +1,135 @@
+---
+sidebar_position: 2
+title: "Connect to M365"
+description: Establish and tear down Exchange Online and Microsoft Graph sessions with one call.
+hide_title: true
+id: connect-nebula
+tags:
+  - Connect-Nebula
+  - Connect-EOL
+  - Get-NebulaConnections
+  - Disconnect-Nebula
+  - Leave-Nebula
+  - Nebula.Core
+---
+
+# Connect (and disconnects) to/from Microsoft 365
+
+For full, always-up-to-date details and examples, use `Get-Help <FunctionName> -Detailed` or `-Examples`.
+
+## Connect-EOL
+Connect to Exchange Online (EXO V3), auto-importing the module and auto-detecting the current user when `-UserPrincipalName` is not supplied.
+
+**Syntax**
+
+```powershell
+Connect-EOL [-UserPrincipalName <String>] [-DelegatedOrganization <String>] [-PassThru]
+```
+
+| Parameter | Description | Required | Default |
+| --- | --- | :---: | --- |
+| `UserPrincipalName` | UPN/e-mail for the EXO auth prompt. | No | Current user (`Find-UserConnected`) |
+| `DelegatedOrganization` | Target customer tenant (delegated admin). | No | - |
+| `PassThru` | Return the `Connect-ExchangeOnline` session object. | No | `False` |
+
+**Example**
+```powershell
+Connect-EOL -UserPrincipalName 'admin@tenant.onmicrosoft.com'
+```
+
+## Connect-Nebula
+One-shot helper that ensures EXO is connected, then (optionally) connects Microsoft Graph.
+
+**Syntax**
+
+```powershell
+Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTenantId <String>]
+               [-GraphDeviceCode] [-AutoInstall] [-ForceReconnect] [-SkipGraph]
+```
+
+| Parameter | Description | Required | Default |
+| --- | --- | :---: | --- |
+| `UserPrincipalName` | UPN for EXO auth. | No | Auto-detected |
+| `GraphScopes` | Graph delegated scopes to request. | No | `User.Read.All` |
+| `GraphTenantId` | Tenant ID/domain for Graph. | No | - |
+| `GraphDeviceCode` | Use device code instead of browser for Graph. | No | `False` |
+| `AutoInstall` | Auto-install missing modules. | No | `False` |
+| `ForceReconnect` | Skip health checks and reconnect both services. | No | `False` |
+| `SkipGraph` | Connect only EXO, skip Graph entirely. | No | `False` |
+
+**Example**
+```powershell
+Connect-Nebula -GraphScopes 'User.Read.All','Directory.Read.All' -AutoInstall
+```
+
+:::note
+By default, `Connect-Nebula` checks PowerShell Gallery for updates of `Nebula.*` modules plus the meta modules `ExchangeOnlineManagement` and `Microsoft.Graph`, warning only when updates are available.
+Disable it by setting `CheckUpdatesOnConnect = $false` in your `settings.psd1` and then run `Sync-NebulaConfig`.
+You can also throttle checks by setting `CheckUpdatesIntervalHours` (default is `24`).
+Run `Get-NebulaModuleUpdates` anytime to trigger a manual check.
+:::
+
+## Disconnect-Nebula
+Disconnect EXO and/or Graph.
+
+**Syntax**
+
+```powershell
+Disconnect-Nebula [-ExchangeOnly] [-GraphOnly]
+```
+
+| Parameter | Description | Default |
+| --- | --- | --- |
+| `ExchangeOnly` | Disconnect only EXO. | `False` |
+| `GraphOnly` | Disconnect only Graph. | `False` |
+
+**Example**
+```powershell
+Disconnect-Nebula -GraphOnly   # keep EXO session alive
+```
+
+:::note
+`Leave-Nebula` is an alias for `Disconnect-Nebula`.
+:::
+
+## Get-NebulaConnections
+Show current Nebula connection status for Exchange Online and Microsoft Graph without reconnecting.
+
+**Syntax**
+
+```powershell
+Get-NebulaConnections
+```
+
+**Returned properties**
+
+| Property | Description |
+| --- | --- |
+| `ExchangeOnlineConnected` | `True` when an EXO session is active. |
+| `ExchangeOnlineUser` | Connected EXO user (when available). |
+| `ExchangeOnlineTenant` | Connected EXO organization/tenant (when available). |
+| `MicrosoftGraphConnected` | `True` when a Graph context is active. |
+| `MicrosoftGraphAccount` | Connected Graph account (when available). |
+| `MicrosoftGraphTenantId` | Connected Graph tenant ID (when available). |
+| `MicrosoftGraphScopes` | Scopes present in the active Graph context. |
+
+**Example**
+```powershell
+Connect-Nebula
+Get-NebulaConnections
+Leave-Nebula
+```
+
+## Questions and answers
+
+### Which services does `Connect-Nebula` connect?
+
+Exchange Online always; Microsoft Graph unless you use `-SkipGraph`. Default Graph scopes include `User.Read.All` (extend with `-GraphScopes`).
+
+### Can I operate across multiple tenants?
+
+Yes. Use `Connect-EOL -DelegatedOrganization` for delegated tenants and `Connect-Nebula -GraphTenantId` for Graph. Run `Disconnect-Nebula` before switching contexts.
+
+### How can I check active sessions before disconnecting?
+
+Run `Get-NebulaConnections` and verify `ExchangeOnlineConnected` / `MicrosoftGraphConnected` are `True` or `False`.
