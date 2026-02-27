@@ -46,7 +46,3 @@ $runtime = Initialize-ScriptRuntime `
 ## Notes
 
 Use `Get-Help <FunctionName> -Detailed` to inspect full signatures and edge-case behavior for each runtime helper.
-
-## Next
-
-- [Logging](./logging)

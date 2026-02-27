@@ -114,7 +114,3 @@ Unregister-ScriptScheduledTask `
   -TaskName "Daily-PolicyAudit" `
   -TaskPath "\Nebula\"
 ```
-
-## Back to section start
-
-- [Usage overview](./intro)

@@ -36,7 +36,3 @@ Register-ScriptScheduledTask `
 ## Notes
 
 Use `Get-Help <FunctionName> -Detailed` for advanced scheduling options and lifecycle switches.
-
-## Next
-
-- [Runtime Helpers](./runtime)

@@ -21,7 +21,3 @@ Compatibility wrapper exposed by Nebula.Automations when `Nebula.Log` is unavail
 ## Notes
 
 Use `Get-Help Write-Log -Detailed` for compatibility and output behavior details.
-
-## Next
-
-- [Functions A-Z](./reference)

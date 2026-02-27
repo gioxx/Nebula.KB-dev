@@ -33,7 +33,3 @@ $ok = Test-MgGraphConnection `
 ## Notes
 
 Use `Get-Help Test-MgGraphConnection -Detailed` for complete parameter behavior and authentication options.
-
-## Next
-
-- [Scheduled Tasks](./scheduled-tasks)

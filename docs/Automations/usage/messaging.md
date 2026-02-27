@@ -62,7 +62,3 @@ $result = Send-ReportIfChanged `
 ## Notes
 
 Use `Get-Help Send-Mail -Detailed` and `Get-Help Send-ReportIfChanged -Detailed` for full parameter documentation.
-
-## Next
-
-- [Microsoft Graph](./graph)
