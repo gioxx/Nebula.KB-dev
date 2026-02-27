@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 title: "Quarantine"
 description: Search, export, release, or delete Exchange Online quarantine items.
 hide_title: true
@@ -15,7 +15,7 @@ tags:
   - Quarantine
 ---
 
-# Quarantine toolkit
+# Quarantine helpers
 
 All commands require an active EXO session (`Test-EOLConnection` is called internally). For complete and current details, run `Get-Help <FunctionName> -Detailed`.
 
@@ -129,7 +129,7 @@ Unlock-QuarantineFrom -SenderAddress <String[]> [-ReportFalsePositive] [-Confirm
 
 **Example**
 ```powershell
-Unlock-QuarantineFrom -SenderAddress 'sender@contoso.com' -ReportFalsePositive -Confirm:$false
+Unlock-QuarantineFrom -SenderAddress 'user@contoso.com' -ReportFalsePositive -Confirm:$false
 ```
 
 ## Unlock-QuarantineMessageId

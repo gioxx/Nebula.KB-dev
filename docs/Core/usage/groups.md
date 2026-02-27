@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 title: "Groups"
 description: Export distribution/dynamic groups, M365 groups, role groups, and user/device memberships.
 hide_title: true
@@ -286,9 +286,22 @@ Get-UserGroups -UserPrincipalName <String> [-GridView]
 | `UserPrincipalName` | User/contact/group identity. | Yes | - |
 | `GridView` | Show details in Out-GridView. | No | `False` |
 
-**Example**
+**Output**
+- Default output columns: `GroupName`, `GroupMail`
+- With `-GridView`: additional details are included (description, type, ID, etc.)
+
+:::warning Breaking Change (version 1.2.0 or newer)
+`Get-UserGroups` now returns `GroupName` and `GroupMail` instead of `Group Name` and `Group Mail`.
+Update any legacy filters/scripts accordingly, for example: use `$_.GroupName` instead of `$_.'Group Name'`.
+:::
+
+**Examples**
 ```powershell
 Get-UserGroups -UserPrincipalName 'user@contoso.com'
+```
+
+```powershell
+Get-UserGroups 'user@contoso.com' | Where-Object { $_.GroupName -like '*portion-of-group-name*' }
 ```
 
 ## Remove-EntraGroupDevice

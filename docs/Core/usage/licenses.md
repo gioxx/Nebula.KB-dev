@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 title: "Licenses"
 description: Export tenant license assignments and inspect user licenses with friendly SKU names.
 hide_title: true
@@ -17,7 +17,7 @@ tags:
   - Licenses
 ---
 
-# License reports
+# License helpers
 
 Backed by Microsoft Graph with a cached SKU catalog. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
@@ -28,6 +28,7 @@ Assign licenses by friendly name (resolved via catalog), SKU part number, or SKU
 
 ```powershell
 Add-UserMsolAccountSku -UserPrincipalName <String> -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
+Add-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
 | Parameter | Description | Required |
@@ -50,11 +51,19 @@ Add-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -License 'ENTERPRIS
 Add-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -License '18181a46-0d4e-45cd-891e-60aabd171b4e'
 ```
 
-:::note
+```powershell
+Add-UserMsolAccountSku 'user@contoso.com' -License 'Microsoft 365 Business Standard EEA (no Teams)'
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Add-UserMsolAccountSku -License 'Microsoft 365 Business Standard EEA (no Teams)'
+```
+
+:::note Mandatory usage location parameter
 If the target user has no `UsageLocation`, Nebula.Core sets it automatically using the `UsageLocation` key from your configuration (default `US`, override via `%USERPROFILE%\.NebulaCore\settings.psd1`). If updating the usage location fails, license assignment stops.
 :::
 
-:::warning
+:::warning Licenses availability
 If the tenant does not have units available for the requested license, the assignment is avoided and a warning message is displayed.
 :::
 
@@ -65,6 +74,7 @@ Copy all licenses (with disabled plans preserved) from one user to another witho
 
 ```powershell
 Copy-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrincipalName <String>
+Copy-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 ```
 
 | Parameter | Description | Required |
@@ -75,6 +85,10 @@ Copy-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrinci
 **Example**
 ```powershell
 Copy-UserMsolAccountSku -SourceUserPrincipalName 'user1@contoso.com' -DestinationUserPrincipalName 'user2@contoso.com'
+```
+
+```powershell
+Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 ```
 
 ## Export-MsolAccountSku
@@ -126,11 +140,11 @@ Get-TenantMsolAccountSku -Filter "E3" -AsTable
 Get-TenantMsolAccountSku -Filter "E3" -SampleUsers
 ```
 
-:::note
+:::note Available licenses: how counting works
 `Available` is calculated as `Enabled - Consumed` (never below zero). The `Total` column shows a friendly breakdown (Enabled/Suspended), while `TotalCount` remains the numeric total for scripting.
 :::
 
-:::tip
+:::tip Microsoft 365 Subscriptions (Admin Portal)
 Need renewal/expiration or billing profile details? Open the Microsoft 365 Admin Center subscriptions page: https://admin.cloud.microsoft/?#/subscriptions
 :::
 
@@ -141,6 +155,7 @@ Show licenses assigned to a single user with friendly names.
 
 ```powershell
 Get-UserMsolAccountSku -UserPrincipalName <String> [-Clipboard] [-CheckAvailability] [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
+Get-UserMsolAccountSku <UserPrincipalName> [-Clipboard] [-CheckAvailability] [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
 | Parameter | Description | Required |
@@ -175,6 +190,7 @@ Move all licenses (with disabled plans preserved) from one user to another.
 
 ```powershell
 Move-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrincipalName <String>
+Move-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 ```
 
 | Parameter | Description | Required |
@@ -187,6 +203,10 @@ Move-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrinci
 Move-UserMsolAccountSku -SourceUserPrincipalName 'user1@contoso.com' -DestinationUserPrincipalName 'user2@contoso.com'
 ```
 
+```powershell
+Move-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
+```
+
 ## Remove-UserMsolAccountSku
 Remove licenses from a user by friendly name (resolved via catalog), SKU part number, or SKU ID.
 
@@ -194,6 +214,8 @@ Remove licenses from a user by friendly name (resolved via catalog), SKU part nu
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName <String> -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
+Remove-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
+'user1@contoso.com','user2@contoso.com' | Remove-UserMsolAccountSku -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
 | Parameter | Description | Required |
@@ -225,6 +247,14 @@ Remove-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -License 'ENTERP
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -License '18181a46-0d4e-45cd-891e-60aabd171b4e'
+```
+
+```powershell
+Remove-UserMsolAccountSku 'user@contoso.com' -License 'Exchange Online (Plan 2)'
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Remove-UserMsolAccountSku -License 'Exchange Online (Plan 1)'
 ```
 
 ```powershell

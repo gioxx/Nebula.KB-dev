@@ -41,16 +41,15 @@ Get-QuarantineToRelease -Interval 7 -GridView -ReleaseSelected -ReportFalsePosit
 ## Create a ready-to-use shared mailbox
 
 ```powershell
-New-SharedMailbox -Name "Support" -Alias support `
-  -PrimarySmtpAddress "support@contoso.com" `
-  -Members 'agent1@contoso.com','agent2@contoso.com' `
-  -Language it-IT -TimeZone "W. Europe Standard Time"
+New-SharedMailbox -SharedMailboxSMTPAddress "sharedmailbox@contoso.com" `
+  -SharedMailboxDisplayName "Support Team" `
+  -SharedMailboxAlias "SupportTeam"
 ```
 
-## Set language and time zone on an existing mailbox
+## Set language on an existing mailbox
 
 ```powershell
-Set-MboxLanguage -UserPrincipalName 'user@contoso.com' -Language en-US -TimeZone "W. Europe Standard Time"
+Set-MboxLanguage -SourceMailbox 'user@contoso.com' -Language en-US
 ```
 
 ## Export mailbox statistics (CSV, batched)

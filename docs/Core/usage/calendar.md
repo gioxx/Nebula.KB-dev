@@ -33,7 +33,7 @@ Copy-OoOMessage -SourceMailbox <String> -DestinationMailbox <String> [-ForceEnab
 
 **Example**
 ```powershell
-Copy-OoOMessage -SourceMailbox source@contoso.com -DestinationMailbox dest@contoso.com -ForceEnable -PassThru
+Copy-OoOMessage -SourceMailbox user1@contoso.com -DestinationMailbox user2@contoso.com -ForceEnable -PassThru
 ```
 
 ## Export-CalendarPermission
@@ -55,7 +55,7 @@ Export-CalendarPermission [-SourceMailbox <String[]>] [-SourceDomain <String[]>]
 
 **Examples**
 ```powershell
-Export-CalendarPermission -SourceMailbox info@contoso.com -OutputFolder C:\Temp
+Export-CalendarPermission -SourceMailbox user@contoso.com -OutputFolder C:\Temp
 ```
 
 ```powershell
@@ -145,7 +145,7 @@ Set-OoO -SourceMailbox user@contoso.com -ChooseDayFromCalendar
 Set-OoO -SourceMailbox user@contoso.com -Disable
 ```
 
-:::note
+:::warning
 - Do not combine `-ChooseDayFromCalendar` with `-StartTime/-EndTime`.
 - Messages accept HTML; defaults are reused from the current configuration when omitted.
 :::

@@ -8,6 +8,7 @@ tags:
   - Connect-Nebula
   - Connect-EOL
   - Get-NebulaConnections
+  - Update-NebulaConnections
   - Disconnect-Nebula
   - Leave-Nebula
   - Nebula.Core
@@ -34,7 +35,7 @@ Connect-EOL [-UserPrincipalName <String>] [-DelegatedOrganization <String>] [-Pa
 
 **Example**
 ```powershell
-Connect-EOL -UserPrincipalName 'admin@tenant.onmicrosoft.com'
+Connect-EOL -UserPrincipalName 'admin@contoso.com'
 ```
 
 ## Connect-Nebula
@@ -62,7 +63,7 @@ Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTe
 Connect-Nebula -GraphScopes 'User.Read.All','Directory.Read.All' -AutoInstall
 ```
 
-:::note
+:::note Automatic update function
 By default, `Connect-Nebula` checks PowerShell Gallery for updates of `Nebula.*` modules plus the meta modules `ExchangeOnlineManagement` and `Microsoft.Graph`, warning only when updates are available.
 Disable it by setting `CheckUpdatesOnConnect = $false` in your `settings.psd1` and then run `Sync-NebulaConfig`.
 You can also throttle checks by setting `CheckUpdatesIntervalHours` (default is `24`).
@@ -88,17 +89,27 @@ Disconnect-Nebula [-ExchangeOnly] [-GraphOnly]
 Disconnect-Nebula -GraphOnly   # keep EXO session alive
 ```
 
-:::note
+:::tip
 `Leave-Nebula` is an alias for `Disconnect-Nebula`.
 :::
 
 ## Get-NebulaConnections
-Show current Nebula connection status for Exchange Online and Microsoft Graph without reconnecting.
+Show current Nebula connection status for Exchange Online and Microsoft Graph.
+By default it runs lightweight health probes (unless `-SkipHealthCheck`) which can also refresh provider-side sessions/tokens.
 
 **Syntax**
 
 ```powershell
-Get-NebulaConnections
+Get-NebulaConnections [-SkipHealthCheck]
+```
+
+## Update-NebulaConnections
+Explicit refresh entry point for connection status checks. It runs the same checks as `Get-NebulaConnections` and is preferred when your intent is to "refresh/revive" current sessions.
+
+**Syntax**
+
+```powershell
+Update-NebulaConnections [-SkipHealthCheck]
 ```
 
 **Returned properties**
@@ -106,9 +117,13 @@ Get-NebulaConnections
 | Property | Description |
 | --- | --- |
 | `ExchangeOnlineConnected` | `True` when an EXO session is active. |
+| `ExchangeOnlineHealthy` | `True` when a lightweight EXO probe succeeds (session really usable). |
+| `ExchangeOnlineError` | Last EXO validation error (if any). |
 | `ExchangeOnlineUser` | Connected EXO user (when available). |
 | `ExchangeOnlineTenant` | Connected EXO organization/tenant (when available). |
 | `MicrosoftGraphConnected` | `True` when a Graph context is active. |
+| `MicrosoftGraphHealthy` | `True` when a lightweight Graph probe succeeds (token really usable). |
+| `MicrosoftGraphError` | Last Graph validation error (if any). |
 | `MicrosoftGraphAccount` | Connected Graph account (when available). |
 | `MicrosoftGraphTenantId` | Connected Graph tenant ID (when available). |
 | `MicrosoftGraphScopes` | Scopes present in the active Graph context. |
@@ -116,7 +131,7 @@ Get-NebulaConnections
 **Example**
 ```powershell
 Connect-Nebula
-Get-NebulaConnections
+Update-NebulaConnections
 Leave-Nebula
 ```
 
@@ -132,4 +147,5 @@ Yes. Use `Connect-EOL -DelegatedOrganization` for delegated tenants and `Connect
 
 ### How can I check active sessions before disconnecting?
 
-Run `Get-NebulaConnections` and verify `ExchangeOnlineConnected` / `MicrosoftGraphConnected` are `True` or `False`.
+Run `Update-NebulaConnections` (or `Get-NebulaConnections`) and verify `ExchangeOnlineConnected` / `MicrosoftGraphConnected` are `True` or `False`.
+For real usability checks after long idle periods, prefer `ExchangeOnlineHealthy` / `MicrosoftGraphHealthy`.

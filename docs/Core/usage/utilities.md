@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 title: "Utilities"
 description: Clipboard helpers for quarantine identities and e-mail address lists.
 hide_title: true
@@ -47,7 +47,7 @@ Format-MessageIDsFromClipboard -NoRelease -PassThru
 ```
 
 :::tip
-`Format-MessageIDsFromClipboard` (`mids`) now prepares quarantine identities and can trigger `Unlock-QuarantineMessageId -Identity` directly from clipboard content.
+`Format-MessageIDsFromClipboard` (`mids`) prepares quarantine identities and can trigger `Unlock-QuarantineMessageId -Identity` directly from clipboard content.
 :::
 
 ## Format-SortedEmailsFromClipboard
@@ -87,6 +87,6 @@ This command always forces a fresh check. The automatic check in `Connect-Nebula
 `CheckUpdatesOnConnect = $false`, and throttled via `CheckUpdatesIntervalHours` (default `24`) in `settings.psd1`.
 After edits, run `Sync-NebulaConfig`.
 
-:::note
+:::tip
 The same details above are also published in the Nebula.Core [configuration](./configuration) section.
 :::

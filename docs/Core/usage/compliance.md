@@ -1,0 +1,82 @@
+---
+sidebar_position: 4
+title: "Compliance"
+description: Purview compliance helpers for mailbox content isolation and related workflows.
+hide_title: true
+id: compliance
+tags:
+  - Search-MboxCutoffWindow
+  - Set-MboxMrmCleanup
+  - Nebula.Core
+  - Purview
+  - Compliance
+---
+
+# Compliance helpers
+
+Requires an EXO session with Purview Compliance PowerShell availability (`Connect-IPPSSession`). For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed`.
+
+## Search-MboxCutoffWindow
+Create/reuse a Purview Compliance Search to isolate mailbox items by date criteria (estimate + optional preview sample).
+
+**Syntax**
+
+```powershell
+Search-MboxCutoffWindow -Mailbox <String> [-Mode <String>] [-CutoffDate <DateTime>] [-ExistingSearchName <String>] [-UseExistingOnly] [-Preview] [-PreviewCount <Int32>] [-PollingSeconds <Int32>] [-MaxWaitMinutes <Int32>]
+Search-MboxCutoffWindow -Mailbox <String> -Mode Range -StartDate <DateTime> -EndDate <DateTime> [-ExistingSearchName <String>] [-UseExistingOnly] [-Preview] [-PreviewCount <Int32>] [-PollingSeconds <Int32>] [-MaxWaitMinutes <Int32>]
+```
+
+| Parameter | Description | Required |
+| --- | --- | :---: |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | Target mailbox. Pipeline accepted. | Yes |
+| `Mode` | `BeforeCutoff` (default) or `Range`. | No |
+| `CutoffDate` | Cutoff date used when `Mode BeforeCutoff`. | No |
+| `StartDate` | Range start date (used with `Mode Range`). | Yes (`Range`) |
+| `EndDate` | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) |
+| `ExistingSearchName` | Reuse an existing Purview Compliance Search name. | No |
+| `UseExistingOnly` | Do not create/modify search definition; run estimate/preview on existing search only. | No |
+| `Preview` | Create a Purview Preview action and return sampled lines. | No |
+| `PreviewCount` | Max preview sample lines to return. | No |
+| `PollingSeconds` | Poll interval while waiting for completion. | No |
+| `MaxWaitMinutes` | Maximum wait time before timeout. | No |
+
+**Examples**
+```powershell
+Search-MboxCutoffWindow -Mailbox 'user@contoso.com' -Mode BeforeCutoff -CutoffDate '2025-01-01'
+```
+
+```powershell
+Search-MboxCutoffWindow -Mailbox 'user@contoso.com' -Mode Range -StartDate '2025-01-01' -EndDate '2025-02-01' -Preview -PreviewCount 25
+```
+
+```powershell
+Search-MboxCutoffWindow -Mailbox 'user@contoso.com' -ExistingSearchName 'Isolate_Pre_20250101_140530' -UseExistingOnly
+```
+
+## Set-MboxMrmCleanup
+Apply a one-shot MRM cleanup policy/tag to a mailbox (optional Managed Folder Assistant trigger).
+
+**Syntax**
+
+```powershell
+Set-MboxMrmCleanup -Mailbox <String> [-FixedCutoffDate <DateTime>] [-SafetyBufferDays <Int32>] [-RetentionAction <String>] [-TagName <String>] [-PolicyName <String>] [-RunAssistant]
+```
+
+| Parameter | Description | Required |
+| --- | --- | :---: |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | Target mailbox. Pipeline accepted. | Yes |
+| `FixedCutoffDate` | Fixed date used to compute `AgeLimitForRetention` days. | No |
+| `SafetyBufferDays` | Additional days added as safety buffer. | No |
+| `RetentionAction` | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No |
+| `TagName` | Retention policy tag name (auto-generated if omitted). | No |
+| `PolicyName` | Retention policy name (auto-generated if omitted). | No |
+| `RunAssistant` | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No |
+
+**Examples**
+```powershell
+Set-MboxMrmCleanup -Mailbox 'user@contoso.com' -FixedCutoffDate '2025-01-01' -SafetyBufferDays 7
+```
+
+```powershell
+Set-MboxMrmCleanup -Mailbox 'user@contoso.com' -RetentionAction PermanentlyDelete -RunAssistant -WhatIf
+```

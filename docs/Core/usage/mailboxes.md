@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: "Mailboxes"
 description: Manage aliases, permissions, languages, quotas, and shared mailbox setup.
 hide_title: true
@@ -44,11 +44,11 @@ Add-MboxAlias -SourceMailbox <String> -MailboxAlias <String>
 
 **Examples**
 ```powershell
-Add-MboxAlias -SourceMailbox 'info@contoso.com' -MailboxAlias 'alias@contoso.com'
+Add-MboxAlias -SourceMailbox 'user@contoso.com' -MailboxAlias 'alias@contoso.com'
 ```
 
 ```powershell
-Add-MboxAlias -Identity 'user@contoso.com' -Aliases 'user.sales@contoso.com','user.eu@contoso.com'
+Add-MboxAlias -Identity 'user@contoso.com' -MailboxAlias 'alias@contoso.com'
 ```
 
 ## Add-MboxPermission
@@ -57,19 +57,24 @@ Grant mailbox permissions.
 **Syntax**
 
 ```powershell
-Add-MboxPermission -Identity <String> -User <String> -AccessRights <String[]> [-AutoMapping]
+Add-MboxPermission -SourceMailbox <String> -UserMailbox <String[]> [-AccessRights <String>] [-AutoMapping] [-PassThru]
 ```
 
 | Parameter | Description | Required |
 | --- | --- | :---: |
-| `Identity` | Target mailbox. | Yes |
-| `User` | Principal to grant. | Yes |
-| `AccessRights` | Rights (e.g., FullAccess, SendAs, SendOnBehalf). | Yes |
+| `SourceMailbox` (`Identity`) | Target mailbox. | Yes |
+| `UserMailbox` | One or more principals to grant. Pipeline accepted. | Yes |
+| `AccessRights` | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No |
 | `AutoMapping` | Enable/disable Outlook automapping. | No |
+| `PassThru` | Emit detailed permission objects (default shows only confirmation messages). | No |
 
 **Examples**
 ```powershell
-Add-MboxPermission -Identity 'shared@contoso.com' -User 'john@contoso.com' -AccessRights FullAccess -AutoMapping:$false
+Add-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user@contoso.com' -AccessRights FullAccess -AutoMapping:$false
+```
+
+```powershell
+Add-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user@contoso.com' -PassThru
 ```
 
 ## Export-MboxAlias
@@ -78,17 +83,24 @@ Export aliases for auditing.
 **Syntax**
 
 ```powershell
-Export-MboxAlias -Identity <String> [-CsvFolder <String>]
+Export-MboxAlias [-SourceMailbox <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-Domain <String>]
 ```
 
 | Parameter | Description | Required |
 | --- | --- | :---: |
-| `Identity` | Target mailbox/recipient. | Yes |
+| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. | No |
+| `Csv` | Export results to CSV. | No |
 | `CsvFolder` | Destination folder for CSV export. | No |
+| `All` | Export aliases for all non-guest recipients. | No |
+| `Domain` | Export aliases for recipients matching a domain. | No |
 
 **Examples**
 ```powershell
-Export-MboxAlias -Identity 'user@contoso.com' -CsvFolder 'C:\Temp'
+Export-MboxAlias -SourceMailbox 'user@contoso.com'
+```
+
+```powershell
+Export-MboxAlias -All -CsvFolder 'C:\Temp'
 ```
 
 ## Export-MboxPermission
@@ -97,17 +109,21 @@ Export mailbox permissions to CSV.
 **Syntax**
 
 ```powershell
-Export-MboxPermission -Identity <String> [-CsvFolder <String>]
+Export-MboxPermission -RecipientType <String> [-CsvFolder <String>]
 ```
 
 | Parameter | Description | Required |
 | --- | --- | :---: |
-| `Identity` | Target mailbox. | Yes |
+| `RecipientType` | Mailbox scope: `User`, `Shared`, `Room`, `All`. | Yes |
 | `CsvFolder` | Destination folder for CSV export. | No |
 
 **Examples**
 ```powershell
-Export-MboxPermission -Identity 'shared@contoso.com' -CsvFolder 'C:\Temp'
+Export-MboxPermission -RecipientType Shared -CsvFolder 'C:\Temp'
+```
+
+```powershell
+Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 ```
 
 ## Get-MboxAlias
@@ -166,7 +182,7 @@ Get-MboxPermission -Identity <String>
 
 **Examples**
 ```powershell
-Get-MboxPermission -Identity 'shared@contoso.com'
+Get-MboxPermission -Identity 'sharedmailbox@contoso.com'
 ```
 
 ## Get-MboxPrimarySmtpAddress
@@ -215,7 +231,7 @@ Get-UserLastSeen -User <String>
 
 **Example**
 ```powershell
-Get-UserLastSeen -User 'alice@contoso.com'
+Get-UserLastSeen -User 'user@contoso.com'
 ```
 
 Notes:
@@ -228,21 +244,18 @@ Create a shared mailbox.
 **Syntax**
 
 ```powershell
-New-SharedMailbox -Name <String> -Alias <String> -PrimarySmtpAddress <String> [-Members <String[]>]
-                  [-Language <String>] [-TimeZone <String>]
+New-SharedMailbox -SharedMailboxSMTPAddress <String> -SharedMailboxDisplayName <String> -SharedMailboxAlias <String>
 ```
 
 | Parameter | Description | Required |
 | --- | --- | :---: |
-| `Name` | Display name. | Yes |
-| `Alias` | Mail alias. | Yes |
-| `PrimarySmtpAddress` | Primary SMTP. | Yes |
-| `Members` | Members to grant FullAccess/SendAs. | No |
-| `Language` / `TimeZone` | Optional localization. | No |
+| `SharedMailboxSMTPAddress` | Primary SMTP address of the new shared mailbox. | Yes |
+| `SharedMailboxDisplayName` | Display name. | Yes |
+| `SharedMailboxAlias` | Mail alias. | Yes |
 
 **Example**
 ```powershell
-New-SharedMailbox -Name "Support" -Alias 'support' -PrimarySmtpAddress 'support@contoso.com' -Members 'agent1@contoso.com','agent2@contoso.com'
+New-SharedMailbox -SharedMailboxSMTPAddress 'sharedmailbox@contoso.com' -SharedMailboxDisplayName 'Support Team' -SharedMailboxAlias 'SupportTeam'
 ```
 
 ## Remove-MboxAlias
@@ -261,7 +274,7 @@ Remove-MboxAlias -SourceMailbox <String> -MailboxAlias <String>
 
 **Examples**
 ```powershell
-Remove-MboxAlias -SourceMailbox 'info@contoso.com' -MailboxAlias 'alias@contoso.com'
+Remove-MboxAlias -SourceMailbox 'user@contoso.com' -MailboxAlias 'alias@contoso.com'
 ```
 
 ## Remove-MboxPermission
@@ -272,6 +285,7 @@ Revoke mailbox permissions.
 ```powershell
 Remove-MboxPermission -SourceMailbox <String> -UserMailbox <String[]> [-AccessRights <String>]
 Remove-MboxPermission -SourceMailbox <String> -ClearAll
+Remove-MboxPermission <SourceMailbox> <UserMailbox> [-AccessRights <String>]
 ```
 
 | Parameter | Description | Required |
@@ -283,87 +297,93 @@ Remove-MboxPermission -SourceMailbox <String> -ClearAll
 
 **Examples**
 ```powershell
-Remove-MboxPermission -SourceMailbox 'shared@contoso.com' -UserMailbox 'john@contoso.com' -AccessRights FullAccess
+Remove-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user@contoso.com' -AccessRights FullAccess
 ```
 
 ```powershell
-Remove-MboxPermission -SourceMailbox 'shared@contoso.com' -ClearAll
+# Positional call (SourceMailbox = position 0, UserMailbox = position 1)
+Remove-MboxPermission 'sharedmailbox@contoso.com' 'user@contoso.com'
+```
+
+```powershell
+Remove-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -ClearAll
 ```
 
 ## Set-MboxLanguage
-Set mailbox UI language, time zone, and regional settings.
+Set mailbox UI language and regional defaults.
 
 **Syntax**
 
 ```powershell
-Set-MboxLanguage -UserPrincipalName <String> [-Language <String>] [-TimeZone <String>]
-                 [-DateFormat <String>] [-TimeFormat <String>]
+Set-MboxLanguage -SourceMailbox <String[]> [-Language <String>]
+Set-MboxLanguage -Csv <String> [-Language <String>]
 ```
 
 | Parameter | Description |
 | --- | --- |
-| `UserPrincipalName` (`Identity`) | Target mailbox. |
+| `SourceMailbox` (`Identity`) | Target mailbox(es). Pipeline accepted. |
+| `Csv` | CSV file path containing `EmailAddress` column. |
 | `Language` | Culture code (e.g., it-IT, en-US). |
-| `TimeZone` | Time zone ID (e.g., W. Europe Standard Time). |
-| `DateFormat` / `TimeFormat` | Optional overrides. |
 
 **Example**
 ```powershell
-Set-MboxLanguage -UserPrincipalName 'user@contoso.com' -Language it-IT -TimeZone "W. Europe Standard Time"
+Set-MboxLanguage -SourceMailbox 'user@contoso.com' -Language it-IT
+```
+
+```powershell
+Set-MboxLanguage -Csv 'C:\Temp\mailboxes.csv' -Language en-US
 ```
 
 ## Set-MboxRulesQuota
-Adjust inbox rules quota for a mailbox.
+Set rules quota to `256KB` for one or more mailboxes.
 
 **Syntax**
 
 ```powershell
-Set-MboxRulesQuota -Identity <String> -RulesQuotaInKB <Int>
+Set-MboxRulesQuota -SourceMailbox <String[]>
 ```
 
 | Parameter | Description |
 | --- | --- |
-| `Identity` | Target mailbox. |
-| `RulesQuotaInKB` | New quota in KB. |
+| `SourceMailbox` (`Identity`) | Target mailbox(es). Pipeline accepted. |
 
 **Example**
 ```powershell
-Set-MboxRulesQuota -Identity 'user@contoso.com' -RulesQuotaInKB 128
+Set-MboxRulesQuota -SourceMailbox 'user@contoso.com','sharedmailbox@contoso.com'
 ```
 
 ## Set-SharedMboxCopyForSent
-Toggle saving sent items for delegated send-as/send-on-behalf.
+Enable sent-item copy settings for shared mailboxes.
 
 **Syntax**
 
 ```powershell
-Set-SharedMboxCopyForSent -Identity <String> [-Enable]
+Set-SharedMboxCopyForSent -SourceMailbox <String[]>
 ```
 
 | Parameter | Description | Required |
 | --- | --- | :---: |
-| `Identity` | Shared mailbox. | Yes |
-| `Enable` | Switch to enable; omit for disable. | No |
+| `SourceMailbox` (`Identity`) | Shared mailbox(es). Pipeline accepted. | Yes |
 
 **Example**
 ```powershell
-Set-SharedMboxCopyForSent -Identity 'shared@contoso.com' -Enable
+Set-SharedMboxCopyForSent -SourceMailbox 'sharedmailbox@contoso.com'
 ```
 
 ## Test-SharedMailboxCompliance
-Quick checks on shared mailbox configuration (permissions, quotas, sent-items copy).
+Report shared mailbox sign-in activity and Exchange Online licensing indicators.
 
 **Syntax**
 
 ```powershell
-Test-SharedMailboxCompliance -Identity <String>
+Test-SharedMailboxCompliance [-GridView]
 ```
 
 | Parameter | Description |
 | --- | --- |
-| `Identity` | Shared mailbox to validate. |
+| `GridView` | Show output in Out-GridView (default behavior). Use `-GridView:$false` to return objects. |
 
 **Example**
 ```powershell
-Test-SharedMailboxCompliance -Identity 'shared@contoso.com'
+Test-SharedMailboxCompliance
 ```

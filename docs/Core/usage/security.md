@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 title: "Security"
 description: Disable devices, block sign-in, and revoke sessions via Microsoft Graph.
 hide_title: true
@@ -72,7 +72,7 @@ Revoke-UserSessions -UserPrincipalName user1@contoso.com,user2@contoso.com
 ```
 
 ```powershell
-Revoke-UserSessions -All -Exclude breakglass@contoso.com -Confirm:$false
+Revoke-UserSessions -All -Exclude user@contoso.com -Confirm:$false
 ```
 
 Notes:
