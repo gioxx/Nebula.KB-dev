@@ -32,8 +32,8 @@ Format-MessageIDsFromClipboard [-NoRelease] [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `NoRelease` | - | Skip automatic release of the identities. | - | `False` |
-| `PassThru` | - | Emit the formatted string to the pipeline. | - | `False` |
+| `NoRelease` | Switch | Skip automatic release of the identities. | No | `False` |
+| `PassThru` | Switch | Emit the formatted string to the pipeline. | No | `False` |
 
 **Example**
 ```powershell
@@ -66,7 +66,7 @@ Format-SortedEmailsFromClipboard [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `PassThru` | - | Emit the formatted string to the pipeline. | - | `False` |
+| `PassThru` | Switch | Emit the formatted string to the pipeline. | No | `False` |
 
 **Example**
 ```powershell

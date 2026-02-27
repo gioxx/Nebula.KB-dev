@@ -25,8 +25,8 @@ Disable-UserDevices -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | - | Users whose registered devices will be disabled. Pipeline accepted. | Yes | - |
-| `PassThru` | - | Emit the impacted devices. | No | - |
+| `UserPrincipalName` (`Identity`) | String[] | Users whose registered devices will be disabled. Pipeline accepted. | Yes | - |
+| `PassThru` | Switch | Emit the impacted devices. | No | - |
 
 **Example**
 ```powershell
@@ -43,8 +43,8 @@ Disable-UserSignIn -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | - | Users to block. Pipeline accepted. | Yes | - |
-| `PassThru` | - | Emit the impacted users. | No | - |
+| `UserPrincipalName` (`Identity`) | String[] | Users to block. Pipeline accepted. | Yes | - |
+| `PassThru` | Switch | Emit the impacted users. | No | - |
 
 **Example**
 ```powershell
@@ -61,10 +61,10 @@ Revoke-UserSessions [-All] [-UserPrincipalName <String[]>] [-Exclude <String[]>]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `All` | - | Target every user in the tenant. | No | - |
-| `UserPrincipalName` (`Identity`) | - | Users to target. Pipeline accepted. | No | - |
-| `Exclude` | - | Users to skip (applies to both -All and explicit lists). | No | - |
-| `PassThru` | - | Emit the impacted users. | No | - |
+| `All` | Switch | Target every user in the tenant. | No | - |
+| `UserPrincipalName` (`Identity`) | String[] | Users to target. Pipeline accepted. | No | - |
+| `Exclude` | String[] | Users to skip (applies to both -All and explicit lists). | No | - |
+| `PassThru` | Switch | Emit the impacted users. | No | - |
 
 **Examples**
 ```powershell

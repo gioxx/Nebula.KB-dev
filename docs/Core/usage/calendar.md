@@ -26,10 +26,10 @@ Copy-OoOMessage -SourceMailbox <String> -DestinationMailbox <String> [-ForceEnab
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | - | Mailbox to read auto-reply configuration from. Pipeline accepted. | Yes | - |
-| `DestinationMailbox` | - | Mailbox to apply the configuration to. | Yes | - |
-| `ForceEnable` | - | Enable auto-replies immediately on the destination, ignoring source state/schedule. | No | - |
-| `PassThru` | - | Emit the updated destination configuration. | No | - |
+| `SourceMailbox` (`Identity`) | String | Mailbox to read auto-reply configuration from. Pipeline accepted. | Yes | - |
+| `DestinationMailbox` | String | Mailbox to apply the configuration to. | Yes | - |
+| `ForceEnable` | Switch | Enable auto-replies immediately on the destination, ignoring source state/schedule. | No | - |
+| `PassThru` | Switch | Emit the updated destination configuration. | No | - |
 
 **Example**
 ```powershell
@@ -47,11 +47,11 @@ Export-CalendarPermission [-SourceMailbox <String[]>] [-SourceDomain <String[]>]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | - | Mailboxes to analyze. Pipeline accepted. | No | - |
-| `SourceDomain` | - | Domain filter (includes all matching mailboxes). | No | - |
-| `OutputFolder` | - | Destination folder for the CSV report. Defaults to current directory. | No | - |
-| `All` | - | Analyze every mailbox (CSV is written). | No | - |
-| `PassThru` | - | Emit the collected permission objects as well as CSV path. | No | - |
+| `SourceMailbox` (`Identity`) | String[] | Mailboxes to analyze. Pipeline accepted. | No | - |
+| `SourceDomain` | String[] | Domain filter (includes all matching mailboxes). | No | - |
+| `OutputFolder` | String | Destination folder for the CSV report. Defaults to current directory. | No | - |
+| `All` | Switch | Analyze every mailbox (CSV is written). | No | - |
+| `PassThru` | Switch | Emit the collected permission objects as well as CSV path. | No | - |
 
 **Examples**
 ```powershell
@@ -83,11 +83,11 @@ Get-RoomDetails [-City <String[]>] [-Csv] [-OutputFolder <String>] [-GridView] [
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `City` | - | Filter room lists whose name/display name matches the provided text. | No | - |
-| `Csv` | - | Export results to CSV. | No | - |
-| `OutputFolder` | - | Destination for CSV; defaults to current directory. | No | - |
-| `GridView` | - | Show results in Out-GridView. | No | - |
-| `PassThru` | - | Emit room detail objects (also when exporting). | No | - |
+| `City` | String[] | Filter room lists whose name/display name matches the provided text. | No | - |
+| `Csv` | Switch | Export results to CSV. | No | - |
+| `OutputFolder` | String | Destination for CSV; defaults to current directory. | No | - |
+| `GridView` | Switch | Show results in Out-GridView. | No | - |
+| `PassThru` | Switch | Emit room detail objects (also when exporting). | No | - |
 
 **Examples**
 ```powershell
@@ -115,14 +115,14 @@ Set-OoO -SourceMailbox <String> [-InternalMessage <String>] [-ExternalMessage <S
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | - | Mailbox to configure. Pipeline accepted. | Yes | - |
-| `InternalMessage` | - | Message for internal recipients. Defaults to current config/template. | No | - |
-| `ExternalMessage` | - | Message for external recipients. Defaults to internal message. | No | - |
-| `ExternalAudience` | - | External scope: `None`, `Known`, or `All`. | No | - |
-| `StartTime` / `EndTime` | - | Schedule window (both required together). | No | - |
-| `ChooseDayFromCalendar` | - | Pick start/end dates via popups (mutually exclusive with Start/End). | No | - |
-| `Disable` | - | Turn off automatic replies. | No | - |
-| `PassThru` | - | Emit the updated configuration. | No | - |
+| `SourceMailbox` (`Identity`) | String | Mailbox to configure. Pipeline accepted. | Yes | - |
+| `InternalMessage` | String | Message for internal recipients. Defaults to current config/template. | No | - |
+| `ExternalMessage` | String | Message for external recipients. Defaults to internal message. | No | - |
+| `ExternalAudience` | None\|Known\|All | External scope: `None`, `Known`, or `All`. | No | - |
+| `StartTime` / `EndTime` | DateTime | Schedule window (both required together). | No | - |
+| `ChooseDayFromCalendar` | Switch | Pick start/end dates via popups (mutually exclusive with Start/End). | No | - |
+| `Disable` | Switch | Turn off automatic replies. | No | - |
+| `PassThru` | Switch | Emit the updated configuration. | No | - |
 
 **Examples**
 ```powershell

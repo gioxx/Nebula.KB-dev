@@ -40,11 +40,11 @@ Add-EntraGroupDevice [-GroupName <String>] [-GroupId <String>] -DeviceIdentifier
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | - | Target group display name. | Yes* | - |
-| `GroupId` | - | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `DeviceIdentifier` | - | Device display name or object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat every `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `PassThru` | - | Emit a status object per device. | No | `False` |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `DeviceIdentifier` | String[] | Device display name or object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `PassThru` | Switch | Emit a status object per device. | No | `False` |
 
 \*Use either `GroupName` or `GroupId`.
 
@@ -68,11 +68,11 @@ Add-EntraGroupUser [-GroupName <String>] [-GroupId <String>] -UserIdentifier <St
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | - | Target group display name. | Yes* | - |
-| `GroupId` | - | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `UserIdentifier` | - | UPN/display name/object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `PassThru` | - | Emit a status object per user. | No | `False` |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `UserIdentifier` | String[] | UPN/display name/object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `PassThru` | Switch | Emit a status object per user. | No | `False` |
 
 \*Use either `GroupName` or `GroupId`.
 
@@ -96,9 +96,9 @@ Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <St
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `DistributionGroup` | - | Group identity (name/alias/SMTP). Pipeline accepted. | No | All DGs |
-| `Csv` | - | Force CSV export. | No | `False` |
-| `CsvFolder` | - | Destination for CSV. | No | Current directory |
+| `DistributionGroup` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All DGs |
+| `Csv` | Switch | Force CSV export. | No | `False` |
+| `CsvFolder` | String | Destination for CSV. | No | Current directory |
 
 **Example**
 ```powershell
@@ -116,9 +116,9 @@ Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `DynamicDistributionGroup` | - | Dynamic DG identity. Pipeline accepted. | No | All dynamic DGs |
-| `Csv` | - | Force CSV export. | No | `False` |
-| `CsvFolder` | - | Destination for CSV. | No | Current directory |
+| `DynamicDistributionGroup` | String[] | Dynamic DG identity. Pipeline accepted. | No | All dynamic DGs |
+| `Csv` | Switch | Force CSV export. | No | `False` |
+| `CsvFolder` | String | Destination for CSV. | No | Current directory |
 
 **Example**
 ```powershell
@@ -136,9 +136,9 @@ Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `M365Group` | - | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
-| `Csv` | - | Force CSV export. | No | `False` |
-| `CsvFolder` | - | Destination for CSV. | No | Current directory |
+| `M365Group` | Switch | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
+| `Csv` | Switch | Force CSV export. | No | `False` |
+| `CsvFolder` | String | Destination for CSV. | No | Current directory |
 
 **Example**
 ```powershell
@@ -156,9 +156,9 @@ Get-DynamicDistributionGroupFilter -DynamicDistributionGroup <String> [-IncludeD
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `DynamicDistributionGroup` | - | Dynamic DG identity. Pipeline accepted. | Yes | - |
-| `IncludeDefaults` | - | Include default EXO filter clauses. | No | - |
-| `AsObject` | - | Return as object instead of string. | No | - |
+| `DynamicDistributionGroup` | String | Dynamic DG identity. Pipeline accepted. | Yes | - |
+| `IncludeDefaults` | Switch | Include default EXO filter clauses. | No | - |
+| `AsObject` | Switch | Return as object instead of string. | No | - |
 
 **Example**
 ```powershell
@@ -176,9 +176,9 @@ Get-EntraGroupDevice -DeviceIdentifier <String> [-TreatInputAsId] [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `DeviceIdentifier` | - | Device display name or object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat the `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `GridView` | - | Show details in Out-GridView. | No | `False` |
+| `DeviceIdentifier` | String | Device display name or object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat the `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
 **Examples**
 ```powershell
@@ -200,9 +200,9 @@ Get-EntraGroupUser -UserIdentifier <String> [-TreatInputAsId] [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserIdentifier` | - | UPN/display name/object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `GridView` | - | Show details in Out-GridView. | No | `False` |
+| `UserIdentifier` | String | UPN/display name/object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
 **Examples**
 ```powershell
@@ -224,10 +224,10 @@ Get-EntraGroupMembers [-GroupName <String>] [-GroupId <String>] [-IncludeDeviceU
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | - | Target group display name. Pipeline accepted. | Yes* | - |
-| `GroupId` | - | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `IncludeDeviceUsers` | - | When members are devices, resolve registered owners and users. | No | `False` |
-| `GridView` | - | Show details in Out-GridView. | No | `False` |
+| `GroupName` | String | Target group display name. Pipeline accepted. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `IncludeDeviceUsers` | Switch | When members are devices, resolve registered owners and users. | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
 \*Use either `GroupName` or `GroupId`.
 
@@ -264,8 +264,8 @@ Get-RoleGroupsMembers [-AsTable] [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `AsTable` | - | Show formatted table output. | No | `False` (objects) |
-| `GridView` | - | Show results in Out-GridView. | No | `False` |
+| `AsTable` | Switch | Show formatted table output. | No | `False` (objects) |
+| `GridView` | Switch | Show results in Out-GridView. | No | `False` |
 
 **Example**
 ```powershell
@@ -283,8 +283,8 @@ Get-UserGroups -UserPrincipalName <String> [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | - | User/contact/group identity. | Yes | - |
-| `GridView` | - | Show details in Out-GridView. | No | `False` |
+| `UserPrincipalName` | String | User/contact/group identity. | Yes | - |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
 **Output**
 - Default output columns: `GroupName`, `GroupMail`
@@ -316,12 +316,12 @@ Remove-EntraGroupDevice [-GroupName <String>] [-GroupId <String>] -ClearAll [-Pa
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | - | Target group display name. | Yes* | - |
-| `GroupId` | - | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `DeviceIdentifier` | - | Device display name or object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat every `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `ClearAll` | - | Remove all device members from the group (users and other objects are not removed). Prompts for confirmation. | No | `False` |
-| `PassThru` | - | Emit a status object per device. | No | `False` |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `DeviceIdentifier` | String[] | Device display name or object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `DeviceIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `ClearAll` | Switch | Remove all device members from the group (users and other objects are not removed). Prompts for confirmation. | No | `False` |
+| `PassThru` | Switch | Emit a status object per device. | No | `False` |
 
 \*Use either `GroupName` or `GroupId`.
 
@@ -354,12 +354,12 @@ Remove-EntraGroupUser [-GroupName <String>] [-GroupId <String>] -ClearAll [-Pass
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | - | Target group display name. | Yes* | - |
-| `GroupId` | - | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `UserIdentifier` | - | UPN/display name/object ID. Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | - | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `ClearAll` | - | Remove all user members from the group (devices and other objects are not removed). Prompts for confirmation. | No | `False` |
-| `PassThru` | - | Emit a status object per user. | No | `False` |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `UserIdentifier` | String[] | UPN/display name/object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `ClearAll` | Switch | Remove all user members from the group (devices and other objects are not removed). Prompts for confirmation. | No | `False` |
+| `PassThru` | Switch | Emit a status object per user. | No | `False` |
 
 \*Use either `GroupName` or `GroupId`.
 
@@ -391,9 +391,9 @@ Search-EntraGroup -SearchText <String> [-SearchIn <String>] [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SearchText` | - | Text to search in display name and/or description. Pipeline accepted. | Yes | - |
-| `SearchIn` | - | Search target: DisplayName, Description, Any. | No | `DisplayName` |
-| `GridView` | - | Show details in Out-GridView. | No | `False` |
+| `SearchText` | String | Text to search in display name and/or description. Pipeline accepted. | Yes | - |
+| `SearchIn` | String | Search target: DisplayName, Description, Any. | No | `DisplayName` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
 **Examples**
 ```powershell

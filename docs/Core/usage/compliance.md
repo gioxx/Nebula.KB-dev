@@ -28,17 +28,17 @@ Search-MboxCutoffWindow -Mailbox <String> -Mode Range -StartDate <DateTime> -End
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | - | Target mailbox. Pipeline accepted. | Yes | - |
-| `Mode` | - | `BeforeCutoff` (default) or `Range`. | No | - |
-| `CutoffDate` | - | Cutoff date used when `Mode BeforeCutoff`. | No | - |
-| `StartDate` | - | Range start date (used with `Mode Range`). | Yes (`Range`) | - |
-| `EndDate` | - | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) | - |
-| `ExistingSearchName` | - | Reuse an existing Purview Compliance Search name. | No | - |
-| `UseExistingOnly` | - | Do not create/modify search definition; run estimate/preview on existing search only. | No | - |
-| `Preview` | - | Create a Purview Preview action and return sampled lines. | No | - |
-| `PreviewCount` | - | Max preview sample lines to return. | No | - |
-| `PollingSeconds` | - | Poll interval while waiting for completion. | No | - |
-| `MaxWaitMinutes` | - | Maximum wait time before timeout. | No | - |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
+| `Mode` | String | `BeforeCutoff` (default) or `Range`. | No | - |
+| `CutoffDate` | DateTime | Cutoff date used when `Mode BeforeCutoff`. | No | - |
+| `StartDate` | DateTime | Range start date (used with `Mode Range`). | Yes (`Range`) | - |
+| `EndDate` | DateTime | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) | - |
+| `ExistingSearchName` | String | Reuse an existing Purview Compliance Search name. | No | - |
+| `UseExistingOnly` | Switch | Do not create/modify search definition; run estimate/preview on existing search only. | No | - |
+| `Preview` | Switch | Create a Purview Preview action and return sampled lines. | No | - |
+| `PreviewCount` | Int32 | Max preview sample lines to return. | No | - |
+| `PollingSeconds` | Int32 | Poll interval while waiting for completion. | No | - |
+| `MaxWaitMinutes` | Int32 | Maximum wait time before timeout. | No | - |
 
 **Examples**
 ```powershell
@@ -64,13 +64,13 @@ Set-MboxMrmCleanup -Mailbox <String> [-FixedCutoffDate <DateTime>] [-SafetyBuffe
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | - | Target mailbox. Pipeline accepted. | Yes | - |
-| `FixedCutoffDate` | - | Fixed date used to compute `AgeLimitForRetention` days. | No | - |
-| `SafetyBufferDays` | - | Additional days added as safety buffer. | No | - |
-| `RetentionAction` | - | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | - |
-| `TagName` | - | Retention policy tag name (auto-generated if omitted). | No | - |
-| `PolicyName` | - | Retention policy name (auto-generated if omitted). | No | - |
-| `RunAssistant` | - | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No | - |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
+| `FixedCutoffDate` | DateTime | Fixed date used to compute `AgeLimitForRetention` days. | No | - |
+| `SafetyBufferDays` | Int32 | Additional days added as safety buffer. | No | - |
+| `RetentionAction` | String | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | - |
+| `TagName` | String | Retention policy tag name (auto-generated if omitted). | No | - |
+| `PolicyName` | String | Retention policy name (auto-generated if omitted). | No | - |
+| `RunAssistant` | Switch | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No | - |
 
 **Examples**
 ```powershell

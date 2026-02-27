@@ -29,9 +29,9 @@ Connect-EOL [-UserPrincipalName <String>] [-DelegatedOrganization <String>] [-Pa
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | - | UPN/e-mail for the EXO auth prompt. | No | Current user (`Find-UserConnected`) |
-| `DelegatedOrganization` | - | Target customer tenant (delegated admin). | No | - |
-| `PassThru` | - | Return the `Connect-ExchangeOnline` session object. | No | `False` |
+| `UserPrincipalName` | String | UPN/e-mail for the EXO auth prompt. | No | Current user (`Find-UserConnected`) |
+| `DelegatedOrganization` | String | Target customer tenant (delegated admin). | No | - |
+| `PassThru` | Switch | Return the `Connect-ExchangeOnline` session object. | No | `False` |
 
 **Example**
 ```powershell
@@ -50,13 +50,13 @@ Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTe
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | - | UPN for EXO auth. | No | Auto-detected |
-| `GraphScopes` | - | Graph delegated scopes to request. | No | `User.Read.All` |
-| `GraphTenantId` | - | Tenant ID/domain for Graph. | No | - |
-| `GraphDeviceCode` | - | Use device code instead of browser for Graph. | No | `False` |
-| `AutoInstall` | - | Auto-install missing modules. | No | `False` |
-| `ForceReconnect` | - | Skip health checks and reconnect both services. | No | `False` |
-| `SkipGraph` | - | Connect only EXO, skip Graph entirely. | No | `False` |
+| `UserPrincipalName` | String | UPN for EXO auth. | No | Auto-detected |
+| `GraphScopes` | String[] | Graph delegated scopes to request. | No | `User.Read.All` |
+| `GraphTenantId` | String | Tenant ID/domain for Graph. | No | - |
+| `GraphDeviceCode` | Switch | Use device code instead of browser for Graph. | No | `False` |
+| `AutoInstall` | Switch | Auto-install missing modules. | No | `False` |
+| `ForceReconnect` | Switch | Skip health checks and reconnect both services. | No | `False` |
+| `SkipGraph` | Switch | Connect only EXO, skip Graph entirely. | No | `False` |
 
 **Example**
 ```powershell
@@ -81,8 +81,8 @@ Disconnect-Nebula [-ExchangeOnly] [-GraphOnly]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `ExchangeOnly` | - | Disconnect only EXO. | - | `False` |
-| `GraphOnly` | - | Disconnect only Graph. | - | `False` |
+| `ExchangeOnly` | Switch | Disconnect only EXO. | No | `False` |
+| `GraphOnly` | Switch | Disconnect only Graph. | No | `False` |
 
 **Example**
 ```powershell

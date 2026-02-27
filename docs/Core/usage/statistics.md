@@ -26,10 +26,10 @@ Export-MboxStatistics [-UserPrincipalName <String>] [-CsvFolder <String>] [-Roun
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | - | Optional single mailbox identity; when omitted, all mailboxes are exported to CSV. | No | - |
-| `CsvFolder` | - | Output folder (for all-mailbox export). | No | Current directory |
-| `Round` | - | Round quota values up to the nearest integer GB. | No | `False` |
-| `BatchSize` | - | Flush to CSV every N mailboxes. | No | `25` |
+| `UserPrincipalName` | String | Optional single mailbox identity; when omitted, all mailboxes are exported to CSV. | No | - |
+| `CsvFolder` | String | Output folder (for all-mailbox export). | No | Current directory |
+| `Round` | Switch | Round quota values up to the nearest integer GB. | No | `False` |
+| `BatchSize` | Int | Flush to CSV every N mailboxes. | No | `25` |
 
 **Examples**
 ```powershell
@@ -51,10 +51,10 @@ Get-MboxStatistics [-UserPrincipalName <String>] [-IncludeArchive] [-IncludeMess
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | - | Optional mailbox identity (also from pipeline, including multiple values); when omitted, all mailboxes are returned. | No | - |
-| `IncludeArchive` | - | Include archive size and usage info when archive is enabled. | No | `False` |
-| `IncludeMessageActivity` | - | Include message activity fields (`LastReceived`, `LastSent`, `OldestItemReceivedDate`, `OldestItemFolderPath`). | No | `False` |
-| `Round` | - | Round quota values up to the nearest integer GB. | No | `True` |
+| `UserPrincipalName` | String | Optional mailbox identity (also from pipeline, including multiple values); when omitted, all mailboxes are returned. | No | - |
+| `IncludeArchive` | Switch | Include archive size and usage info when archive is enabled. | No | `False` |
+| `IncludeMessageActivity` | Switch | Include message activity fields (`LastReceived`, `LastSent`, `OldestItemReceivedDate`, `OldestItemFolderPath`). | No | `False` |
+| `Round` | Switch | Round quota values up to the nearest integer GB. | No | `True` |
 
 **Output (main fields)**
 - `DisplayName`
