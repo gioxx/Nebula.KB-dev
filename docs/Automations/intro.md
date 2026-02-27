@@ -24,11 +24,11 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 It is the natural evolution of *Nebula.Tools* and was created with a specific focus on automation.
 
 **Main features currently available:**
-- `Send-Mail` - send HTML (or plain text) emails via SMTP, with multi-recipient To/Cc/Bcc, multiple attachments, optional auth, and TLS.
-- `Test-MgGraphConnection` (alias `CheckMGGraphConnection`) - connect to Microsoft Graph using application credentials, optionally auto-install the Graph module, and emit a Boolean result.
+- Messaging: `Send-Mail`, `Send-ReportIfChanged`.
+- Microsoft Graph connectivity: `Test-MgGraphConnection` (alias `CheckMGGraphConnection`).
+- Scheduled task automation: `Register-ScriptScheduledTask`, `Unregister-ScriptScheduledTask`, `Invoke-ScriptTaskLifecycle`.
+- Runtime helpers: `Import-PreferredModule`, `Initialize-ScriptRuntime`, `Resolve-ScriptConfigPaths`, `Test-ScriptActivityLog`, `Start-ScriptTranscript`, `Stop-ScriptTranscriptSafe`.
 - Logging fallback: if `Nebula.Log` is not installed, the module exposes a compatible `Write-Log` (alias `Log-Message`) that internally calls `Write-NALog`, so scripts using `Write-Log` do not break.
- 
-Both functions are designed to be composable inside automation scripts rather than one-off console utilities.
 
 ## Quick examples
 
@@ -39,8 +39,8 @@ Send-Mail `
   -SMTPServer "smtp.contoso.com" `
   -UseSsl `
   -Credential (Get-Credential) `
-  -From "automation@contoso.com" `
-  -To "ops@contoso.com","lead@contoso.com" `
+  -From "user@contoso.com" `
+  -To "sharedmailbox@contoso.com","user2@contoso.com" `
   -Subject "Daily report" `
   -Body "<h1>Report</h1><p>See attachment.</p>" `
   -AttachmentPath "C:\Reports\daily.csv","C:\Reports\chart.pdf"
@@ -61,6 +61,18 @@ $connected = Test-MgGraphConnection `
 if (-not $connected) { throw "Unable to connect to Microsoft Graph." }
 ```
 
+- Register a daily scheduled task for a script:
+
+```powershell
+Register-ScriptScheduledTask `
+  -TaskName "Daily-InventorySync" `
+  -TaskPath "\Nebula\" `
+  -ScriptPath "C:\Ops\Inventory\Sync.ps1" `
+  -StartTime ((Get-Date).Date.AddHours(3)) `
+  -ScheduleType Daily `
+  -Force
+```
+
 :::tip
 Every function exposes built-in help. Use `Get-Help <FunctionName> -Detailed` or `-Examples` for notes, parameters, and prerequisites.
 :::
@@ -70,6 +82,7 @@ Every function exposes built-in help. Use `Get-Help <FunctionName> -Detailed` or
 - PowerShell 5.1+ or PowerShell 7+
 - `Send-Mail`: no external dependencies; uses .NET `System.Net.Mail`. Supports credentials/TLS when the relay requires them.
 - `Test-MgGraphConnection`: uses `Microsoft.Graph`; can auto-install it when `-AutoInstall` is set. Logging relies on `Write-Log` from `Nebula.Log`; if that module is missing, Nebula.Automations exposes a compatible `Write-Log`/`Log-Message` that delegates to `Write-NALog`.
+- `Register-ScriptScheduledTask`: requires the ScheduledTasks module/cmdlets available on Windows hosts where Task Scheduler automation is supported.
 
 ## Logging behavior
 

@@ -23,9 +23,9 @@ $body = @"
 "@
 
 Send-Mail `
-  -SMTPServer "smtp.internal.local" `
-  -From "automation@contoso.com" `
-  -To "team@contoso.com" `
+  -SMTPServer "smtp.contoso.com" `
+  -From "user@contoso.com" `
+  -To "sharedmailbox@contoso.com" `
   -Subject "Nightly batch OK" `
   -Body $body
 ```
@@ -36,12 +36,12 @@ Send-Mail `
 $cred = Get-Credential  # relay credentials
 
 Send-Mail `
-  -SMTPServer "smtp.secure.local" `
+  -SMTPServer "smtp.contoso.com" `
   -SMTPPort 587 `
   -UseSsl `
   -Credential $cred `
-  -From "alerts@contoso.com" `
-  -To "ops@contoso.com" `
+  -From "user@contoso.com" `
+  -To "sharedmailbox@contoso.com" `
   -Subject "Alert with attachment" `
   -Body "<p>See attached log.</p>" `
   -AttachmentPath "C:\Logs\alert.log"
@@ -51,11 +51,11 @@ Send-Mail `
 
 ```powershell
 Send-Mail `
-  -SMTPServer "smtp.internal.local" `
-  -From "notifications@contoso.com" `
-  -To "primary@contoso.com","secondary@contoso.com" `
-  -Cc "manager@contoso.com" `
-  -Bcc "audit@contoso.com" `
+  -SMTPServer "smtp.contoso.com" `
+  -From "user@contoso.com" `
+  -To "user1@contoso.com","user2@contoso.com" `
+  -Cc "sharedmailbox@contoso.com" `
+  -Bcc "user3@contoso.com" `
   -Subject "Maintenance window" `
   -Body "Service downtime tonight 22:00-23:00 UTC." `
   -PlainText
@@ -79,4 +79,38 @@ if (-not $connected) { throw "Unable to connect to Microsoft Graph." }
 if (-not (Test-MgGraphConnection -TenantId $tenantId -ClientId $clientId -ClientSecret $clientSecret -AutoInstall)) {
     throw "Graph connection failed even after installing Microsoft.Graph."
 }
+```
+
+## Register a daily script task (standard mode)
+
+```powershell
+Register-ScriptScheduledTask `
+  -TaskName "Daily-PolicyAudit" `
+  -TaskPath "\Nebula\" `
+  -Mode Standard `
+  -ScriptPath "C:\Ops\Audit\Invoke-PolicyAudit.ps1" `
+  -StartTime ((Get-Date).Date.AddHours(2)) `
+  -ScheduleType Daily `
+  -RunElevated
+```
+
+## Register with custom XML (advanced scheduling)
+
+```powershell
+$cred = Get-Credential
+
+Register-ScriptScheduledTask `
+  -TaskName "ConditionalAccess-Automation" `
+  -Mode Xml `
+  -TaskXmlPath "C:\Ops\TaskXml\ConditionalAccess.xml" `
+  -Credential $cred `
+  -Force
+```
+
+## Remove a scheduled script task
+
+```powershell
+Unregister-ScriptScheduledTask `
+  -TaskName "Daily-PolicyAudit" `
+  -TaskPath "\Nebula\"
 ```

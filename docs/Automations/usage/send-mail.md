@@ -49,9 +49,9 @@ The function relies on .NET `System.Net.Mail.SmtpClient`. Auth/TLS are supported
 
 ```powershell
 Send-Mail `
-  -SMTPServer "smtp.internal.local" `
-  -From "automation@contoso.com" `
-  -To "team@contoso.com" `
+  -SMTPServer "smtp.contoso.com" `
+  -From "user@contoso.com" `
+  -To "sharedmailbox@contoso.com" `
   -Subject "Job completed" `
   -Body "<p>The overnight job finished successfully.</p>"
 ```
@@ -60,14 +60,14 @@ Send-Mail `
 
 ```powershell
 Send-Mail `
-  -SMTPServer "smtp.internal.local" `
+  -SMTPServer "smtp.contoso.com" `
   -SMTPPort 2525 `
-  -From "automation@contoso.com" `
+  -From "user@contoso.com" `
   -UseSsl `
   -Credential (Get-Credential) `
   -To "user1@contoso.com","user2@contoso.com" `
-  -Cc "lead@contoso.com" `
-  -Bcc "audit@contoso.com" `
+  -Cc "sharedmailbox@contoso.com" `
+  -Bcc "user3@contoso.com" `
   -Subject "Weekly metrics" `
   -Body "<p>Attached you will find the weekly metrics.</p>" `
   -AttachmentPath "C:\Exports\metrics.xlsx","C:\Exports\trend.pdf"
@@ -85,7 +85,7 @@ function Send-JobAlert {
   $subject = "Nightly job status: $Status"
   $body = "<h2>Status: $Status</h2><p>See attached log.</p>"
 
-  Send-Mail -SMTPServer "smtp.example.com" -From "jobs@example.com" -To "ops@example.com" `
+  Send-Mail -SMTPServer "smtp.contoso.com" -From "user@contoso.com" -To "sharedmailbox@contoso.com" `
     -Subject $subject -Body $body -AttachmentPath $ReportPath
 }
 ```
