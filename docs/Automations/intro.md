@@ -77,6 +77,15 @@ Register-ScriptScheduledTask `
 Every function exposes built-in help. Use `Get-Help <FunctionName> -Detailed` or `-Examples` for notes, parameters, and prerequisites.
 :::
 
+## Browse by area
+
+- [Messaging](./usage/messaging)
+- [Microsoft Graph](./usage/graph)
+- [Scheduled Tasks](./usage/scheduled-tasks)
+- [Runtime Helpers](./usage/runtime)
+- [Logging](./usage/logging)
+- [Functions A-Z](./usage/reference)
+
 ## Requirements
 
 - PowerShell 5.1+ or PowerShell 7+
