@@ -62,7 +62,7 @@ Get-QuarantineFrom -SenderAddress <String[]> [-IncludeReleased]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SenderAddress` | String[] | Sender address(es). Pipeline accepted. | Yes | - |
-| `IncludeReleased` | Switch | Include messages already released. | No | - |
+| `IncludeReleased` | Switch | Include messages already released. | No | `False` |
 
 **Example**
 ```powershell
@@ -81,7 +81,7 @@ Get-QuarantineFromDomain -SenderDomain <String[]> [-IncludeReleased]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SenderDomain` | String[] | Domain(s) (e.g., contoso.com). Pipeline accepted. | Yes | - |
-| `IncludeReleased` | Switch | Include messages already released. | No | - |
+| `IncludeReleased` | Switch | Include messages already released. | No | `False` |
 
 **Example**
 ```powershell
@@ -125,7 +125,7 @@ Unlock-QuarantineFrom -SenderAddress <String[]> [-ReportFalsePositive] [-Confirm
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SenderAddress` | String[] | Sender address(es). Pipeline accepted. | Yes | - |
-| `ReportFalsePositive` | Switch | Also report as false positive. | No | - |
+| `ReportFalsePositive` | Switch | Also report as false positive. | No | `False` |
 
 **Example**
 ```powershell
@@ -145,7 +145,7 @@ Unlock-QuarantineMessageId [-MessageId <String[]>] [-Identity <String[]>] [-Repo
 | --- | --- | --- | :---: | --- |
 | `MessageId` | String[] | MessageId values (with/without angle brackets). Pipeline accepted. | One of MessageId/Identity | - |
 | `Identity` | String[] | Quarantine Identity values (e.g., GUID\GUID). Pipeline accepted. | One of MessageId/Identity | - |
-| `ReportFalsePositive` | Switch | Also report as false positive. | No | - |
+| `ReportFalsePositive` | Switch | Also report as false positive. | No | `False` |
 
 **Example**
 ```powershell

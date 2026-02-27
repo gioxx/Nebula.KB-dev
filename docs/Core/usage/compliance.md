@@ -29,13 +29,13 @@ Search-MboxCutoffWindow -Mailbox <String> -Mode Range -StartDate <DateTime> -End
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
-| `Mode` | String | `BeforeCutoff` (default) or `Range`. | No | - |
+| `Mode` | String | `BeforeCutoff` (default) or `Range`. | No | BeforeCutoff |
 | `CutoffDate` | DateTime | Cutoff date used when `Mode BeforeCutoff`. | No | - |
 | `StartDate` | DateTime | Range start date (used with `Mode Range`). | Yes (`Range`) | - |
 | `EndDate` | DateTime | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) | - |
 | `ExistingSearchName` | String | Reuse an existing Purview Compliance Search name. | No | - |
-| `UseExistingOnly` | Switch | Do not create/modify search definition; run estimate/preview on existing search only. | No | - |
-| `Preview` | Switch | Create a Purview Preview action and return sampled lines. | No | - |
+| `UseExistingOnly` | Switch | Do not create/modify search definition; run estimate/preview on existing search only. | No | `False` |
+| `Preview` | Switch | Create a Purview Preview action and return sampled lines. | No | `False` |
 | `PreviewCount` | Int32 | Max preview sample lines to return. | No | - |
 | `PollingSeconds` | Int32 | Poll interval while waiting for completion. | No | - |
 | `MaxWaitMinutes` | Int32 | Maximum wait time before timeout. | No | - |
@@ -67,10 +67,10 @@ Set-MboxMrmCleanup -Mailbox <String> [-FixedCutoffDate <DateTime>] [-SafetyBuffe
 | `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
 | `FixedCutoffDate` | DateTime | Fixed date used to compute `AgeLimitForRetention` days. | No | - |
 | `SafetyBufferDays` | Int32 | Additional days added as safety buffer. | No | - |
-| `RetentionAction` | String | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | - |
+| `RetentionAction` | String | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | DeleteAndAllowRecovery |
 | `TagName` | String | Retention policy tag name (auto-generated if omitted). | No | - |
 | `PolicyName` | String | Retention policy name (auto-generated if omitted). | No | - |
-| `RunAssistant` | Switch | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No | - |
+| `RunAssistant` | Switch | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No | `False` |
 
 **Examples**
 ```powershell

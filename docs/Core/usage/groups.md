@@ -157,8 +157,8 @@ Get-DynamicDistributionGroupFilter -DynamicDistributionGroup <String> [-IncludeD
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `DynamicDistributionGroup` | String | Dynamic DG identity. Pipeline accepted. | Yes | - |
-| `IncludeDefaults` | Switch | Include default EXO filter clauses. | No | - |
-| `AsObject` | Switch | Return as object instead of string. | No | - |
+| `IncludeDefaults` | Switch | Include default EXO filter clauses. | No | `False` |
+| `AsObject` | Switch | Return as object instead of string. | No | `False` |
 
 **Example**
 ```powershell

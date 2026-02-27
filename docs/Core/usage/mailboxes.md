@@ -65,8 +65,8 @@ Add-MboxPermission -SourceMailbox <String> -UserMailbox <String[]> [-AccessRight
 | `SourceMailbox` (`Identity`) | String | Target mailbox. | Yes | - |
 | `UserMailbox` | String[] | One or more principals to grant. Pipeline accepted. | Yes | - |
 | `AccessRights` | String | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No | - |
-| `AutoMapping` | Switch | Enable/disable Outlook automapping. | No | - |
-| `PassThru` | Switch | Emit detailed permission objects (default shows only confirmation messages). | No | - |
+| `AutoMapping` | Switch | Enable/disable Outlook automapping. | No | `False` |
+| `PassThru` | Switch | Emit detailed permission objects (default shows only confirmation messages). | No | `False` |
 
 **Examples**
 ```powershell
@@ -89,9 +89,9 @@ Export-MboxAlias [-SourceMailbox <String[]>] [-Csv] [-CsvFolder <String>] [-All]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String[] | Target mailbox/recipient. Pipeline accepted. | No | - |
-| `Csv` | Switch | Export results to CSV. | No | - |
+| `Csv` | Switch | Export results to CSV. | No | `False` |
 | `CsvFolder` | String | Destination folder for CSV export. | No | - |
-| `All` | Switch | Export aliases for all non-guest recipients. | No | - |
+| `All` | Switch | Export aliases for all non-guest recipients. | No | `False` |
 | `Domain` | String | Export aliases for recipients matching a domain. | No | - |
 
 **Examples**
@@ -156,7 +156,7 @@ Get-MboxLastMessageTrace -SourceMailbox <String> [-IncludeTrace]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String | Target mailbox/recipient. Pipeline accepted. | No | - |
-| `IncludeTrace` | Switch | Include raw message trace objects in the output. | No | - |
+| `IncludeTrace` | Switch | Include raw message trace objects in the output. | No | `False` |
 
 **Example**
 ```powershell
@@ -197,7 +197,7 @@ Get-MboxPrimarySmtpAddress -SourceMailbox <String[]> [-Raw]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String[] | Target mailbox/recipient. Pipeline accepted. | Yes | - |
-| `Raw` | Switch | Return only the PrimarySmtpAddress values. | No | - |
+| `Raw` | Switch | Return only the PrimarySmtpAddress values. | No | `False` |
 
 :::tip
 `Get-MboxPrimarySmtpAddress` is also available as `gpa` (alias).
@@ -292,7 +292,7 @@ Remove-MboxPermission <SourceMailbox> <UserMailbox> [-AccessRights <String>]
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String | Target mailbox. | Yes | - |
 | `UserMailbox` | String[] | Principal(s) to revoke. | Yes (User mode) | - |
-| `AccessRights` | String | Rights (e.g., FullAccess, SendAs, SendOnBehalfTo). Defaults to All. | No | - |
+| `AccessRights` | String | Rights (e.g., FullAccess, SendAs, SendOnBehalfTo). Defaults to All. | No | All |
 | `ClearAll` | Switch | Remove all non-inherited FullAccess, SendAs, and SendOnBehalfTo permissions from the source mailbox. | Yes (All mode) | - |
 
 **Examples**
@@ -381,7 +381,7 @@ Test-SharedMailboxCompliance [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GridView` | Switch | Show output in Out-GridView (default behavior). Use `-GridView:$false` to return objects. | No | - |
+| `GridView` | Switch | Show output in Out-GridView (default behavior). Use `-GridView:$false` to return objects. | No | True |
 
 **Example**
 ```powershell
