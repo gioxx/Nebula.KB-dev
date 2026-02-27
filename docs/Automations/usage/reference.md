@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: Functions A-Z
 id: functions-a-z
 description: Alphabetical index of Nebula.Automations functions.
@@ -24,3 +24,7 @@ description: Alphabetical index of Nebula.Automations functions.
 ## Additional examples
 
 - [More examples](./more-examples)
+
+## Back to section start
+
+- [Usage overview](./intro)

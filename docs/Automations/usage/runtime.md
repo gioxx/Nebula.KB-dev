@@ -1,6 +1,6 @@
 ---
-sidebar_position: 4
-title: Runtime Helpers overview
+sidebar_position: 5
+title: Runtime Helpers
 id: runtime-overview
 description: Functions for script bootstrap, configuration, activity checks, and transcripts.
 ---
@@ -46,3 +46,7 @@ $runtime = Initialize-ScriptRuntime `
 ## Notes
 
 Use `Get-Help <FunctionName> -Detailed` to inspect full signatures and edge-case behavior for each runtime helper.
+
+## Next
+
+- [Logging](./logging)

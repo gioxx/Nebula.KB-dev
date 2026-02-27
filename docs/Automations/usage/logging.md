@@ -1,6 +1,6 @@
 ---
-sidebar_position: 5
-title: Logging overview
+sidebar_position: 6
+title: Logging
 id: logging-overview
 description: Functions related to log writing and fallback logging behavior.
 ---
@@ -21,3 +21,7 @@ Compatibility wrapper exposed by Nebula.Automations when `Nebula.Log` is unavail
 ## Notes
 
 Use `Get-Help Write-Log -Detailed` for compatibility and output behavior details.
+
+## Next
+
+- [Functions A-Z](./reference)

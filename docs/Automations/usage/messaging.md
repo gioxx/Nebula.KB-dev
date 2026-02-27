@@ -1,6 +1,6 @@
 ---
-sidebar_position: 1
-title: Messaging overview
+sidebar_position: 2
+title: Messaging
 id: messaging-overview
 description: Functions for sending emails and change-based reports.
 ---
@@ -62,3 +62,7 @@ $result = Send-ReportIfChanged `
 ## Notes
 
 Use `Get-Help Send-Mail -Detailed` and `Get-Help Send-ReportIfChanged -Detailed` for full parameter documentation.
+
+## Next
+
+- [Microsoft Graph](./graph)

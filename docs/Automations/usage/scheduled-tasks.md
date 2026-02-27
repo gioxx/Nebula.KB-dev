@@ -1,6 +1,6 @@
 ---
-sidebar_position: 3
-title: Scheduled Tasks overview
+sidebar_position: 4
+title: Scheduled Tasks
 id: scheduled-tasks-overview
 description: Functions to register, unregister, and orchestrate scheduled script tasks.
 ---
@@ -36,3 +36,7 @@ Register-ScriptScheduledTask `
 ## Notes
 
 Use `Get-Help <FunctionName> -Detailed` for advanced scheduling options and lifecycle switches.
+
+## Next
+
+- [Runtime Helpers](./runtime)

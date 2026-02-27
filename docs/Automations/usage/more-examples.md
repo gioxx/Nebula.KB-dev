@@ -1,5 +1,5 @@
 ---
-sidebar_position: 50
+sidebar_position: 8
 title: "More examples"
 description: Practical recipes that show common ways to use Nebula.Automations.
 hide_title: true
@@ -114,3 +114,7 @@ Unregister-ScriptScheduledTask `
   -TaskName "Daily-PolicyAudit" `
   -TaskPath "\Nebula\"
 ```
+
+## Back to section start
+
+- [Usage overview](./intro)

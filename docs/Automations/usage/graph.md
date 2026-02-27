@@ -1,6 +1,6 @@
 ---
-sidebar_position: 2
-title: Microsoft Graph overview
+sidebar_position: 3
+title: Microsoft Graph
 id: graph-overview
 description: Functions for Microsoft Graph connectivity and validation.
 ---
@@ -33,3 +33,7 @@ $ok = Test-MgGraphConnection `
 ## Notes
 
 Use `Get-Help Test-MgGraphConnection -Detailed` for complete parameter behavior and authentication options.
+
+## Next
+
+- [Scheduled Tasks](./scheduled-tasks)
