@@ -1,19 +1,23 @@
 ---
 sidebar_position: 2
-title: Messaging
-id: messaging-overview
+title: "Messaging"
+id: messaging
 description: Functions for sending emails and change-based reports.
+tags:
+  - Send-Mail
+  - Send-ReportIfChanged
+  - Nebula.Automations
 ---
 
 # Messaging
 
-This page groups the messaging functions used to send emails and conditional reports.
+This page groups the messaging functions used to send emails and conditional reports. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
 
 ## Send-Mail
 
 Send emails via SMTP with support for CC/BCC, attachments, SSL/TLS, and credentials.
 
-### Syntax
+**Syntax**
 
 ```powershell
 Send-Mail -SMTPServer <String> -From <String> -To <String[]> -Subject <String> -Body <String>
@@ -21,7 +25,7 @@ Send-Mail -SMTPServer <String> -From <String> -To <String[]> -Subject <String> -
          [-PlainText] [-Credential <PSCredential>] [-UseSsl]
 ```
 
-### Typical use
+**Example**
 
 ```powershell
 Send-Mail `
@@ -38,7 +42,7 @@ Send-Mail `
 
 Finalize and send an HTML report only when changes are detected.
 
-### Syntax
+**Syntax**
 
 ```powershell
 Send-ReportIfChanged -ModCounter <Int> -MailBody <String> -SmtpServer <String> -From <String> -To <String[]>
@@ -46,7 +50,7 @@ Send-ReportIfChanged -ModCounter <Int> -MailBody <String> -SmtpServer <String> -
                      [-ForceMailTo <Boolean>] [-LogLocation <String>]
 ```
 
-### Typical use
+**Example**
 
 ```powershell
 $result = Send-ReportIfChanged `
@@ -58,7 +62,3 @@ $result = Send-ReportIfChanged `
   -To "ops@contoso.com" `
   -Subject "User sync report"
 ```
-
-## Notes
-
-Use `Get-Help Send-Mail -Detailed` and `Get-Help Send-ReportIfChanged -Detailed` for full parameter documentation.
