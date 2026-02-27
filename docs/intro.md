@@ -18,12 +18,6 @@ Something that could easily group ideas together and provide users with a source
 This is **Nebula.KB**, initially conceived and created to host documentation related to Nebula modules for PowerShell (you can find all the references in the sidebar, just below), immediately adapted to look to the future and the possibility of bringing other ideas unrelated to the main project here as well. It's only a matter of time, I have less and less of it and I'm trying to devote it to this "side project" (which isn't really that side), to the migration of content written in a "_less than perfect_" way in my virtual notebooks.  
 Be patient, I'll manage to publish everything, sooner or later!
 
-At present, almost all Nebula modules documentation is available. The following will arrive later:
-- [IntuneWinAppUtilGUI](https://github.com/gioxx/IntuneWinAppUtilGUI)
-- [SleeperStack](https://github.com/gioxx/SleeperStack/)
-- My WordPress plugins
-- My YOURLS plugins
-
 ## Why in English? 🌎
 To try to break out of the usual pattern _a little_.  
 I have always written in Italian (and I still do it on my personal blog), but sometimes I have written in English, which has allowed me to reach a different audience, broadening my horizons and seeking to embrace the exchange of ideas and the improvement of existing ones thanks to the contribution of people outside the _boot_ (as Italy is known).  
