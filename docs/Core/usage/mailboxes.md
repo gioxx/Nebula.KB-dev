@@ -64,7 +64,7 @@ Add-MboxPermission -SourceMailbox <String> -UserMailbox <String[]> [-AccessRight
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String | Target mailbox. | Yes | - |
 | `UserMailbox` | String[] | One or more principals to grant. Pipeline accepted. | Yes | - |
-| `AccessRights` | String | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No | - |
+| `AccessRights` | String | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No | `All` |
 | `AutoMapping` | Switch | Enable/disable Outlook automapping. | No | `False` |
 | `PassThru` | Switch | Emit detailed permission objects (default shows only confirmation messages). | No | `False` |
 
@@ -323,7 +323,7 @@ Set-MboxLanguage -Csv <String> [-Language <String>]
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String[] | Target mailbox(es). Pipeline accepted. | No | - |
 | `Csv` | String | CSV file path containing `EmailAddress` column. | No | - |
-| `Language` | String | Culture code (e.g., it-IT, en-US). | No | - |
+| `Language` | String | Culture code (e.g., it-IT, en-US). | No | `it-IT` |
 
 **Example**
 ```powershell

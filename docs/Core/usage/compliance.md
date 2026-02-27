@@ -30,15 +30,15 @@ Search-MboxCutoffWindow -Mailbox <String> -Mode Range -StartDate <DateTime> -End
 | --- | --- | --- | :---: | --- |
 | `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
 | `Mode` | String | `BeforeCutoff` (default) or `Range`. | No | BeforeCutoff |
-| `CutoffDate` | DateTime | Cutoff date used when `Mode BeforeCutoff`. | No | - |
+| `CutoffDate` | DateTime | Cutoff date used when `Mode BeforeCutoff`. | No | `2025-01-01` |
 | `StartDate` | DateTime | Range start date (used with `Mode Range`). | Yes (`Range`) | - |
 | `EndDate` | DateTime | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) | - |
 | `ExistingSearchName` | String | Reuse an existing Purview Compliance Search name. | No | - |
 | `UseExistingOnly` | Switch | Do not create/modify search definition; run estimate/preview on existing search only. | No | `False` |
 | `Preview` | Switch | Create a Purview Preview action and return sampled lines. | No | `False` |
-| `PreviewCount` | Int32 | Max preview sample lines to return. | No | - |
-| `PollingSeconds` | Int32 | Poll interval while waiting for completion. | No | - |
-| `MaxWaitMinutes` | Int32 | Maximum wait time before timeout. | No | - |
+| `PreviewCount` | Int32 | Max preview sample lines to return. | No | `50` |
+| `PollingSeconds` | Int32 | Poll interval while waiting for completion. | No | `10` |
+| `MaxWaitMinutes` | Int32 | Maximum wait time before timeout. | No | `60` |
 
 **Examples**
 ```powershell
@@ -65,8 +65,8 @@ Set-MboxMrmCleanup -Mailbox <String> [-FixedCutoffDate <DateTime>] [-SafetyBuffe
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | String | Target mailbox. Pipeline accepted. | Yes | - |
-| `FixedCutoffDate` | DateTime | Fixed date used to compute `AgeLimitForRetention` days. | No | - |
-| `SafetyBufferDays` | Int32 | Additional days added as safety buffer. | No | - |
+| `FixedCutoffDate` | DateTime | Fixed date used to compute `AgeLimitForRetention` days. | No | `2025-01-01` |
+| `SafetyBufferDays` | Int32 | Additional days added as safety buffer. | No | `7` |
 | `RetentionAction` | String | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | DeleteAndAllowRecovery |
 | `TagName` | String | Retention policy tag name (auto-generated if omitted). | No | - |
 | `PolicyName` | String | Retention policy name (auto-generated if omitted). | No | - |
