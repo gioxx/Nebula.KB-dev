@@ -1,26 +1,41 @@
 ---
 sidebar_position: 3
-title: Microsoft Graph
-id: graph-overview
+title: "Microsoft Graph"
+id: graph
 description: Functions for Microsoft Graph connectivity and validation.
+tags:
+  - Test-MgGraphConnection
+  - Microsoft.Graph
+  - Nebula.Automations
 ---
 
 # Microsoft Graph
 
-This page covers Graph connectivity checks used by automation scripts.
+This page covers Graph connectivity checks used by automation scripts. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
 
 ## Test-MgGraphConnection
 
 Validate and initialize Microsoft Graph connectivity, with optional auto-install behavior.
 
-### Syntax
+**Syntax**
 
 ```powershell
 Test-MgGraphConnection [-TenantId <String>] [-ClientId <String>] [-ClientSecret <String>]
                        [-AutoInstall] [-LogLocation <String>] [-ShowInformations]
 ```
 
-### Typical use
+**Parameters**
+
+| Parameter | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `TenantId` | `String` | Yes | - | Azure AD tenant ID (GUID or verified domain). |
+| `ClientId` | `String` | Yes | - | Application (client) ID. |
+| `ClientSecret` | `String` | Yes | - | Client secret associated with the application. |
+| `AutoInstall` | `Boolean` | No | `False` | Installs `Microsoft.Graph` if missing. |
+| `LogLocation` | `String` | No | - | Optional log file/location. |
+| `ShowInformations` | `Boolean` | No | `False` | Emits additional diagnostics (secret is masked). |
+
+**Example**
 
 ```powershell
 $ok = Test-MgGraphConnection `
@@ -29,7 +44,3 @@ $ok = Test-MgGraphConnection `
   -ClientSecret $secret `
   -AutoInstall
 ```
-
-## Notes
-
-Use `Get-Help Test-MgGraphConnection -Detailed` for complete parameter behavior and authentication options.

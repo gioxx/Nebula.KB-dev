@@ -12,7 +12,7 @@ tags:
 
 # More examples
 
-Practical recipes that show common ways to use Nebula.Automations.
+Practical recipes that show common ways to use Nebula.Automations. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
 
 ## Send a styled HTML e-mail
 
