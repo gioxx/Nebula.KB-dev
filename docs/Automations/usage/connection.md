@@ -28,9 +28,9 @@ Test-MgGraphConnection -TenantId <String> -ClientId <String> -ClientSecret <Stri
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TenantId` | `String` | Microsoft Entra tenant ID used for app authentication. | Yes | N/A |
-| `ClientId` | `String` | Application (client) ID. | Yes | N/A |
-| `ClientSecret` | `String` | Client secret for app-based authentication. | Yes | N/A |
+| `TenantId` | `String` | Microsoft Entra tenant ID used for app authentication. | Yes | - |
+| `ClientId` | `String` | Application (client) ID. | Yes | - |
+| `ClientSecret` | `String` | Client secret for app-based authentication. | Yes | - |
 | `AutoInstall` | `Boolean` | Automatically installs `Microsoft.Graph` when missing. | No | `False` |
 | `LogLocation` | `String` | Log destination path for connection checks. | No | `None` |
 | `ShowInformations` | `Boolean` | Emits additional diagnostic information during validation. | No | `False` |
