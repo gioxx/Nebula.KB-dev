@@ -26,19 +26,19 @@ Search-MboxCutoffWindow -Mailbox <String> [-Mode <String>] [-CutoffDate <DateTim
 Search-MboxCutoffWindow -Mailbox <String> -Mode Range -StartDate <DateTime> -EndDate <DateTime> [-ExistingSearchName <String>] [-UseExistingOnly] [-Preview] [-PreviewCount <Int32>] [-PollingSeconds <Int32>] [-MaxWaitMinutes <Int32>]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | Target mailbox. Pipeline accepted. | Yes |
-| `Mode` | `BeforeCutoff` (default) or `Range`. | No |
-| `CutoffDate` | Cutoff date used when `Mode BeforeCutoff`. | No |
-| `StartDate` | Range start date (used with `Mode Range`). | Yes (`Range`) |
-| `EndDate` | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) |
-| `ExistingSearchName` | Reuse an existing Purview Compliance Search name. | No |
-| `UseExistingOnly` | Do not create/modify search definition; run estimate/preview on existing search only. | No |
-| `Preview` | Create a Purview Preview action and return sampled lines. | No |
-| `PreviewCount` | Max preview sample lines to return. | No |
-| `PollingSeconds` | Poll interval while waiting for completion. | No |
-| `MaxWaitMinutes` | Maximum wait time before timeout. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | - | Target mailbox. Pipeline accepted. | Yes | - |
+| `Mode` | - | `BeforeCutoff` (default) or `Range`. | No | - |
+| `CutoffDate` | - | Cutoff date used when `Mode BeforeCutoff`. | No | - |
+| `StartDate` | - | Range start date (used with `Mode Range`). | Yes (`Range`) | - |
+| `EndDate` | - | Range end date, exclusive (used with `Mode Range`). | Yes (`Range`) | - |
+| `ExistingSearchName` | - | Reuse an existing Purview Compliance Search name. | No | - |
+| `UseExistingOnly` | - | Do not create/modify search definition; run estimate/preview on existing search only. | No | - |
+| `Preview` | - | Create a Purview Preview action and return sampled lines. | No | - |
+| `PreviewCount` | - | Max preview sample lines to return. | No | - |
+| `PollingSeconds` | - | Poll interval while waiting for completion. | No | - |
+| `MaxWaitMinutes` | - | Maximum wait time before timeout. | No | - |
 
 **Examples**
 ```powershell
@@ -62,15 +62,15 @@ Apply a one-shot MRM cleanup policy/tag to a mailbox (optional Managed Folder As
 Set-MboxMrmCleanup -Mailbox <String> [-FixedCutoffDate <DateTime>] [-SafetyBufferDays <Int32>] [-RetentionAction <String>] [-TagName <String>] [-PolicyName <String>] [-RunAssistant]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | Target mailbox. Pipeline accepted. | Yes |
-| `FixedCutoffDate` | Fixed date used to compute `AgeLimitForRetention` days. | No |
-| `SafetyBufferDays` | Additional days added as safety buffer. | No |
-| `RetentionAction` | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No |
-| `TagName` | Retention policy tag name (auto-generated if omitted). | No |
-| `PolicyName` | Retention policy name (auto-generated if omitted). | No |
-| `RunAssistant` | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Mailbox` (`Identity`, `UserPrincipalName`, `SourceMailbox`) | - | Target mailbox. Pipeline accepted. | Yes | - |
+| `FixedCutoffDate` | - | Fixed date used to compute `AgeLimitForRetention` days. | No | - |
+| `SafetyBufferDays` | - | Additional days added as safety buffer. | No | - |
+| `RetentionAction` | - | `DeleteAndAllowRecovery` (default) or `PermanentlyDelete`. | No | - |
+| `TagName` | - | Retention policy tag name (auto-generated if omitted). | No | - |
+| `PolicyName` | - | Retention policy name (auto-generated if omitted). | No | - |
+| `RunAssistant` | - | Trigger Managed Folder Assistant (`Start-ManagedFolderAssistant -FullCrawl`) after assignment. | No | - |
 
 **Examples**
 ```powershell

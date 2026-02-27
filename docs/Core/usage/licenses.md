@@ -31,12 +31,12 @@ Add-UserMsolAccountSku -UserPrincipalName <String> -License <String[]> [-ForceLi
 Add-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `UserPrincipalName` | Target user UPN or object ID. | Yes |
-| `License` | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes |
-| `ForceLicenseCatalogRefresh` | Redownload license catalog cache. | No |
-| `ShowErrorDetails` | Include exception details in error messages. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` | - | Target user UPN or object ID. | Yes | - |
+| `License` | - | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
+| `ForceLicenseCatalogRefresh` | - | Redownload license catalog cache. | No | - |
+| `ShowErrorDetails` | - | Include exception details in error messages. | No | - |
 
 **Examples**
 ```powershell
@@ -77,10 +77,10 @@ Copy-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrinci
 Copy-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceUserPrincipalName` | Source user UPN or object ID. | Yes |
-| `DestinationUserPrincipalName` | Destination user UPN or object ID. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceUserPrincipalName` | - | Source user UPN or object ID. | Yes | - |
+| `DestinationUserPrincipalName` | - | Destination user UPN or object ID. | Yes | - |
 
 **Example**
 ```powershell
@@ -100,10 +100,10 @@ Export all users with assigned licenses to CSV, mapping SKU part numbers to frie
 Export-MsolAccountSku [-CsvFolder <String>] [-ForceLicenseCatalogRefresh]
 ```
 
-| Parameter | Description | Required | Default |
-| --- | --- | :---: | --- |
-| `CsvFolder` | Output folder. | No | Current directory |
-| `ForceLicenseCatalogRefresh` | Redownload the license catalog cache. | No | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `CsvFolder` | - | Output folder. | No | Current directory |
+| `ForceLicenseCatalogRefresh` | - | Redownload the license catalog cache. | No | `False` |
 
 **Example**
 ```powershell
@@ -119,13 +119,13 @@ List tenant SKUs with resolved names, totals, consumed, available (enabled minus
 Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-AsTable] [-GridView]
 ```
 
-| Parameter | Description | Required | Default |
-| --- | --- | :---: | --- |
-| `ForceLicenseCatalogRefresh` | Redownload license catalog cache. | No | `False` |
-| `Filter` | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No |  |
-| `SampleUsers` | Return up to N sample users per license (requires `-Filter`). Defaults to 5 when specified. | No | `5` |
-| `AsTable` | Format output as a table. | No | `False` |
-| `GridView` | Show output in a GridView window. | No | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `ForceLicenseCatalogRefresh` | - | Redownload license catalog cache. | No | `False` |
+| `Filter` | - | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No | - |
+| `SampleUsers` | - | Return up to N sample users per license (requires `-Filter`). Defaults to 5 when specified. | No | `5` |
+| `AsTable` | - | Format output as a table. | No | `False` |
+| `GridView` | - | Show output in a GridView window. | No | `False` |
 
 **Example**
 ```powershell
@@ -158,13 +158,13 @@ Get-UserMsolAccountSku -UserPrincipalName <String> [-Clipboard] [-CheckAvailabil
 Get-UserMsolAccountSku <UserPrincipalName> [-Clipboard] [-CheckAvailability] [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `UserPrincipalName` | Target UPN or object ID. | Yes |
-| `Clipboard` | Copy the resolved license names (fallback: `SkuPartNumber`) to the clipboard as `"License1","License2"`. | No |
-| `CheckAvailability` | Show tenant available seat counts for the assigned SKUs. | No |
-| `ForceLicenseCatalogRefresh` | Redownload license catalog cache. | No |
-| `ShowErrorDetails` | Include exception details in error messages. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` | - | Target UPN or object ID. | Yes | - |
+| `Clipboard` | - | Copy the resolved license names (fallback: `SkuPartNumber`) to the clipboard as `"License1","License2"`. | No | - |
+| `CheckAvailability` | - | Show tenant available seat counts for the assigned SKUs. | No | - |
+| `ForceLicenseCatalogRefresh` | - | Redownload license catalog cache. | No | - |
+| `ShowErrorDetails` | - | Include exception details in error messages. | No | - |
 
 **Example**
 ```powershell
@@ -193,10 +193,10 @@ Move-UserMsolAccountSku -SourceUserPrincipalName <String> -DestinationUserPrinci
 Move-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceUserPrincipalName` | Source user UPN or object ID. | Yes |
-| `DestinationUserPrincipalName` | Destination user UPN or object ID. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceUserPrincipalName` | - | Source user UPN or object ID. | Yes | - |
+| `DestinationUserPrincipalName` | - | Destination user UPN or object ID. | Yes | - |
 
 **Example**
 ```powershell
@@ -218,23 +218,23 @@ Remove-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicense
 'user1@contoso.com','user2@contoso.com' | Remove-UserMsolAccountSku -License <String[]> [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `UserPrincipalName` | Target user UPN or object ID. | Yes |
-| `License` | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes |
-| `ForceLicenseCatalogRefresh` | Redownload license catalog cache. | No |
-| `ShowErrorDetails` | Include exception details in error messages. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` | - | Target user UPN or object ID. | Yes | - |
+| `License` | - | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
+| `ForceLicenseCatalogRefresh` | - | Redownload license catalog cache. | No | - |
+| `ShowErrorDetails` | - | Include exception details in error messages. | No | - |
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `UserPrincipalName` | Target user UPN or object ID. | Yes |
-| `All` | Remove all assigned licenses. | Yes |
-| `ForceLicenseCatalogRefresh` | Redownload license catalog cache. | No |
-| `ShowErrorDetails` | Include exception details in error messages. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` | - | Target user UPN or object ID. | Yes | - |
+| `All` | - | Remove all assigned licenses. | Yes | - |
+| `ForceLicenseCatalogRefresh` | - | Redownload license catalog cache. | No | - |
+| `ShowErrorDetails` | - | Include exception details in error messages. | No | - |
 
 **Examples**
 ```powershell
@@ -270,9 +270,9 @@ Refresh the local license catalog cache (download SKU mappings).
 Update-LicenseCatalog [-Force]
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `Force` | Force a refresh even if cache exists. |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Force` | - | Force a refresh even if cache exists. | - | - |
 
 **Example**
 ```powershell

@@ -28,14 +28,14 @@ Fetch quarantined message(s) by MessageId **or** Identity, save as EML, optional
 Export-QuarantineEml [-MessageId <String[]>] [-Identity <String[]>] [-DestinationFolder <String>] [-OpenFile] [-ReleaseToAll] [-ReportFalsePositive]
 ```
 
-| Parameter | Description | Required | Default |
-| --- | --- | :---: | --- |
-| `MessageId` | MessageId with/without angle brackets. | One of MessageId/Identity | - |
-| `Identity` | Quarantine Identity (e.g., GUID\GUID). | One of MessageId/Identity | - |
-| `DestinationFolder` | Folder for the EML file. | No | Current directory |
-| `OpenFile` | Open the file after saving. | No | `False` |
-| `ReleaseToAll` | Release to all recipients after export. | No | `False` |
-| `ReportFalsePositive` | Also report as false positive on release. | No | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `MessageId` | - | MessageId with/without angle brackets. | One of MessageId/Identity | - |
+| `Identity` | - | Quarantine Identity (e.g., GUID\GUID). | One of MessageId/Identity | - |
+| `DestinationFolder` | - | Folder for the EML file. | No | Current directory |
+| `OpenFile` | - | Open the file after saving. | No | `False` |
+| `ReleaseToAll` | - | Release to all recipients after export. | No | `False` |
+| `ReportFalsePositive` | - | Also report as false positive on release. | No | `False` |
 
 **Example**
 ```powershell
@@ -59,10 +59,10 @@ List quarantined messages by sender.
 Get-QuarantineFrom -SenderAddress <String[]> [-IncludeReleased]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SenderAddress` | Sender address(es). Pipeline accepted. | Yes |
-| `IncludeReleased` | Include messages already released. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SenderAddress` | - | Sender address(es). Pipeline accepted. | Yes | - |
+| `IncludeReleased` | - | Include messages already released. | No | - |
 
 **Example**
 ```powershell
@@ -78,10 +78,10 @@ List quarantined messages by sender domain.
 Get-QuarantineFromDomain -SenderDomain <String[]> [-IncludeReleased]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SenderDomain` | Domain(s) (e.g., contoso.com). Pipeline accepted. | Yes |
-| `IncludeReleased` | Include messages already released. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SenderDomain` | - | Domain(s) (e.g., contoso.com). Pipeline accepted. | Yes | - |
+| `IncludeReleased` | - | Include messages already released. | No | - |
 
 **Example**
 ```powershell
@@ -98,15 +98,15 @@ Get-QuarantineToRelease -Interval <Int> [-ChooseDayFromCalendar] [-GridView] [-C
                        [-OutputFolder <String>] [-ReleaseSelected] [-DeleteSelected] [-ReportFalsePositive]
 ```
 
-| Parameter | Description | Required | Default |
-| --- | --- | :---: | --- |
-| `Interval` | Days back to search (1-30). | Yes (unless calendar) | - |
-| `ChooseDayFromCalendar` | Pick a single day via calendar UI. | No | `False` |
-| `GridView` | Select items via Out-GridView. | No | `False` |
-| `Csv` / `Html` | Export reports. | No | `False` |
-| `OutputFolder` | Target folder for CSV/HTML. | No | Current directory |
-| `ReleaseSelected` / `DeleteSelected` | Release or delete selected items. | No | `False` |
-| `ReportFalsePositive` | Also report as false positive when releasing. | No | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Interval` | - | Days back to search (1-30). | Yes (unless calendar) | - |
+| `ChooseDayFromCalendar` | - | Pick a single day via calendar UI. | No | `False` |
+| `GridView` | - | Select items via Out-GridView. | No | `False` |
+| `Csv` / `Html` | - | Export reports. | No | `False` |
+| `OutputFolder` | - | Target folder for CSV/HTML. | No | Current directory |
+| `ReleaseSelected` / `DeleteSelected` | - | Release or delete selected items. | No | `False` |
+| `ReportFalsePositive` | - | Also report as false positive when releasing. | No | `False` |
 
 **Example**
 ```powershell
@@ -122,10 +122,10 @@ Bulk-release messages for specific senders (to all recipients, with optional fal
 Unlock-QuarantineFrom -SenderAddress <String[]> [-ReportFalsePositive] [-Confirm]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SenderAddress` | Sender address(es). Pipeline accepted. | Yes |
-| `ReportFalsePositive` | Also report as false positive. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SenderAddress` | - | Sender address(es). Pipeline accepted. | Yes | - |
+| `ReportFalsePositive` | - | Also report as false positive. | No | - |
 
 **Example**
 ```powershell
@@ -141,11 +141,11 @@ Bulk-release messages for specific message IDs or identities (to all recipients,
 Unlock-QuarantineMessageId [-MessageId <String[]>] [-Identity <String[]>] [-ReportFalsePositive] [-Confirm]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `MessageId` | MessageId values (with/without angle brackets). Pipeline accepted. | One of MessageId/Identity |
-| `Identity` | Quarantine Identity values (e.g., GUID\GUID). Pipeline accepted. | One of MessageId/Identity |
-| `ReportFalsePositive` | Also report as false positive. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `MessageId` | - | MessageId values (with/without angle brackets). Pipeline accepted. | One of MessageId/Identity | - |
+| `Identity` | - | Quarantine Identity values (e.g., GUID\GUID). Pipeline accepted. | One of MessageId/Identity | - |
+| `ReportFalsePositive` | - | Also report as false positive. | No | - |
 
 **Example**
 ```powershell

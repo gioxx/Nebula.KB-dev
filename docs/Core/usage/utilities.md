@@ -30,10 +30,10 @@ Reads quarantine identities (one per line) from the clipboard, deduplicates them
 Format-MessageIDsFromClipboard [-NoRelease] [-PassThru]
 ```
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `NoRelease` | Skip automatic release of the identities. | `False` |
-| `PassThru` | Emit the formatted string to the pipeline. | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `NoRelease` | - | Skip automatic release of the identities. | - | `False` |
+| `PassThru` | - | Emit the formatted string to the pipeline. | - | `False` |
 
 **Example**
 ```powershell
@@ -64,9 +64,9 @@ Extracts e-mail addresses from clipboard text, deduplicates and sorts them, then
 Format-SortedEmailsFromClipboard [-PassThru]
 ```
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `PassThru` | Emit the formatted string to the pipeline. | `False` |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `PassThru` | - | Emit the formatted string to the pipeline. | - | `False` |
 
 **Example**
 ```powershell

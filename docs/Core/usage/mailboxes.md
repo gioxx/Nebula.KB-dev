@@ -37,10 +37,10 @@ Add SMTP aliases on a recipient.
 Add-MboxAlias -SourceMailbox <String> -MailboxAlias <String>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. | Yes |
-| `MailboxAlias` | Alias (SMTP address) to add. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox/recipient. Pipeline accepted. | Yes | - |
+| `MailboxAlias` | - | Alias (SMTP address) to add. | Yes | - |
 
 **Examples**
 ```powershell
@@ -60,13 +60,13 @@ Grant mailbox permissions.
 Add-MboxPermission -SourceMailbox <String> -UserMailbox <String[]> [-AccessRights <String>] [-AutoMapping] [-PassThru]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox. | Yes |
-| `UserMailbox` | One or more principals to grant. Pipeline accepted. | Yes |
-| `AccessRights` | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No |
-| `AutoMapping` | Enable/disable Outlook automapping. | No |
-| `PassThru` | Emit detailed permission objects (default shows only confirmation messages). | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox. | Yes | - |
+| `UserMailbox` | - | One or more principals to grant. Pipeline accepted. | Yes | - |
+| `AccessRights` | - | Rights: `All`, `FullAccess`, `SendAs`, `SendOnBehalfTo`. | No | - |
+| `AutoMapping` | - | Enable/disable Outlook automapping. | No | - |
+| `PassThru` | - | Emit detailed permission objects (default shows only confirmation messages). | No | - |
 
 **Examples**
 ```powershell
@@ -86,13 +86,13 @@ Export aliases for auditing.
 Export-MboxAlias [-SourceMailbox <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-Domain <String>]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. | No |
-| `Csv` | Export results to CSV. | No |
-| `CsvFolder` | Destination folder for CSV export. | No |
-| `All` | Export aliases for all non-guest recipients. | No |
-| `Domain` | Export aliases for recipients matching a domain. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox/recipient. Pipeline accepted. | No | - |
+| `Csv` | - | Export results to CSV. | No | - |
+| `CsvFolder` | - | Destination folder for CSV export. | No | - |
+| `All` | - | Export aliases for all non-guest recipients. | No | - |
+| `Domain` | - | Export aliases for recipients matching a domain. | No | - |
 
 **Examples**
 ```powershell
@@ -112,10 +112,10 @@ Export mailbox permissions to CSV.
 Export-MboxPermission -RecipientType <String> [-CsvFolder <String>]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `RecipientType` | Mailbox scope: `User`, `Shared`, `Room`, `All`. | Yes |
-| `CsvFolder` | Destination folder for CSV export. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `RecipientType` | - | Mailbox scope: `User`, `Shared`, `Room`, `All`. | Yes | - |
+| `CsvFolder` | - | Destination folder for CSV export. | No | - |
 
 **Examples**
 ```powershell
@@ -135,9 +135,9 @@ List aliases for auditing.
 Get-MboxAlias -Identity <String>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `Identity` | Target mailbox/recipient. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Identity` | - | Target mailbox/recipient. | Yes | - |
 
 **Examples**
 ```powershell
@@ -153,10 +153,10 @@ Return the most recent received and sent message traces for a mailbox.
 Get-MboxLastMessageTrace -SourceMailbox <String> [-IncludeTrace]
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. |
-| `IncludeTrace` | Include raw message trace objects in the output. |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox/recipient. Pipeline accepted. | - | - |
+| `IncludeTrace` | - | Include raw message trace objects in the output. | - | - |
 
 **Example**
 ```powershell
@@ -176,9 +176,9 @@ List mailbox permissions.
 Get-MboxPermission -Identity <String>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `Identity` | Target mailbox. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Identity` | - | Target mailbox. | Yes | - |
 
 **Examples**
 ```powershell
@@ -194,10 +194,10 @@ Return the PrimarySmtpAddress for a mailbox or recipient.
 Get-MboxPrimarySmtpAddress -SourceMailbox <String[]> [-Raw]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. | Yes |
-| `Raw` | Return only the PrimarySmtpAddress values. | No |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox/recipient. Pipeline accepted. | Yes | - |
+| `Raw` | - | Return only the PrimarySmtpAddress values. | No | - |
 
 :::tip
 `Get-MboxPrimarySmtpAddress` is also available as `gpa` (alias).
@@ -225,9 +225,9 @@ Return the most recent activity for a mailbox combining Exchange LastUserActionT
 Get-UserLastSeen -User <String>
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `User` (`Identity`, `UserPrincipalName`) | Target mailbox identity. Pipeline accepted. |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `User` (`Identity`, `UserPrincipalName`) | - | Target mailbox identity. Pipeline accepted. | - | - |
 
 **Example**
 ```powershell
@@ -247,11 +247,11 @@ Create a shared mailbox.
 New-SharedMailbox -SharedMailboxSMTPAddress <String> -SharedMailboxDisplayName <String> -SharedMailboxAlias <String>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SharedMailboxSMTPAddress` | Primary SMTP address of the new shared mailbox. | Yes |
-| `SharedMailboxDisplayName` | Display name. | Yes |
-| `SharedMailboxAlias` | Mail alias. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SharedMailboxSMTPAddress` | - | Primary SMTP address of the new shared mailbox. | Yes | - |
+| `SharedMailboxDisplayName` | - | Display name. | Yes | - |
+| `SharedMailboxAlias` | - | Mail alias. | Yes | - |
 
 **Example**
 ```powershell
@@ -267,10 +267,10 @@ Remove SMTP aliases from a recipient.
 Remove-MboxAlias -SourceMailbox <String> -MailboxAlias <String>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox/recipient. Pipeline accepted. | Yes |
-| `MailboxAlias` | Alias (SMTP address) to remove. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox/recipient. Pipeline accepted. | Yes | - |
+| `MailboxAlias` | - | Alias (SMTP address) to remove. | Yes | - |
 
 **Examples**
 ```powershell
@@ -288,12 +288,12 @@ Remove-MboxPermission -SourceMailbox <String> -ClearAll
 Remove-MboxPermission <SourceMailbox> <UserMailbox> [-AccessRights <String>]
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Target mailbox. | Yes |
-| `UserMailbox` | Principal(s) to revoke. | Yes (User mode) |
-| `AccessRights` | Rights (e.g., FullAccess, SendAs, SendOnBehalfTo). Defaults to All. | No |
-| `ClearAll` | Remove all non-inherited FullAccess, SendAs, and SendOnBehalfTo permissions from the source mailbox. | Yes (All mode) |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox. | Yes | - |
+| `UserMailbox` | - | Principal(s) to revoke. | Yes (User mode) | - |
+| `AccessRights` | - | Rights (e.g., FullAccess, SendAs, SendOnBehalfTo). Defaults to All. | No | - |
+| `ClearAll` | - | Remove all non-inherited FullAccess, SendAs, and SendOnBehalfTo permissions from the source mailbox. | Yes (All mode) | - |
 
 **Examples**
 ```powershell
@@ -319,11 +319,11 @@ Set-MboxLanguage -SourceMailbox <String[]> [-Language <String>]
 Set-MboxLanguage -Csv <String> [-Language <String>]
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `SourceMailbox` (`Identity`) | Target mailbox(es). Pipeline accepted. |
-| `Csv` | CSV file path containing `EmailAddress` column. |
-| `Language` | Culture code (e.g., it-IT, en-US). |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox(es). Pipeline accepted. | - | - |
+| `Csv` | - | CSV file path containing `EmailAddress` column. | - | - |
+| `Language` | - | Culture code (e.g., it-IT, en-US). | - | - |
 
 **Example**
 ```powershell
@@ -343,9 +343,9 @@ Set rules quota to `256KB` for one or more mailboxes.
 Set-MboxRulesQuota -SourceMailbox <String[]>
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `SourceMailbox` (`Identity`) | Target mailbox(es). Pipeline accepted. |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Target mailbox(es). Pipeline accepted. | - | - |
 
 **Example**
 ```powershell
@@ -361,9 +361,9 @@ Enable sent-item copy settings for shared mailboxes.
 Set-SharedMboxCopyForSent -SourceMailbox <String[]>
 ```
 
-| Parameter | Description | Required |
-| --- | --- | :---: |
-| `SourceMailbox` (`Identity`) | Shared mailbox(es). Pipeline accepted. | Yes |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceMailbox` (`Identity`) | - | Shared mailbox(es). Pipeline accepted. | Yes | - |
 
 **Example**
 ```powershell
@@ -379,9 +379,9 @@ Report shared mailbox sign-in activity and Exchange Online licensing indicators.
 Test-SharedMailboxCompliance [-GridView]
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `GridView` | Show output in Out-GridView (default behavior). Use `-GridView:$false` to return objects. |
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GridView` | - | Show output in Out-GridView (default behavior). Use `-GridView:$false` to return objects. | - | - |
 
 **Example**
 ```powershell
