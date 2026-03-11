@@ -30,6 +30,9 @@ const config = {
           sidebarPath: './sidebars.js',
           routeBasePath: 'Nebula',
         },
+        blog: {
+          routeBasePath: 'news',
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -129,6 +132,11 @@ const config = {
             to: 'https://gioxx.org',
             label: 'Blog',
             target: '_self',
+          },
+          {
+            type: 'blog',
+            label: 'News',
+            position: 'left',
           },
           {
             href: 'https://github.com/gioxx?tab=repositories&q=Nebula',
