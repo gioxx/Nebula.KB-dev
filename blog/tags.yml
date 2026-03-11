@@ -1,19 +1,14 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+microsoft:
+  label: Microsoft
+  permalink: /microsoft
+  description: Microsoft
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+exchange:
+  label: Microsoft Exchange
+  permalink: /exchange
+  description: Microsoft Exchange in Cloud
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
-
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+core:
+  label: Nebula.Core
+  permalink: /core
+  description: Updates concerning Nebula.Core

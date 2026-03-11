@@ -1,8 +1,8 @@
 ---
-slug: welcome
-title: Welcome
+slug: MC1248389
+title: Retirement of -Credential parameter when connecting to Exchange Online PowerShell
 authors: [gioxx]
-tags: [facebook, hello, docusaurus]
+tags: [microsoft, exchange, powershell, core]
 ---
 
 [Docusaurus blogging features](https://docusaurus.io/docs/blog) are powered by the [blog plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).
