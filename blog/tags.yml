@@ -1,3 +1,8 @@
+automations:
+  label: Nebula.Automations
+  permalink: /automations
+  description: Updates concerning Nebula.Automations
+
 exchange:
   label: Microsoft Exchange
   permalink: /exchange
@@ -8,12 +13,37 @@ core:
   permalink: /core
   description: Updates concerning Nebula.Core
 
+kb:
+  label: Nebula.KB
+  permalink: /kb
+  description: Updates concerning the Nebula.KB
+
+log:
+  label: Nebula.Log
+  permalink: /log
+  description: Updates concerning Nebula.Log
+
 microsoft:
   label: Microsoft
   permalink: /microsoft
   description: Microsoft
 
+nebula:
+  label: Nebula
+  permalink: /nebula
+  description: Nebula modules, in general
+
 powershell:
   label: PowerShell
   permalink: /powershell
   description: PowerShell
+
+scripts:
+  label: Nebula.Scripts
+  permalink: /scripts
+  description: Updates concerning Nebula.Scripts
+
+tools:
+  label: Nebula.Tools
+  permalink: /tools
+  description: Updates concerning Nebula.Tools

@@ -1,6 +1,7 @@
 ---
 slug: MC1248389
 title: Retirement of -Credential parameter when connecting to Exchange Online PowerShell
+date: 2026-03-11T01:08:00+01:00
 authors: [gioxx]
 tags: [microsoft, exchange, powershell, core]
 ---
@@ -11,17 +12,42 @@ Microsoft is retiring the [-Credential](https://learn.microsoft.com/powershell/m
 
 <!-- truncate -->
 
-Simply add Markdown files (or folders) to the `blog` directory.
+### When this will happen
 
-Regular blog authors can be added to `authors.yml`.
+- The **-Credential parameter** will be removed from `Connect-ExchangeOnline` and `Connect-IppsSession` cmdlets in **Exchange Online PowerShell** module versions released beginning **July 2026**.
+- A separate server-side retirement of the underlying authentication flow is planned for a later date and will be communicated in advance.
 
-The blog post date can be extracted from filenames, such as:
+### How this affects your organization
 
-- `2019-05-30-welcome.md`
-- `2019-05-30-welcome/index.md`
+#### Who is affected
 
-A blog post folder can be convenient to co-locate blog post images:
+- Microsoft 365 administrators using **Exchange Online** or **Security & Compliance PowerShell**
+- Organizations with automation scripts that use the **`-Credential` parameter**
 
-The blog supports tags as well!
+#### What will happen
 
-**And if you don't want a blog**: just delete this directory, and use `blog: false` in your Docusaurus config.
+- If your organization uses the **`-Credential` parameter** in PowerShell scripts or automation workflows connecting to **Exchange Online** or **Security & Compliance PowerShell**, those scripts will break when you update to an Exchange Online PowerShell module version released beginning **July 2026**.
+- No impact if your organization does not use the **`-Credential` parameter**
+
+### What you can do to prepare
+
+- If you are using the **`-Credential` parameter**, begin migrating your scripts now. Do not wait until **July 2026**. Choose the appropriate alternative based on your scenario:
+    - **Interactive admin access**: Switch to modern authentication with MFA. Learn more: [Connect to Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps).
+    - **Automation outside Azure**: Use app-only authentication (certificate-based or client secret). Learn more: [App-only authentication for unattended scripts in Exchange OnlinePowerShell and Security & Compliance PowerShell](https://learn.microsoft.com/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps).
+    - **Automation within Azure**: Use managed identity authentication (no secrets required). Learn more: [Use Azure managed identities to connect to Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-exo-powershell-managed-identity?view=exchange-ps).
+- Review internal documentation and communicate changes to admins
+- If you are not using the **`-Credential` parameter**, no action is required.
+
+### Additional information
+
+This change iscurrently **client-side only** and will not take effect automatically. Your existing scripts will continue to work if you continue using an Exchange Online PowerShell module version released before **July 2026**. The **`-Credential` parameter** will only be removed when you upgrade to a module version released in **July 2026** and later.
+
+A separate **server-side retirement** of the Credential parameter authentication flow is planned for a later date.When that occurs, the **`-Credential` parameter** will stop functioning even on older module versions. Microsoft will communicate that timeline separately and provide advance notice before any service-side changes take effect.
+
+We strongly recommend migrating proactively rather than waiting, to avoid disruption when either change occurs. If you have questions or concerns, contact Microsoft Support or leave a comment on the [Exchange Team Blog](https://techcommunity.microsoft.com/blog/exchange/deprecation-of-the--credential-parameter-in-exchange-online-powershell/4494584) post.
+
+### Compliance considerations
+
+| Compliance area | Impact |  
+| --- | --- |
+| Conditional Access policies | Retiring the `-Credential` parameter removes use of the ROPC authentication flow and enables enforcement of Conditional Access and multifactor authentication for Exchange Online PowerShell connections. |
