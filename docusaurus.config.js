@@ -134,7 +134,7 @@ const config = {
             target: '_self',
           },
           {
-            type: 'blog',
+            to: '/news',
             label: 'News',
             position: 'left',
           },
