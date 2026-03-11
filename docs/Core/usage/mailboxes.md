@@ -191,17 +191,22 @@ Return the PrimarySmtpAddress for a mailbox or recipient.
 **Syntax**
 
 ```powershell
-Get-MboxPrimarySmtpAddress -SourceMailbox <String[]> [-Raw]
+Get-MboxPrimarySmtpAddress -SourceMailbox <String[]> [-Raw] [-Detailed]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String[] | Target mailbox/recipient. Pipeline accepted. | Yes | - |
 | `Raw` | Switch | Return only the PrimarySmtpAddress values. | No | `False` |
+| `Detailed` | Switch | Include additional fields (`Identity`, `RecipientTypeDetails`). | No | `False` |
 
 :::tip
 `Get-MboxPrimarySmtpAddress` is also available as `gpa` (alias).
 :::
+
+By default, object output is compact and optimized for console readability:
+- `DisplayName`
+- `PrimarySmtpAddress`
 
 **Example**
 ```powershell
@@ -214,6 +219,10 @@ Get-MboxPrimarySmtpAddress -SourceMailbox 'user@contoso.com' -Raw
 
 ```powershell
 gpa 'user@contoso.com' -Raw
+```
+
+```powershell
+Get-MboxPrimarySmtpAddress -SourceMailbox 'user@contoso.com' -Detailed
 ```
 
 ## Get-UserLastSeen

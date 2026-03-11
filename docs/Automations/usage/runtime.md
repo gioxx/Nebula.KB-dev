@@ -29,7 +29,7 @@ Import-PreferredModule -ModuleName <String> [-DevManifestPath <String>] [-Prefer
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ModuleName` | `String` | Name of the module to import. | Yes | N/A |
+| `ModuleName` | `String` | Name of the module to import. | Yes | - |
 | `DevManifestPath` | `String` | Path to a development `.psd1` manifest used when `PreferDev` is enabled. | No | `None` |
 | `PreferDev` | `Boolean` | Prefer the development manifest when available. | No | `True` |
 | `Force` | `Switch` | Forces module import/reload behavior. | No | `False` |
@@ -65,7 +65,7 @@ Initialize-ScriptRuntime -ConfigPath <String> [-ModulesToImport <String[]>] [-Lo
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ConfigPath` | `String` | Path to the XML configuration file to load. | Yes | N/A |
+| `ConfigPath` | `String` | Path to the XML configuration file to load. | Yes | - |
 | `ModulesToImport` | `String[]` | One or more module names to import before loading configuration. | No | `@('Nebula.Log','Nebula.Automations')` |
 | `LogDirectory` | `String` | Target log directory used by runtime helpers. | No | `None` |
 | `EnsureLogDirectory` | `Switch` | Creates `LogDirectory` when it does not exist. | No | `False` |
@@ -103,8 +103,8 @@ Resolve-ScriptConfigPaths -ScriptRoot <String> -ConfigRelativePath <String> `
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ScriptRoot` | `String` | Root path of the running script (typically `$PSScriptRoot`). | Yes | N/A |
-| `ConfigRelativePath` | `String` | Config file path relative to `ConfigRootPath` (or parent of `ScriptRoot`). | Yes | N/A |
+| `ScriptRoot` | `String` | Root path of the running script (typically `$PSScriptRoot`). | Yes | - |
+| `ConfigRelativePath` | `String` | Config file path relative to `ConfigRootPath` (or parent of `ScriptRoot`). | Yes | - |
 | `ConfigRootPath` | `String` | Explicit root folder for config path resolution. | No | `Parent of ScriptRoot` |
 | `LogRelativePath` | `String` | Relative path used to build the resolved log directory. | No | `None` |
 | `OutputRelativePath` | `String` | Relative path used to build the resolved output file path. | No | `None` |
@@ -143,7 +143,7 @@ Start-ScriptTranscript -OutputDirectory <String> [-CleanupOld] [-CleanupPattern 
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `OutputDirectory` | `String` | Folder where transcript files are written. | Yes | N/A |
+| `OutputDirectory` | `String` | Folder where transcript files are written. | Yes | - |
 | `CleanupOld` | `Switch` | Deletes old transcript files matching `CleanupPattern` before start. | No | `False` |
 | `CleanupPattern` | `String` | Filename pattern used when `CleanupOld` is enabled. | No | `PowerShell*.txt` |
 | `IncludeInvocationHeader` | `Switch` | Includes invocation header metadata in transcript output. | No | `False` |
@@ -205,7 +205,7 @@ Test-ScriptActivityLog -LogLocation <String>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `LogLocation` | `String` | Path used to validate script activity logging capability. | Yes | N/A |
+| `LogLocation` | `String` | Path used to validate script activity logging capability. | Yes | - |
 
 **Notes**
 

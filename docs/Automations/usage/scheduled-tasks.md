@@ -35,9 +35,9 @@ Invoke-ScriptTaskLifecycle -UnregisterTask -TaskName <String> [-TaskPath <String
 | --- | --- | --- | --- | --- |
 | `RegisterTask` | `Switch` | Enables register/update lifecycle mode. | Conditional | `False` |
 | `UnregisterTask` | `Switch` | Enables unregister lifecycle mode. | Conditional | `False` |
-| `TaskName` | `String` | Scheduled task name. | Yes | N/A |
+| `TaskName` | `String` | Scheduled task name. | Yes | - |
 | `TaskPath` | `String` | Task Scheduler folder path (for example `\Nebula\`). | No | `\` |
-| `ScriptPath` | `String` | Script file to execute when registering. | Required for register | N/A |
+| `ScriptPath` | `String` | Script file to execute when registering. | Required for register | - |
 | `TaskTime` | `String` | Trigger time string used by lifecycle registration flow. | No | `02:00` |
 | `ScheduleType` | `String` | Trigger type (`Daily` or `Once`). | No | `Daily` |
 | `Description` | `String` | Task description text. | No | `None` |
@@ -81,10 +81,10 @@ Register-ScriptScheduledTask -TaskName <String> [-TaskPath <String>] [-Mode <Sta
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TaskName` | `String` | Scheduled task name. | Yes | N/A |
+| `TaskName` | `String` | Scheduled task name. | Yes | - |
 | `TaskPath` | `String` | Task Scheduler folder path. | No | `\` |
 | `Mode` | `String` | Registration mode (`Standard` or `Xml`). | No | `Standard` |
-| `ScriptPath` | `String` | Script file path (used in `Standard` mode). | Conditional | N/A |
+| `ScriptPath` | `String` | Script file path (used in `Standard` mode). | Conditional | - |
 | `PwshPath` | `String` | Path to `pwsh.exe`/`powershell.exe`. | No | `pwsh.exe` |
 | `ScriptArguments` | `String` | Extra arguments passed to the script. | No | `None` |
 | `WorkingDirectory` | `String` | Working directory for the task action. | No | `Script parent folder` |
@@ -127,7 +127,7 @@ Unregister-ScriptScheduledTask -TaskName <String> [-TaskPath <String>] [-LogLoca
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `TaskName` | `String` | Name of the task to remove. | Yes | N/A |
+| `TaskName` | `String` | Name of the task to remove. | Yes | - |
 | `TaskPath` | `String` | Task Scheduler folder path. | No | `\` |
 | `LogLocation` | `String` | Log destination for removal operations. | No | `None` |
 

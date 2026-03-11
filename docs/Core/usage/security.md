@@ -25,7 +25,7 @@ Disable-UserDevices -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | String[] | Users whose registered devices will be disabled. Pipeline accepted. | Yes | - |
+| `UserPrincipalName` (`Identity`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
 | `PassThru` | Switch | Emit the impacted devices. | No | `False` |
 
 **Example**
@@ -43,7 +43,7 @@ Disable-UserSignIn -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | String[] | Users to block. Pipeline accepted. | Yes | - |
+| `UserPrincipalName` (`Identity`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
 | `PassThru` | Switch | Emit the impacted users. | No | `False` |
 
 **Example**
@@ -62,8 +62,8 @@ Revoke-UserSessions [-All] [-UserPrincipalName <String[]>] [-Exclude <String[]>]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `All` | Switch | Target every user in the tenant. | No | `False` |
-| `UserPrincipalName` (`Identity`) | String[] | Users to target. Pipeline accepted. | No | - |
-| `Exclude` | String[] | Users to skip (applies to both -All and explicit lists). | No | - |
+| `UserPrincipalName` (`Identity`) | String[] | Users to target (UPN/object ID/short identifier). Pipeline accepted. | No | - |
+| `Exclude` | String[] | Users to skip (UPN/object ID/short identifier; applies to both -All and explicit lists). | No | - |
 | `PassThru` | Switch | Emit the impacted users. | No | `False` |
 
 **Examples**
@@ -77,4 +77,5 @@ Revoke-UserSessions -All -Exclude user@contoso.com -Confirm:$false
 
 Notes:
 - Supports `-WhatIf`/`-Confirm` for safety.
-- Skips missing users and reports exclusions. 
+- Skips missing users and reports exclusions.
+- User identities are resolved through `Find-UserRecipient`, so short identifiers are supported.

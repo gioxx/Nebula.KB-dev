@@ -21,6 +21,10 @@ tags:
 
 Backed by Microsoft Graph with a cached SKU catalog. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
+:::note User identifier resolution
+User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) support full UPNs/object IDs and short identifiers (for example alias/SamAccountName/UPN prefix) via the shared resolver.
+:::
+
 ## Add-UserMsolAccountSku
 Assign licenses by friendly name (resolved via catalog), SKU part number, or SKU ID to a user.
 
@@ -33,7 +37,7 @@ Add-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCat
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN or object ID. | Yes | - |
+| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
@@ -79,8 +83,8 @@ Copy-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceUserPrincipalName` | String | Source user UPN or object ID. | Yes | - |
-| `DestinationUserPrincipalName` | String | Destination user UPN or object ID. | Yes | - |
+| `SourceUserPrincipalName` | String | Source user UPN, object ID, or short identifier. | Yes | - |
+| `DestinationUserPrincipalName` | String | Destination user UPN, object ID, or short identifier. | Yes | - |
 
 **Example**
 ```powershell
@@ -160,7 +164,7 @@ Get-UserMsolAccountSku <UserPrincipalName> [-Clipboard] [-CheckAvailability] [-F
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target UPN or object ID. | Yes | - |
+| `UserPrincipalName` | String | Target UPN, object ID, or short identifier. | Yes | - |
 | `Clipboard` | Switch | Copy the resolved license names (fallback: `SkuPartNumber`) to the clipboard as `"License1","License2"`. | No | `False` |
 | `CheckAvailability` | Switch | Show tenant available seat counts for the assigned SKUs. | No | `False` |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
@@ -195,8 +199,8 @@ Move-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceUserPrincipalName` | String | Source user UPN or object ID. | Yes | - |
-| `DestinationUserPrincipalName` | String | Destination user UPN or object ID. | Yes | - |
+| `SourceUserPrincipalName` | String | Source user UPN, object ID, or short identifier. | Yes | - |
+| `DestinationUserPrincipalName` | String | Destination user UPN, object ID, or short identifier. | Yes | - |
 
 **Example**
 ```powershell
@@ -220,7 +224,7 @@ Remove-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicense
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN or object ID. | Yes | - |
+| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
@@ -231,7 +235,7 @@ Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalog
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN or object ID. | Yes | - |
+| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `All` | Switch | Remove all assigned licenses. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |

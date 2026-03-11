@@ -29,11 +29,11 @@ Send-Mail -SMTPServer <String> -From <String> -To <String[]> -Subject <String> -
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `SMTPServer` | `String` | SMTP host name or IP address. | Yes | N/A |
-| `From` | `String` | Sender e-mail address. | Yes | N/A |
-| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | N/A |
-| `Subject` | `String` | E-mail subject. | Yes | N/A |
-| `Body` | `String` | Message body (HTML by default). | Yes | N/A |
+| `SMTPServer` | `String` | SMTP host name or IP address. | Yes | - |
+| `From` | `String` | Sender e-mail address. | Yes | - |
+| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | - |
+| `Subject` | `String` | E-mail subject. | Yes | - |
+| `Body` | `String` | Message body (HTML by default). | Yes | - |
 | `SMTPPort` | `Int` | SMTP port (for example `25`, `465`, `587`). | No | `25` |
 | `Cc` | `String[]` | CC recipient addresses. | No | `None` |
 | `Bcc` | `String[]` | BCC recipient addresses. | No | `None` |
@@ -71,12 +71,12 @@ Send-ReportIfChanged -ModCounter <Int> -MailBody <String> -SmtpServer <String> -
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | --- | --- |
-| `ModCounter` | `Int` | Number of detected changes used to decide whether to send. | Yes | N/A |
-| `MailBody` | `String` | HTML body content for the report e-mail. | Yes | N/A |
-| `SmtpServer` | `String` | SMTP host used to send the report. | Yes | N/A |
-| `From` | `String` | Sender e-mail address. | Yes | N/A |
-| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | N/A |
-| `Subject` | `String` | Subject line for the report e-mail. | Yes | N/A |
+| `ModCounter` | `Int` | Number of detected changes used to decide whether to send. | Yes | - |
+| `MailBody` | `String` | HTML body content for the report e-mail. | Yes | - |
+| `SmtpServer` | `String` | SMTP host used to send the report. | Yes | - |
+| `From` | `String` | Sender e-mail address. | Yes | - |
+| `To` | `String[]` | One or more recipient e-mail addresses. | Yes | - |
+| `Subject` | `String` | Subject line for the report e-mail. | Yes | - |
 | `SendLogs` | `Boolean` | Include log artifacts when available. | No | `True` |
 | `AttachmentPath` | `String[]` | Additional attachment file paths. | No | `None` |
 | `ForceMailTo` | `Boolean` | Forces send behavior even when no changes are detected. | No | `False` |
