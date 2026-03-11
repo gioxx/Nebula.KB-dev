@@ -1,8 +1,3 @@
-microsoft:
-  label: Microsoft
-  permalink: /microsoft
-  description: Microsoft
-
 exchange:
   label: Microsoft Exchange
   permalink: /exchange
@@ -12,3 +7,13 @@ core:
   label: Nebula.Core
   permalink: /core
   description: Updates concerning Nebula.Core
+
+microsoft:
+  label: Microsoft
+  permalink: /microsoft
+  description: Microsoft
+
+powershell:
+  label: PowerShell
+  permalink: /powershell
+  description: PowerShell
