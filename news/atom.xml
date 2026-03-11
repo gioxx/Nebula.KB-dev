@@ -92,7 +92,6 @@
         </author>
         <category label="Nebula" term="Nebula"/>
         <category label="Nebula.KB" term="Nebula.KB"/>
-        <category label="news" term="news"/>
-        <category label="microsoft365" term="microsoft365"/>
+        <category label="Microsoft" term="Microsoft"/>
     </entry>
 </feed>
