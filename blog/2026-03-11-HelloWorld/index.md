@@ -11,7 +11,7 @@ I have re-enabled the internal Docusaurus blog and, starting today, this space w
 ![Hello World](./472097903_b781a0f4f8_b.jpg)
 
 :::note Credits
-Fotografia originale: https://www.flickr.com/photos/oskay/472097903
+Original photograph: https://www.flickr.com/photos/oskay/472097903
 :::
 
 Here I will publish quick updates about:
