@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunknebula=globalThis.webpackChunknebula||[]).push([[7472],{5513(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Retirement of -Credential parameter when connecting to Exchange Online PowerShell","permalink":"/Nebula.KB-dev/news/MC1248389","unlisted":false,"date":"2026-03-11T00:00:00.000Z"}]}')}}]);
