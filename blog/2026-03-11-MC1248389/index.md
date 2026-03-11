@@ -29,7 +29,7 @@ Microsoft is retiring the [-Credential](https://learn.microsoft.com/powershell/m
 - If your organization uses the **`-Credential` parameter** in PowerShell scripts or automation workflows connecting to **Exchange Online** or **Security & Compliance PowerShell**, those scripts will break when you update to an Exchange Online PowerShell module version released beginning **July 2026**.
 - No impact if your organization does not use the **`-Credential` parameter**
 
-:::note
+:::warning
 ### Impact on Nebula modules (starting July 2026)
 For the **Nebula** ecosystem, the direct impact is concentrated on **Exchange Online / Purview** connection flows.
 
