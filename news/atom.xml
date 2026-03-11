@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gioxx.github.io/Nebula.KB-dev/news</id>
     <title>Nebula: A family of PowerShell modules that go beyond your workstation Blog</title>
