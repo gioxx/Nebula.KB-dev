@@ -29,7 +29,8 @@ Microsoft is retiring the [-Credential](https://learn.microsoft.com/powershell/m
 - If your organization uses the **`-Credential` parameter** in PowerShell scripts or automation workflows connecting to **Exchange Online** or **Security & Compliance PowerShell**, those scripts will break when you update to an Exchange Online PowerShell module version released beginning **July 2026**.
 - No impact if your organization does not use the **`-Credential` parameter**
 
-:::note Impact on Nebula modules (starting July 2026)
+:::note
+### Impact on Nebula modules (starting July 2026)
 For the **Nebula** ecosystem, the direct impact is concentrated on **Exchange Online / Purview** connection flows.
 
 - **Nebula.Core (high impact):** any function path that relies on `Connect-ExchangeOnline` and/or `Connect-IPPSSession` may fail starting **July 2026** if it still uses `-Credential` and the `ExchangeOnlineManagement` module is upgraded to a version released from that date onward. This includes EXO-dependent commands and Compliance/Purview scenarios.
@@ -37,7 +38,7 @@ For the **Nebula** ecosystem, the direct impact is concentrated on **Exchange On
 - **Nebula.Tools / Nebula.Log (no known direct impact):** these modules do not currently expose EXO/Purview connection entry points documented with `Connect-ExchangeOnline`/`Connect-IPPSSession -Credential`.
 - **Risk timeline:** the first breaking point is **client-side** (triggered when upgrading the Exchange Online PowerShell module in/after July 2026). A later **server-side** retirement is also planned by Microsoft; at that point, old module versions will no longer be a workaround.
 
-### What we will do
+#### What we will do
 
 - Run a targeted audit across all `Nebula.*` repositories to identify any usage of `Connect-ExchangeOnline` / `Connect-IPPSSession` with `-Credential`.
 - Migrate affected flows to supported methods: modern interactive auth (MFA), app-only auth (certificate or client secret), or managed identity where applicable.
