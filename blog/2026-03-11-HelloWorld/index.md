@@ -3,7 +3,7 @@ slug: HelloWorld
 title: Welcome, News Section
 date: 2026-03-11T00:00:00+01:00
 authors: [gioxx]
-tags: [nebula, kb, news, microsoft365]
+tags: [nebula, kb, microsoft]
 ---
 
 I have re-enabled the internal Docusaurus blog and, starting today, this space will be one of the reference points for Nebula project updates (the main one is and will remain my personal blog, but this is where English translations of those same articles can live, along with micro-updates that may have an impact on end users).
