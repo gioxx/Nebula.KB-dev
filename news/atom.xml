@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gioxx.github.io/Nebula.KB-dev/news</id>
     <title>Nebula: A family of PowerShell modules that go beyond your workstation Blog</title>
-    <updated>2026-03-11T00:00:00.000Z</updated>
+    <updated>2026-03-11T00:08:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gioxx.github.io/Nebula.KB-dev/news"/>
     <subtitle>Nebula: A family of PowerShell modules that go beyond your workstation Blog</subtitle>
@@ -11,20 +11,44 @@
         <title type="html"><![CDATA[Retirement of -Credential parameter when connecting to Exchange Online PowerShell]]></title>
         <id>https://gioxx.github.io/Nebula.KB-dev/news/MC1248389</id>
         <link href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389"/>
-        <updated>2026-03-11T00:00:00.000Z</updated>
+        <updated>2026-03-11T00:08:00.000Z</updated>
         <summary type="html"><![CDATA[Introduction]]></summary>
         <content type="html"><![CDATA[<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="introduction">Introduction<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#introduction" class="hash-link" aria-label="Direct link to Introduction" title="Direct link to Introduction" translate="no">​</a></h3>
 <p>Microsoft is retiring the <a href="https://learn.microsoft.com/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps#-credential" target="_blank" rel="noopener noreferrer" class="">-Credential</a> parameter used when connecting to Exchange Online PowerShell. Starting with module versions released in July 2026 and later, the -Credential parameter will be removed from both <a href="https://learn.microsoft.com/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps" target="_blank" rel="noopener noreferrer" class="">Connect-ExchangeOnline</a> and <a href="https://learn.microsoft.com/powershell/module/exchangepowershell/connect-ippssession?view=exchange-ps" target="_blank" rel="noopener noreferrer" class="">Connect-IppsSession</a> cmdlets. Organizations using this parameter in automation scripts must migrate to a supported authentication method before that date. This change improves security by moving away from legacy authentication methods that do not support modern protections such as multifactor authentication (MFA).</p>
-<p>Simply add Markdown files (or folders) to the <code>blog</code> directory.</p>
-<p>Regular blog authors can be added to <code>authors.yml</code>.</p>
-<p>The blog post date can be extracted from filenames, such as:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-this-will-happen">When this will happen<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#when-this-will-happen" class="hash-link" aria-label="Direct link to When this will happen" title="Direct link to When this will happen" translate="no">​</a></h3>
 <ul>
-<li class=""><code>2019-05-30-welcome.md</code></li>
-<li class=""><code>2019-05-30-welcome/index.md</code></li>
+<li class="">The <strong>-Credential parameter</strong> will be removed from <code>Connect-ExchangeOnline</code> and <code>Connect-IppsSession</code> cmdlets in <strong>Exchange Online PowerShell</strong> module versions released beginning <strong>July 2026</strong>.</li>
+<li class="">A separate server-side retirement of the underlying authentication flow is planned for a later date and will be communicated in advance.</li>
 </ul>
-<p>A blog post folder can be convenient to co-locate blog post images:</p>
-<p>The blog supports tags as well!</p>
-<p><strong>And if you don't want a blog</strong>: just delete this directory, and use <code>blog: false</code> in your Docusaurus config.</p>]]></content>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-this-affects-your-organization">How this affects your organization<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#how-this-affects-your-organization" class="hash-link" aria-label="Direct link to How this affects your organization" title="Direct link to How this affects your organization" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="who-is-affected">Who is affected<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#who-is-affected" class="hash-link" aria-label="Direct link to Who is affected" title="Direct link to Who is affected" translate="no">​</a></h4>
+<ul>
+<li class="">Microsoft 365 administrators using <strong>Exchange Online</strong> or <strong>Security &amp; Compliance PowerShell</strong></li>
+<li class="">Organizations with automation scripts that use the <strong><code>-Credential</code> parameter</strong></li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-will-happen">What will happen<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#what-will-happen" class="hash-link" aria-label="Direct link to What will happen" title="Direct link to What will happen" translate="no">​</a></h4>
+<ul>
+<li class="">If your organization uses the <strong><code>-Credential</code> parameter</strong> in PowerShell scripts or automation workflows connecting to <strong>Exchange Online</strong> or <strong>Security &amp; Compliance PowerShell</strong>, those scripts will break when you update to an Exchange Online PowerShell module version released beginning <strong>July 2026</strong>.</li>
+<li class="">No impact if your organization does not use the <strong><code>-Credential</code> parameter</strong></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-you-can-do-to-prepare">What you can do to prepare<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#what-you-can-do-to-prepare" class="hash-link" aria-label="Direct link to What you can do to prepare" title="Direct link to What you can do to prepare" translate="no">​</a></h3>
+<ul>
+<li class="">If you are using the <strong><code>-Credential</code> parameter</strong>, begin migrating your scripts now. Do not wait until <strong>July 2026</strong>. Choose the appropriate alternative based on your scenario:<!-- -->
+<ul>
+<li class=""><strong>Interactive admin access</strong>: Switch to modern authentication with MFA. Learn more: <a href="https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps" target="_blank" rel="noopener noreferrer" class="">Connect to Exchange Online PowerShell</a>.</li>
+<li class=""><strong>Automation outside Azure</strong>: Use app-only authentication (certificate-based or client secret). Learn more: <a href="https://learn.microsoft.com/powershell/exchange/app-only-auth-powershell-v2?view=exchange-ps" target="_blank" rel="noopener noreferrer" class="">App-only authentication for unattended scripts in Exchange OnlinePowerShell and Security &amp; Compliance PowerShell</a>.</li>
+<li class=""><strong>Automation within Azure</strong>: Use managed identity authentication (no secrets required). Learn more: <a href="https://learn.microsoft.com/powershell/exchange/connect-exo-powershell-managed-identity?view=exchange-ps" target="_blank" rel="noopener noreferrer" class="">Use Azure managed identities to connect to Exchange Online PowerShell</a>.</li>
+</ul>
+</li>
+<li class="">Review internal documentation and communicate changes to admins</li>
+<li class="">If you are not using the <strong><code>-Credential</code> parameter</strong>, no action is required.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="additional-information">Additional information<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#additional-information" class="hash-link" aria-label="Direct link to Additional information" title="Direct link to Additional information" translate="no">​</a></h3>
+<p>This change iscurrently <strong>client-side only</strong> and will not take effect automatically. Your existing scripts will continue to work if you continue using an Exchange Online PowerShell module version released before <strong>July 2026</strong>. The <strong><code>-Credential</code> parameter</strong> will only be removed when you upgrade to a module version released in <strong>July 2026</strong> and later.</p>
+<p>A separate <strong>server-side retirement</strong> of the Credential parameter authentication flow is planned for a later date.When that occurs, the <strong><code>-Credential</code> parameter</strong> will stop functioning even on older module versions. Microsoft will communicate that timeline separately and provide advance notice before any service-side changes take effect.</p>
+<p>We strongly recommend migrating proactively rather than waiting, to avoid disruption when either change occurs. If you have questions or concerns, contact Microsoft Support or leave a comment on the&nbsp;<a href="https://techcommunity.microsoft.com/blog/exchange/deprecation-of-the--credential-parameter-in-exchange-online-powershell/4494584" target="_blank" rel="noopener noreferrer" class="">Exchange Team Blog</a> post.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="compliance-considerations">Compliance considerations<a href="https://gioxx.github.io/Nebula.KB-dev/news/MC1248389#compliance-considerations" class="hash-link" aria-label="Direct link to Compliance considerations" title="Direct link to Compliance considerations" translate="no">​</a></h3>
+<table><thead><tr><th>Compliance area</th><th>Impact</th></tr></thead><tbody><tr><td>Conditional Access policies</td><td>Retiring the <code>-Credential</code> parameter removes use of the ROPC authentication flow and enables enforcement of Conditional Access and multifactor authentication for Exchange Online PowerShell connections.</td></tr></tbody></table>]]></content>
         <author>
             <name>Giovanni Solone</name>
             <uri>https://gioxx.org</uri>
@@ -33,5 +57,29 @@
         <category label="Microsoft Exchange" term="Microsoft Exchange"/>
         <category label="PowerShell" term="PowerShell"/>
         <category label="Nebula.Core" term="Nebula.Core"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Welcome, News Section]]></title>
+        <id>https://gioxx.github.io/Nebula.KB-dev/news/HelloWorld</id>
+        <link href="https://gioxx.github.io/Nebula.KB-dev/news/HelloWorld"/>
+        <updated>2026-03-10T23:00:00.000Z</updated>
+        <summary type="html"><![CDATA[I have re-enabled the internal Docusaurus blog and, starting today, this space will be one of the reference points for Nebula project updates (the main one is and will remain my personal blog, but this is where English translations of those same articles can live, along with micro-updates that may have an impact on end users).]]></summary>
+        <content type="html"><![CDATA[<p>I have re-enabled the internal Docusaurus blog and, starting today, this space will be one of the reference points for Nebula project updates (the main one is and will remain my personal blog, but this is where English translations of those same articles can live, along with micro-updates that may have an impact on end users).</p>
+<p><img decoding="async" loading="lazy" alt="Hello World" src="https://gioxx.github.io/Nebula.KB-dev/assets/images/472097903_b781a0f4f8_b-3a64b5d866eb527024216df92050c265.jpg" width="1024" height="443" class="img_ev3q"></p>
+<p>Here I will publish quick updates about:</p>
+<ul>
+<li class="">changes and improvements across the Nebula module family (or scripts);</li>
+<li class="">technical updates that affect scripts and automation workflows;</li>
+<li class="">Microsoft 365 announcements that can directly impact module development.</li>
+</ul>
+<p>The goal is simple: keep a clear history of decisions, changes, and recommended actions so development, maintenance, and daily usage stay aligned.</p>]]></content>
+        <author>
+            <name>Giovanni Solone</name>
+            <uri>https://gioxx.org</uri>
+        </author>
+        <category label="Nebula" term="Nebula"/>
+        <category label="Nebula.KB" term="Nebula.KB"/>
+        <category label="news" term="news"/>
+        <category label="microsoft365" term="microsoft365"/>
     </entry>
 </feed>
