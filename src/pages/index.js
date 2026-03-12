@@ -53,9 +53,9 @@ export default function Home() {
       title={`${siteConfig.title}`}
       description="Nebula: PowerShell modules that scale beyond your workstation"
     >
-      <HomeAlerts />
       <HomepageHeader />
       <main>
+        <HomeAlerts />
         <HomepageFeatures />
       </main>
     </Layout>
