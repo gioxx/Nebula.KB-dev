@@ -1,0 +1,11 @@
+{
+  "id": "mc1248389-global-notice",
+  "enabled": true,
+  "variant": "warning",
+  "title": "Important change incoming",
+  "message": "Exchange Online will retire -Credential in module releases starting July 2026.",
+  "linkHref": "/news/MC1248389#impact-on-nebula-modules-starting-july-2026",
+  "linkLabel": "Read impact details",
+  "isDismissible": true,
+  "startDate": "2026-03-12"
+}

@@ -1,0 +1,166 @@
+.wrapper {
+  background: linear-gradient(90deg, rgba(24, 24, 37, 0.94), rgba(36, 39, 58, 0.94));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 64px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.badge {
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 0.45rem 0.65rem;
+  text-transform: uppercase;
+  flex: 0 0 auto;
+}
+
+.badgeHigh {
+  color: #2f0a12;
+  background: #f38ba8;
+}
+
+.badgeMedium {
+  color: #3a2d0e;
+  background: #f9e2af;
+}
+
+.badgeInfo {
+  color: #081326;
+  background: #89b4fa;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.copy strong {
+  color: #f5f5f7;
+  display: block;
+  line-height: 1.3;
+}
+
+.copy p {
+  margin: 0.15rem 0 0;
+  color: rgba(245, 245, 247, 0.88);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.cta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-weight: 700;
+  color: #cdd6f4;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  color: #f5c2e7;
+  text-decoration: none;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+}
+
+.controlButton {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.controlButton:hover,
+.controlButton:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.counter {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  min-width: 2.9rem;
+  text-align: center;
+}
+
+html:not([data-theme='dark']) .wrapper {
+  background: linear-gradient(90deg, rgba(235, 239, 248, 0.94), rgba(220, 228, 244, 0.94));
+  border-bottom: 1px solid rgba(63, 79, 117, 0.2);
+}
+
+html:not([data-theme='dark']) .copy strong {
+  color: #1d2a44;
+}
+
+html:not([data-theme='dark']) .copy p {
+  color: #2d3f66;
+}
+
+html:not([data-theme='dark']) .cta {
+  color: #25365d;
+}
+
+html:not([data-theme='dark']) .cta:hover,
+html:not([data-theme='dark']) .cta:focus-visible {
+  color: #3f4f75;
+}
+
+html:not([data-theme='dark']) .controlButton {
+  border: 1px solid rgba(29, 42, 68, 0.24);
+  background: rgba(29, 42, 68, 0.08);
+  color: #1d2a44;
+}
+
+html:not([data-theme='dark']) .controlButton:hover,
+html:not([data-theme='dark']) .controlButton:focus-visible {
+  background: rgba(29, 42, 68, 0.14);
+}
+
+html:not([data-theme='dark']) .counter {
+  color: #1d2a44;
+}
+
+@media (max-width: 996px) {
+  .inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .content {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .cta {
+    width: 100%;
+  }
+
+  .controls {
+    justify-content: flex-end;
+  }
+}
