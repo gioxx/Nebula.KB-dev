@@ -134,12 +134,15 @@ export default function HomeAlerts() {
         <div className={styles.content}>
           <span className={badgeClassName}>{severityLabel(activeAlert.severity)}</span>
           <div className={styles.copy}>
-            <strong>{activeAlert.title}</strong>
+            {activeAlert.href ? (
+              <Link className={styles.titleLink} to={activeAlert.href}>
+                <strong>{activeAlert.title}</strong>
+              </Link>
+            ) : (
+              <strong>{activeAlert.title}</strong>
+            )}
             <p>{activeAlert.message}</p>
           </div>
-          <Link className={styles.cta} to={activeAlert.href}>
-            {activeAlert.ctaLabel || 'Read more'}
-          </Link>
         </div>
 
         {showControls && (

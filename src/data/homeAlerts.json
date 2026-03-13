@@ -6,7 +6,6 @@
     "title": "Exchange Online: -Credential retirement (July 2026)",
     "message": "Scripts using -Credential with Connect-ExchangeOnline / Connect-IppsSession may break after module updates released from July 2026.",
     "href": "/news/MC1248389#impact-on-nebula-modules-starting-july-2026",
-    "ctaLabel": "Read impact details",
     "publishedAt": "2026-03-11",
     "startDate": "2026-03-11"
   },
@@ -17,7 +16,6 @@
     "title": "Nebula news feed is live",
     "message": "Use this carousel to highlight urgent changes, release notes, and internal KB updates.",
     "href": "/news",
-    "ctaLabel": "Open all news",
     "publishedAt": "2026-03-12",
     "startDate": "2026-03-12"
   }

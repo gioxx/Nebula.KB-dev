@@ -57,24 +57,22 @@
   line-height: 1.3;
 }
 
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink:hover strong,
+.titleLink:focus-visible strong {
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
 .copy p {
   margin: 0.15rem 0 0;
   color: rgba(245, 245, 247, 0.88);
   font-size: 0.92rem;
   line-height: 1.35;
-}
-
-.cta {
-  flex: 0 0 auto;
-  white-space: nowrap;
-  font-weight: 700;
-  color: #cdd6f4;
-}
-
-.cta:hover,
-.cta:focus-visible {
-  color: #f5c2e7;
-  text-decoration: none;
 }
 
 .controls {
@@ -119,15 +117,6 @@ html:not([data-theme='dark']) .copy p {
   color: #2d3f66;
 }
 
-html:not([data-theme='dark']) .cta {
-  color: #25365d;
-}
-
-html:not([data-theme='dark']) .cta:hover,
-html:not([data-theme='dark']) .cta:focus-visible {
-  color: #3f4f75;
-}
-
 html:not([data-theme='dark']) .controlButton {
   border: 1px solid rgba(29, 42, 68, 0.24);
   background: rgba(29, 42, 68, 0.08);
@@ -154,10 +143,6 @@ html:not([data-theme='dark']) .counter {
   .content {
     align-items: flex-start;
     flex-wrap: wrap;
-  }
-
-  .cta {
-    width: 100%;
   }
 
   .controls {
