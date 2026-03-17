@@ -385,45 +385,47 @@ export default function MessageHeaderAnalyzer() {
     return (
         <Layout title="Message Header Analyzer" description="Inspect message headers entirely in your browser.">
             <style>{`
-                .mha-root { font-size: 0.92rem; }
-                .mha-layout { display: grid; gap: 0.9rem; }
+                .mha-root { font-size: 0.94rem; }
+                .mha-layout { display: grid; gap: 1.1rem; }
                 .mha-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-top: 0.55rem; }
                 .mha-exportActions { display: flex; gap: 0.5rem; align-items: center; margin: 0; flex-wrap: wrap; }
-                .mha-panel { border: 1px solid #1f4a7a; background: var(--ifm-background-color); }
-                .mha-panelHeader {
+                .mha-card { border: 1px solid var(--ifm-toc-border-color); border-radius: 8px; overflow: hidden; background: var(--ifm-background-surface-color); }
+                .mha-cardHeader {
                     background: #0067b8;
                     color: #fff;
-                    font-size: 0.82rem;
+                    font-size: 0.87rem;
                     font-weight: 700;
-                    padding: 0.22rem 0.55rem;
+                    padding: 0.45rem 0.75rem;
                     line-height: 1.3;
+                    letter-spacing: 0.01em;
                 }
-                .mha-panelBody { padding: 0.55rem; }
+                .mha-cardBody { padding: 0.7rem 0.85rem; }
                 .mha-textarea {
                     width: 100%;
-                    min-height: 210px;
-                    border: 1px solid #8da7c2;
+                    min-height: 220px;
+                    border: 1px solid var(--ifm-toc-border-color);
                     font-family: var(--ifm-font-family-monospace);
-                    font-size: 0.78rem;
-                    line-height: 1.2;
-                    padding: 0.45rem;
+                    font-size: 0.84rem;
+                    line-height: 1.25;
+                    padding: 0.6rem;
                     resize: vertical;
+                    border-radius: 6px;
                 }
                 .mha-tableWrapper { overflow-x: auto; }
-                .mha-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.78rem; }
+                .mha-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; }
                 .mha-table th, .mha-table td {
-                    border: 1px solid #1f4a7a;
-                    padding: 0.2rem 0.35rem;
+                    border: 1px solid var(--ifm-toc-border-color);
+                    padding: 0.38rem 0.48rem;
                     vertical-align: top;
                     word-break: break-word;
                 }
                 .mha-table th {
-                    background: #0067b8;
-                    color: #fff;
+                    background: #e5f1fb;
+                    color: var(--ifm-color-emphasis-700);
                     font-weight: 700;
-                    font-size: 0.74rem;
+                    font-size: 0.8rem;
                 }
-                .mha-table tbody tr:nth-child(even) { background: #f1f8ff; }
+                .mha-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.015); }
                 .mha-kvLabel { width: 220px; font-weight: 700; }
                 .mha-mono {
                     font-family: var(--ifm-font-family-monospace);
@@ -433,6 +435,11 @@ export default function MessageHeaderAnalyzer() {
                 .mha-good { color: #147539; font-weight: 700; }
                 .mha-bad { color: #b11a00; font-weight: 700; }
                 .mha-muted { color: var(--ifm-color-secondary-text); font-size: 0.8rem; }
+                [data-theme='dark'] .mha-table th {
+                    background: #243447;
+                    color: var(--ifm-color-emphasis-300);
+                }
+                [data-theme='dark'] .mha-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
                 @media (max-width: 768px) {
                     .mha-kvLabel { width: 140px; }
                 }
@@ -452,9 +459,9 @@ export default function MessageHeaderAnalyzer() {
                 </p>
 
                 <div className="mha-layout">
-                    <section className="mha-panel">
-                        <div className="mha-panelHeader">Paste the message header you would like to analyze</div>
-                        <div className="mha-panelBody">
+                    <section className="mha-card">
+                        <div className="mha-cardHeader">Paste the message header you would like to analyze</div>
+                        <div className="mha-cardBody">
                             <textarea
                                 className="mha-textarea"
                                 placeholder="Paste the full e-mail header here..."
@@ -477,9 +484,9 @@ export default function MessageHeaderAnalyzer() {
                     </section>
 
                     {parsed && (
-                        <section className="mha-panel">
-                            <div className="mha-panelHeader">Analyze Result</div>
-                            <div className="mha-panelBody">
+                        <section className="mha-card">
+                            <div className="mha-cardHeader">Analyze Result</div>
+                            <div className="mha-cardBody">
                                 <div className="mha-exportActions">
                                     <button className="button button--secondary button--sm" onClick={handleCopyAnalysis}>
                                         Copy analysis
@@ -494,9 +501,9 @@ export default function MessageHeaderAnalyzer() {
                     )}
 
                     {parsed && (
-                        <section className="mha-panel">
-                            <div className="mha-panelHeader">Header Analyzer Summary</div>
-                            <div className="mha-panelBody">
+                        <section className="mha-card">
+                            <div className="mha-cardHeader">Header Analyzer Summary</div>
+                            <div className="mha-cardBody">
                                 <div className="mha-tableWrapper">
                                     <table className="mha-table">
                                         <thead>
@@ -525,9 +532,9 @@ export default function MessageHeaderAnalyzer() {
                     )}
 
                     {parsed && (
-                        <section className="mha-panel">
-                            <div className="mha-panelHeader">Transport Message Header Report</div>
-                            <div className="mha-panelBody">
+                        <section className="mha-card">
+                            <div className="mha-cardHeader">Transport Message Header Report</div>
+                            <div className="mha-cardBody">
                                 {!parsed.received.length && <p className="mha-muted">No Received headers available.</p>}
                                 {parsed.received.length > 0 && (
                                     <div className="mha-tableWrapper">
@@ -564,9 +571,9 @@ export default function MessageHeaderAnalyzer() {
                     )}
 
                     {parsed && (
-                        <section className="mha-panel">
-                            <div className="mha-panelHeader">Forefront Antispam Report Header</div>
-                            <div className="mha-panelBody">
+                        <section className="mha-card">
+                            <div className="mha-cardHeader">Forefront Antispam Report Header</div>
+                            <div className="mha-cardBody">
                                 <div className="mha-tableWrapper">
                                     <table className="mha-table">
                                         <thead>
@@ -609,9 +616,9 @@ export default function MessageHeaderAnalyzer() {
                     )}
 
                     {parsed && (
-                        <section className="mha-panel">
-                            <div className="mha-panelHeader">Other Headers</div>
-                            <div className="mha-panelBody">
+                        <section className="mha-card">
+                            <div className="mha-cardHeader">Other Headers</div>
+                            <div className="mha-cardBody">
                                 {parsed.entries?.length ? (
                                     <div className="mha-tableWrapper">
                                         <table className="mha-table">
