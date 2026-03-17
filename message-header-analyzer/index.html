@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Message Header Analyzer | Nebula: A family of PowerShell modules that go beyond your workstation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://gioxx.github.io/Nebula.KB-dev/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://gioxx.github.io/Nebula.KB-dev/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://gioxx.github.io/Nebula.KB-dev/message-header-analyzer"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Message Header Analyzer | Nebula: A family of PowerShell modules that go beyond your workstation"><meta data-rh="true" name="description" content="Inspect message headers entirely in your browser."><meta data-rh="true" property="og:description" content="Inspect message headers entirely in your browser."><link data-rh="true" rel="icon" href="/Nebula.KB-dev/img/Nebula_Icon_Header.svg"><link data-rh="true" rel="canonical" href="https://gioxx.github.io/Nebula.KB-dev/message-header-analyzer"><link data-rh="true" rel="alternate" href="https://gioxx.github.io/Nebula.KB-dev/message-header-analyzer" hreflang="en"><link data-rh="true" rel="alternate" href="https://gioxx.github.io/Nebula.KB-dev/message-header-analyzer" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/Nebula.KB-dev/news/rss.xml" title="Nebula: A family of PowerShell modules that go beyond your workstation RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/Nebula.KB-dev/news/atom.xml" title="Nebula: A family of PowerShell modules that go beyond your workstation Atom Feed"><link rel="stylesheet" href="/Nebula.KB-dev/assets/css/styles.f7973ec9.css">
-<script src="/Nebula.KB-dev/assets/js/runtime~main.2680f630.js" defer="defer"></script>
+<script src="/Nebula.KB-dev/assets/js/runtime~main.7c80400b.js" defer="defer"></script>
 <script src="/Nebula.KB-dev/assets/js/main.b21e055a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -17,7 +17,13 @@
                 .mha-layout { display: grid; gap: 1.1rem; }
                 .mha-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-top: 0.55rem; }
                 .mha-exportActions { display: flex; gap: 0.5rem; align-items: center; margin: 0; flex-wrap: wrap; }
-                .mha-card { border: 1px solid var(--ifm-toc-border-color); border-radius: 8px; overflow: hidden; background: var(--ifm-background-surface-color); }
+                .mha-card {
+                    border: 1px solid var(--ifm-toc-border-color);
+                    border-radius: 10px;
+                    overflow: hidden;
+                    background: var(--ifm-background-surface-color);
+                    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+                }
                 .mha-cardHeader {
                     background: #0067b8;
                     color: #fff;
@@ -68,6 +74,14 @@
                     color: var(--ifm-color-emphasis-300);
                 }
                 [data-theme='dark'] .mha-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+                [data-theme='dark'] .mha-card {
+                    background: #141a2f;
+                    border-color: #334164;
+                    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+                }
+                [data-theme='dark'] .mha-cardBody {
+                    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
+                }
                 @media (max-width: 768px) {
                     .mha-kvLabel { width: 140px; }
                 }
