@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Admonition from '@theme/Admonition';
 
@@ -153,7 +153,7 @@ function formatSeconds(sec) {
 
 function getFirstHeaderValue(map, names) {
     for (const name of names) {
-        const value = map[name]?.[0];
+        const value = map?.[name]?.[0];
         if (value) return value;
     }
     return '';
@@ -165,6 +165,45 @@ function extractEmail(raw = '') {
     if (bracketMatch?.[1]) return bracketMatch[1].trim();
     const plainMatch = raw.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
     return plainMatch ? plainMatch[0] : '';
+}
+
+function buildSummaryRows(summary, map, received, auth) {
+    const created = summary?.dateObj || null;
+    const delivered = received?.[0]?.dateObj || null;
+    const sender = extractEmail(summary?.from) || summary?.from || '';
+    const recipient = extractEmail(summary?.to) || summary?.to || '';
+    const directionality = getFirstHeaderValue(map, ['x-ms-exchange-organization-messagedirectionality']);
+    const networkMessageId = getFirstHeaderValue(map, [
+        'x-ms-exchange-crosstenant-network-message-id',
+        'x-ms-exchange-organization-network-message-id',
+    ]);
+    const internetMessageId = summary?.messageId || getFirstHeaderValue(map, ['x-ms-exchange-organization-messageid']);
+
+    const authStats = {
+        pass: (auth || []).filter((x) => x.result === 'pass').length,
+        fail: (auth || []).filter((x) => x.result.includes('fail')).length,
+        total: (auth || []).length,
+    };
+
+    return [
+        { label: 'Subject', value: summary?.subject || 'n/a' },
+        { label: 'Message ID', value: internetMessageId || 'n/a' },
+        { label: 'Sender', value: sender || 'n/a' },
+        { label: 'Recipient', value: recipient || 'n/a' },
+        { label: 'Created', value: created ? formatDate(created) : summary?.dateHeader || 'n/a' },
+        { label: 'Delivered', value: delivered ? formatDate(delivered) : 'n/a' },
+        { label: 'Received hop count', value: typeof summary?.hopCount === 'number' ? String(summary.hopCount) : 'n/a' },
+        {
+            label: 'Total transit time',
+            value: typeof summary?.totalTransitSeconds === 'number' ? formatSeconds(summary.totalTransitSeconds) : 'n/a',
+        },
+        { label: 'Message directionality', value: directionality || 'n/a' },
+        { label: 'Network Message ID', value: networkMessageId || 'n/a' },
+        {
+            label: 'SPF/DKIM/DMARC summary',
+            value: authStats.total ? `${authStats.pass} pass, ${authStats.fail} fail (${authStats.total})` : 'No checks parsed',
+        },
+    ];
 }
 
 function summarize(map, received) {
@@ -187,46 +226,6 @@ function summarize(map, received) {
         hopCount: received.length,
         totalTransitSeconds,
     };
-}
-
-function buildSummaryRows(summary, map, authRows) {
-    const deliveryDate = summary?.received?.[0]?.dateObj || null;
-    const creationDate = summary?.dateObj || null;
-    const directionality = getFirstHeaderValue(map, [
-        'x-ms-exchange-organization-messagedirectionality',
-        'x-ms-exchange-crosstenant-originalarrivaltime',
-    ]);
-    const networkMessageId = getFirstHeaderValue(map, [
-        'x-ms-exchange-crosstenant-network-message-id',
-        'x-ms-exchange-organization-network-message-id',
-    ]);
-    const senderAddress = extractEmail(summary.from) || summary.from;
-    const recipientAddress = extractEmail(summary.to) || summary.to;
-    const passCount = (authRows || []).filter((x) => x.result === 'pass').length;
-    const failCount = (authRows || []).filter((x) => x.result.includes('fail')).length;
-
-    return [
-        { label: 'Subject', value: summary.subject || 'n/a' },
-        { label: 'Message ID', value: summary.messageId || 'n/a' },
-        { label: 'Sender', value: senderAddress || 'n/a' },
-        { label: 'Recipient', value: recipientAddress || 'n/a' },
-        { label: 'Created', value: creationDate ? formatDate(creationDate) : summary.dateHeader || 'n/a' },
-        { label: 'Delivered', value: deliveryDate ? formatDate(deliveryDate) : 'n/a' },
-        { label: 'Hop count', value: typeof summary.hopCount === 'number' ? String(summary.hopCount) : 'n/a' },
-        {
-            label: 'Total delay',
-            value: typeof summary.totalTransitSeconds === 'number' ? formatSeconds(summary.totalTransitSeconds) : 'n/a',
-        },
-        {
-            label: 'Authentication',
-            value:
-                authRows?.length > 0
-                    ? `${passCount} pass, ${failCount} fail (${authRows.length} checks)`
-                    : 'No SPF/DKIM/DMARC rows',
-        },
-        { label: 'Directionality', value: directionality || 'n/a' },
-        { label: 'Network Message ID', value: networkMessageId || 'n/a' },
-    ];
 }
 
 const SAMPLE_HEADER = `Received: from mx.sender.example (mx.sender.example [203.0.113.21])
@@ -260,7 +259,7 @@ export default function MessageHeaderAnalyzer() {
             return;
         }
         const { map, entries } = parseHeaderEntries(rawHeaders);
-        const receivedRaw = map.received || [];
+        const receivedRaw = map['received'] || [];
         const received = computeReceivedDelays(receivedRaw.map((r) => parseReceivedLine(r)));
         const summary = summarize(map, received);
         const forefront = parseKeyValueHeader(map['x-forefront-antispam-report']?.[0] || '');
@@ -291,14 +290,9 @@ export default function MessageHeaderAnalyzer() {
         if (!data) return '';
         const lines = [];
         const s = data.summary || {};
+        const extendedSummary = buildSummaryRows(s, data.rawMap || {}, data.received || [], data.auth || []);
         lines.push('=== Summary ===');
-        lines.push(`Subject: ${s.subject || 'n/a'}`);
-        lines.push(`Message ID: ${s.messageId || 'n/a'}`);
-        lines.push(`From: ${s.from || 'n/a'}`);
-        lines.push(`To: ${s.to || 'n/a'}`);
-        lines.push(`Date: ${s.dateHeader || 'n/a'}`);
-        lines.push(`Hops: ${s.hopCount ?? 'n/a'}`);
-        lines.push(`Transit time: ${typeof s.totalTransitSeconds === 'number' ? formatSeconds(s.totalTransitSeconds) : 'n/a'}`);
+        extendedSummary.forEach((row) => lines.push(`${row.label}: ${row.value}`));
         lines.push('');
 
         lines.push('=== Received path ===');
@@ -357,7 +351,7 @@ export default function MessageHeaderAnalyzer() {
         try {
             await navigator.clipboard.writeText(buildAnalysisText(parsed));
             setExportStatus('Analysis copied to clipboard.');
-        } catch {
+        } catch (err) {
             setExportStatus('Unable to copy to clipboard.');
         }
     };
@@ -375,290 +369,431 @@ export default function MessageHeaderAnalyzer() {
     };
 
     const missingReceived = parsed && (!parsed.received || parsed.received.length === 0);
-    const summaryRows = parsed ? buildSummaryRows({ ...parsed.summary, received: parsed.received }, parsed.rawMap, parsed.auth) : [];
-    const combinedAuthSource =
-        parsed?.auth?.map((item, idx) => ({
-            key: `${item.mechanism.toLowerCase()}_${idx}`,
-            value: `${item.mechanism}=${item.result}${item.domain ? ` (${item.domain})` : ''}${item.detail ? ` - ${item.detail}` : ''}`,
-        })) || [];
+    const summaryRows = useMemo(
+        () => (parsed ? buildSummaryRows(parsed.summary, parsed.rawMap, parsed.received, parsed.auth) : []),
+        [parsed]
+    );
+
+    const cards = useMemo(() => {
+        const byLabel = Object.fromEntries(summaryRows.map((row) => [row.label, row.value]));
+        return [
+            { label: 'Subject', value: byLabel.Subject || 'n/a' },
+            { label: 'Sender', value: byLabel.Sender || 'n/a' },
+            { label: 'Recipient', value: byLabel.Recipient || 'n/a' },
+            { label: 'Created', value: byLabel.Created || 'n/a' },
+            { label: 'Delivered', value: byLabel.Delivered || 'n/a' },
+            { label: 'Hops', value: byLabel['Received hop count'] || 'n/a' },
+            { label: 'Transit time', value: byLabel['Total transit time'] || 'n/a' },
+            { label: 'Directionality', value: byLabel['Message directionality'] || 'n/a' },
+        ];
+    }, [summaryRows]);
+
+    const SectionIcon = ({ icon }) => (
+        <span className="mha-headerIcon" aria-hidden="true">
+            <svg
+                viewBox="0 0 24 24"
+                role="presentation"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                {...(icon?.props || {})}
+            >
+                {icon?.nodes}
+            </svg>
+        </span>
+    );
+
+    const icons = {
+        paste: {
+            nodes: (
+                <>
+                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                    <path d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2" />
+                    <path d="M9 11h3" />
+                    <path d="M9 14h6" />
+                    <path d="M9 17h6" />
+                </>
+            ),
+        },
+        summary: {
+            nodes: (
+                <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                    <path d="M9 9l1 0" />
+                    <path d="M9 13l6 0" />
+                    <path d="M9 17l6 0" />
+                </>
+            ),
+        },
+        received: {
+            nodes: (
+                <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 17h4v4h-4z" />
+                    <path d="M17 3h4v4h-4z" />
+                    <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />
+                </>
+            ),
+        },
+        auth: {
+            nodes: (
+                <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v.5" />
+                    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+                    <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+                    <path d="M15 19l2 2l4 -4" />
+                </>
+            ),
+        },
+        antispam: {
+            props: { fill: 'currentColor', stroke: 'none' },
+            nodes: (
+                <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M11.998 2l.118 .007l.059 .008l.061 .013l.111 .034a.993 .993 0 0 1 .217 .112l.104 .082l.255 .218a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.531 -2.527l.263 -.225l.096 -.075a.993 .993 0 0 1 .217 -.112l.112 -.034a.97 .97 0 0 1 .119 -.021l.115 -.007zm3.71 7.293a1 1 0 0 0 -1.415 0l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.32 1.497l2 2l.094 .083a1 1 0 0 0 1.32 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+                </>
+            ),
+        },
+        headers: {
+            nodes: (
+                <>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M11 19h-6a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v6" />
+                    <path d="M3 7l9 6l9 -6" />
+                    <path d="M20 21l2 -2l-2 -2" />
+                    <path d="M17 17l-2 2l2 2" />
+                </>
+            ),
+        },
+    };
 
     return (
         <Layout title="Message Header Analyzer" description="Inspect message headers entirely in your browser.">
             <style>{`
                 .mha-root { font-size: 0.94rem; }
-                .mha-layout { display: grid; gap: 1.1rem; }
-                .mha-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-top: 0.55rem; }
-                .mha-exportActions { display: flex; gap: 0.5rem; align-items: center; margin: 0; flex-wrap: wrap; }
-                .mha-card {
-                    border: 1px solid var(--ifm-toc-border-color);
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: var(--ifm-background-surface-color);
-                    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
-                }
-                .mha-cardHeader {
-                    background: #0067b8;
-                    color: #fff;
-                    font-size: 0.87rem;
-                    font-weight: 700;
-                    padding: 0.45rem 0.75rem;
-                    line-height: 1.3;
-                    letter-spacing: 0.01em;
-                }
+                .mha-layout { display: grid; gap: 1.25rem; }
+                .mha-actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.75rem; }
+                .mha-exportActions { display: flex; gap: .5rem; align-items: center; margin: 0.6rem 0 0.2rem; flex-wrap: wrap; }
+                .mha-textarea { width: 100%; min-height: 200px; font-family: inherit; font-size: inherit; line-height: inherit; }
+                .mha-card { border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; overflow: hidden; background: var(--ifm-background-surface-color); box-shadow: 0 6px 18px rgba(0,0,0,0.10); }
+                .mha-cardHeader { background: #0067b8; color: #fff; padding: 0.45rem 0.7rem; font-weight: 700; letter-spacing: 0.01em; font-size: 0.94rem; display: flex; align-items: center; gap: 0.4rem; }
+                .mha-headerIcon { display: inline-flex; align-items: center; justify-content: center; }
+                .mha-headerIcon svg { width: 18px; height: 18px; vertical-align: middle; }
+                .mha-titleIcon { display: inline-flex; align-items: center; justify-content: center; margin-right: 0.45rem; vertical-align: middle; color: var(--ifm-color-primary); }
+                .mha-titleIcon svg { width: 26px; height: 26px; }
                 .mha-cardBody { padding: 0.7rem 0.85rem; }
-                .mha-textarea {
-                    width: 100%;
-                    min-height: 220px;
-                    border: 1px solid var(--ifm-toc-border-color);
-                    font-family: var(--ifm-font-family-monospace);
-                    font-size: 0.84rem;
-                    line-height: 1.25;
-                    padding: 0.6rem;
-                    resize: vertical;
-                    border-radius: 6px;
-                }
+                .mha-summaryGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.6rem; }
+                .mha-summaryItem { padding: 0.5rem 0.55rem; border: 1px solid var(--ifm-toc-border-color); border-radius: 4px; background: var(--ifm-background-color); }
+                .mha-summaryLabel { display: block; font-size: 0.7rem; color: var(--ifm-color-secondary-text); text-transform: uppercase; letter-spacing: 0.04em; }
+                .mha-summaryValue { margin-top: 0.12rem; font-weight: 600; font-size: 0.92rem; word-break: break-word; }
+                .mha-summaryTable { margin-top: 0.8rem; }
+                .mha-summaryTable td:first-child { width: 220px; font-weight: 700; }
                 .mha-tableWrapper { overflow-x: auto; }
-                .mha-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; }
-                .mha-table th, .mha-table td {
-                    border: 1px solid var(--ifm-toc-border-color);
-                    padding: 0.38rem 0.48rem;
-                    vertical-align: top;
-                    word-break: break-word;
-                }
-                .mha-table th {
-                    background: #e5f1fb;
-                    color: var(--ifm-color-emphasis-700);
-                    font-weight: 700;
-                    font-size: 0.8rem;
-                }
-                .mha-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.015); }
-                .mha-kvLabel { width: 220px; font-weight: 700; }
-                .mha-mono {
-                    font-family: var(--ifm-font-family-monospace);
-                    white-space: pre-wrap;
-                    overflow-wrap: anywhere;
-                }
-                .mha-good { color: #147539; font-weight: 700; }
-                .mha-bad { color: #b11a00; font-weight: 700; }
-                .mha-muted { color: var(--ifm-color-secondary-text); font-size: 0.8rem; }
-                [data-theme='dark'] .mha-table th {
-                    background: #243447;
-                    color: var(--ifm-color-emphasis-300);
-                }
-                [data-theme='dark'] .mha-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-                [data-theme='dark'] .mha-card {
-                    background: #141a2f;
-                    border-color: #334164;
-                    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
-                }
-                [data-theme='dark'] .mha-cardBody {
-                    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
-                }
+                .mha-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; table-layout: fixed; }
+                .mha-table th, .mha-table td { padding: 0.45rem 0.5rem; border: 1px solid var(--ifm-toc-border-color); vertical-align: top; word-break: break-word; white-space: normal; }
+                .mha-table th { background: #e5f1fb; font-weight: 700; font-size: 0.88rem; color: var(--ifm-color-emphasis-600); }
+                .mha-table tr:nth-child(odd) { background: rgba(0,0,0,0.015); }
+                [data-theme='dark'] .mha-table th { background: #243447; color: var(--ifm-color-emphasis-400); }
+                [data-theme='dark'] .mha-table tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+                [data-theme='dark'] .mha-card { background: #141a2f; border-color: #334164; box-shadow: 0 10px 24px rgba(0,0,0,0.34); }
+                .mha-chip { display: inline-block; padding: 0.12rem 0.42rem; border-radius: 999px; font-size: 0.75rem; background: #e5f1fb; color: #004f9f; border: 1px solid #c6defa; }
+                .mha-delay-bad { color: var(--ifm-color-danger); font-weight: 700; }
+                .mha-delay-good { color: var(--ifm-color-success); font-weight: 700; }
+                .mha-mono { font-family: var(--ifm-font-family-monospace); font-size: 0.85rem; white-space: pre-wrap; }
+                .mha-center { text-align: center; vertical-align: middle; }
+                .mha-sectionHint { margin: 0.2rem 0 0; color: var(--ifm-color-secondary-text); font-size: 0.82rem; }
+                .mha-muted { color: var(--ifm-color-secondary-text); }
+                .mha-kvGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.55rem; }
+                .mha-kv { border: 1px solid var(--ifm-toc-border-color); border-radius: 4px; padding: 0.4rem 0.5rem; background: var(--ifm-background-color); font-size: 0.88rem; }
+                .mha-kv strong { font-size: 0.8rem; display: block; color: var(--ifm-color-secondary-text); text-transform: uppercase; letter-spacing: 0.03em; }
+                .mha-kv span { display: block; margin-top: 0.1rem; word-break: break-word; }
                 @media (max-width: 768px) {
-                    .mha-kvLabel { width: 140px; }
+                    .mha-summaryGrid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+                    .mha-cardBody { padding: 0.65rem 0.7rem; }
                 }
             `}</style>
 
             <main className="container margin-vert--lg mha-root">
-                <div>
-                    <h1 className="margin-bottom--sm">Message Header Analyzer</h1>
-                    <p style={{ marginBottom: 0 }}>
-                        Paste a raw e-mail header and generate an MHA-like report with summary, transport path, and antispam details.
-                    </p>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '0.35rem' }}>
+                    <span className="mha-titleIcon" aria-hidden="true" style={{ color: 'var(--ifm-color-primary)' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 64, height: 64 }}>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+                            <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+                            <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+                            <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+                            <path d="M8 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            <path d="M16 16l-2.5 -2.5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h1 className="margin-bottom--sm">
+                            Message Header Analyzer
+                        </h1>
+                        <p style={{ marginBottom: 0 }}>
+                            Paste a raw e-mail header to extract transport, authentication, and antispam diagnostics.<br/>
+                            The report structure is aligned with Microsoft MHA while keeping the Nebula visual style.
+                        </p>
+                    </div>
                 </div>
-                <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '0.7rem', marginBottom: '0.7rem' }}>
+                <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
                     <Admonition type="danger" title="Data Privacy">
-                        Everything stays in your browser; no files are uploaded or stored on the server.
+                        Everything stays in your browser; no files are uploaded or stored on the server.<br/>
+                        All analysis is performed by your browser.
                     </Admonition>
                 </p>
 
                 <div className="mha-layout">
-                    <section className="mha-card">
-                        <div className="mha-cardHeader">Paste the message header you would like to analyze</div>
-                        <div className="mha-cardBody">
-                            <textarea
-                                className="mha-textarea"
-                                placeholder="Paste the full e-mail header here..."
-                                value={rawHeaders}
-                                onChange={(e) => setRawHeaders(e.target.value)}
-                            />
-                            <div className="mha-actions">
-                                <button className="button button--primary button--sm" onClick={handleAnalyze}>
-                                    Analyze headers
-                                </button>
-                                <button className="button button--secondary button--sm" onClick={handleClear}>
-                                    Clear
-                                </button>
-                                <button className="button button--link button--sm" type="button" onClick={() => setRawHeaders(SAMPLE_HEADER)}>
-                                    Load sample
-                                </button>
-                                {error && <span style={{ color: 'var(--ifm-color-danger)' }}>{error}</span>}
-                            </div>
-                        </div>
-                    </section>
+                    <div className="mha-actions">
+                        <button className="button button--primary button--sm" onClick={handleAnalyze}>
+                            Analyze headers
+                        </button>
+                        <button className="button button--secondary button--sm" onClick={handleClear}>
+                            Clear
+                        </button>
+                        <button
+                            className="button button--link button--sm"
+                            type="button"
+                            onClick={() => setRawHeaders(SAMPLE_HEADER)}
+                        >
+                            Load sample
+                        </button>
+                        {error && <span style={{ color: 'var(--ifm-color-danger)' }}>{error}</span>}
+                    </div>
+                    <textarea
+                        style={{ width: '100%', minHeight: '220px' }}
+                        placeholder="Paste the full e-mail header here..."
+                        value={rawHeaders}
+                        onChange={(e) => setRawHeaders(e.target.value)}
+                    />
 
                     {parsed && (
-                        <section className="mha-card">
-                            <div className="mha-cardHeader">Analyze Result</div>
-                            <div className="mha-cardBody">
-                                <div className="mha-exportActions">
-                                    <button className="button button--secondary button--sm" onClick={handleCopyAnalysis}>
-                                        Copy analysis
-                                    </button>
-                                    <button className="button button--secondary button--sm" onClick={handleDownloadAnalysis}>
-                                        Export as .txt
-                                    </button>
-                                    {exportStatus && <span style={{ color: 'var(--ifm-color-secondary-text)' }}>{exportStatus}</span>}
+                        <>
+                            <div className="mha-exportActions">
+                                <button className="button button--secondary button--sm" onClick={handleCopyAnalysis}>
+                                    Copy analysis
+                                </button>
+                                <button className="button button--secondary button--sm" onClick={handleDownloadAnalysis}>
+                                    Export as .txt
+                                </button>
+                                {exportStatus && <span style={{ color: 'var(--ifm-color-secondary-text)' }}>{exportStatus}</span>}
+                            </div>
+
+                            <section className="mha-card">
+                                <div className="mha-cardHeader">
+                                    <SectionIcon icon={icons.summary} />
+                                    <span>Summary</span>
                                 </div>
-                            </div>
-                        </section>
-                    )}
-
-                    {parsed && (
-                        <section className="mha-card">
-                            <div className="mha-cardHeader">Header Analyzer Summary</div>
-                            <div className="mha-cardBody">
-                                <div className="mha-tableWrapper">
-                                    <table className="mha-table">
-                                        <thead>
-                                            <tr>
-                                                <th style={{ width: '260px' }}>Name</th>
-                                                <th>Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {summaryRows.map((row) => (
-                                                <tr key={row.label}>
-                                                    <td className="mha-kvLabel">{row.label}</td>
-                                                    <td className="mha-mono">{row.value}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {missingReceived && (
-                                    <p className="mha-muted" style={{ marginTop: '0.45rem' }}>
-                                        No Received headers found. Verify that the pasted content includes the complete message header.
-                                    </p>
-                                )}
-                            </div>
-                        </section>
-                    )}
-
-                    {parsed && (
-                        <section className="mha-card">
-                            <div className="mha-cardHeader">Transport Message Header Report</div>
-                            <div className="mha-cardBody">
-                                {!parsed.received.length && <p className="mha-muted">No Received headers available.</p>}
-                                {parsed.received.length > 0 && (
-                                    <div className="mha-tableWrapper">
-                                        <table className="mha-table">
-                                            <thead>
-                                                <tr>
-                                                    <th style={{ width: '60px' }}>Hop</th>
-                                                    <th>Submitting Host</th>
-                                                    <th>Receiving Host</th>
-                                                    <th style={{ width: '180px' }}>Time</th>
-                                                    <th style={{ width: '95px' }}>Delay</th>
-                                                    <th style={{ width: '95px' }}>Type</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {parsed.received.map((r, idx) => (
-                                                    <tr key={`${idx}-${r.dateString}`}>
-                                                        <td>{idx + 1}</td>
-                                                        <td className="mha-mono">{r.submittingHost || 'Unknown'}</td>
-                                                        <td className="mha-mono">{r.receivingHost || 'Unknown'}</td>
-                                                        <td>{r.dateObj ? formatDate(r.dateObj) : r.dateString || 'n/a'}</td>
-                                                        <td className={r.delaySeconds !== null && r.delaySeconds < 0 ? 'mha-bad' : 'mha-good'}>
-                                                            {r.delaySeconds === null ? 'n/a' : formatSeconds(r.delaySeconds)}
-                                                        </td>
-                                                        <td className="mha-mono">{r.protocol || 'n/a'}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                <div className="mha-cardBody">
+                                    <div className="mha-summaryGrid">
+                                        {cards.map((c) => (
+                                            <div key={c.label} className="mha-summaryItem">
+                                                <span className="mha-summaryLabel">{c.label}</span>
+                                                <span className="mha-summaryValue">{c.value}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                )}
-                            </div>
-                        </section>
-                    )}
-
-                    {parsed && (
-                        <section className="mha-card">
-                            <div className="mha-cardHeader">Forefront Antispam Report Header</div>
-                            <div className="mha-cardBody">
-                                <div className="mha-tableWrapper">
-                                    <table className="mha-table">
-                                        <thead>
-                                            <tr>
-                                                <th style={{ width: '260px' }}>Name</th>
-                                                <th>Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {parsed.forefront.map((item, idx) => (
-                                                <tr key={`ff-${idx}`}>
-                                                    <td className="mha-kvLabel">{item.key}</td>
-                                                    <td className="mha-mono">{item.value || 'n/a'}</td>
-                                                </tr>
-                                            ))}
-                                            {parsed.antispam.map((item, idx) => (
-                                                <tr key={`msa-${idx}`}>
-                                                    <td className="mha-kvLabel">{item.key}</td>
-                                                    <td className="mha-mono">{item.value || 'n/a'}</td>
-                                                </tr>
-                                            ))}
-                                            {combinedAuthSource.map((item) => (
-                                                <tr key={item.key}>
-                                                    <td className="mha-kvLabel">auth-result</td>
-                                                    <td className="mha-mono">{item.value}</td>
-                                                </tr>
-                                            ))}
-                                            {!parsed.forefront.length && !parsed.antispam.length && !combinedAuthSource.length && (
-                                                <tr>
-                                                    <td colSpan={2} className="mha-muted">
-                                                        No antispam or authentication diagnostic details were detected.
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </section>
-                    )}
-
-                    {parsed && (
-                        <section className="mha-card">
-                            <div className="mha-cardHeader">Other Headers</div>
-                            <div className="mha-cardBody">
-                                {parsed.entries?.length ? (
-                                    <div className="mha-tableWrapper">
+                                    <div className="mha-tableWrapper mha-summaryTable">
                                         <table className="mha-table">
                                             <thead>
-                                                <tr>
-                                                    <th style={{ width: '60px' }}>#</th>
-                                                    <th style={{ width: '260px' }}>Header</th>
+                                            <tr>
+                                                    <th style={{ width: '240px' }}>Name</th>
                                                     <th>Value</th>
-                                                </tr>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                {parsed.entries.map((item, idx) => (
-                                                    <tr key={`${item.name}-${idx}`}>
-                                                        <td>{idx + 1}</td>
-                                                        <td>{item.name}</td>
-                                                        <td className="mha-mono">{item.value}</td>
+                                                {summaryRows.map((row) => (
+                                                    <tr key={row.label}>
+                                                        <td>{row.label}</td>
+                                                        <td className="mha-mono">{row.value}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
-                                ) : (
-                                    <p className="mha-muted">No headers parsed.</p>
-                                )}
+                                    {missingReceived && (
+                                        <p className="mha-sectionHint">
+                                            No Received headers found. Check that you pasted the full message header (not just the body).
+                                        </p>
+                                    )}
                             </div>
-                        </section>
+                            </section>
+
+                            <section className="mha-card">
+                                <div className="mha-cardHeader">
+                                    <SectionIcon icon={icons.received} />
+                                    <span>Received path</span>
+                                </div>
+                                <div className="mha-cardBody">
+                                    {!parsed.received.length && (
+                                        <p className="mha-muted">No Received headers available.</p>
+                                    )}
+                                    {parsed.received.length > 0 && (
+                                        <div className="mha-tableWrapper">
+                                            <table className="mha-table">
+                                                <thead>
+                                                        <tr>
+                                                            <th style={{ width: '60px' }}>Hop</th>
+                                                            <th>Submitting host</th>
+                                                            <th>Receiving host</th>
+                                                            <th style={{ width: '220px' }}>Time</th>
+                                                            <th style={{ width: '110px' }}>Delay vs next</th>
+                                                        <th style={{ width: '120px' }}>Protocol</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {parsed.received.map((r, idx) => (
+                                                        <tr key={`${idx}-${r.dateString}`}>
+                                                            <td className="mha-center">
+                                                                <span className="mha-chip">{idx + 1}</span>
+                                                            </td>
+                                                            <td className="mha-mono">{r.submittingHost || <span className="mha-muted">Unknown</span>}</td>
+                                                            <td className="mha-mono">{r.receivingHost || <span className="mha-muted">Unknown</span>}</td>
+                                                            <td>
+                                                                {r.dateObj ? (
+                                                                    <>
+                                                                        {formatDate(r.dateObj)}
+                                                                        <div className="mha-sectionHint">{r.dateString}</div>
+                                                                    </>
+                                                                ) : (
+                                                                    r.dateString || <span className="mha-muted">Not parsed</span>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {r.delaySeconds === null ? (
+                                                                    <span className="mha-muted">n/a</span>
+                                                                ) : (
+                                                                    <span className={r.delaySeconds < 0 ? 'mha-delay-bad' : 'mha-delay-good'}>
+                                                                        {formatSeconds(r.delaySeconds)}
+                                                                    </span>
+                                                                )}
+                                                            </td>
+                                                            <td className="mha-mono">{r.protocol || <span className="mha-muted">?</span>}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </div>
+                            </section>
+
+                            <section className="mha-card">
+                                <div className="mha-cardHeader">
+                                    <SectionIcon icon={icons.auth} />
+                                    <span>Authentication</span>
+                                </div>
+                                <div className="mha-cardBody">
+                                    {parsed.auth.length === 0 && <p className="mha-muted">No SPF/DKIM/DMARC results detected.</p>}
+                                    {parsed.auth.length > 0 && (
+                                        <div className="mha-tableWrapper">
+                                            <table className="mha-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{ width: '110px' }}>Check</th>
+                                                        <th style={{ width: '140px' }}>Result</th>
+                                                        <th>Domain</th>
+                                                        <th>Details</th>
+                                                        <th style={{ width: '170px' }}>Source header</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {parsed.auth.map((row, idx) => (
+                                                        <tr key={`${row.mechanism}-${idx}`}>
+                                                            <td><strong>{row.mechanism}</strong></td>
+                                                            <td className={row.result.includes('fail') || row.result.includes('softfail') ? 'mha-delay-bad' : 'mha-delay-good'}>
+                                                                {row.result}
+                                                            </td>
+                                                            <td className="mha-mono">{row.domain || <span className="mha-muted">n/a</span>}</td>
+                                                            <td>{row.detail || <span className="mha-muted">No extra info</span>}</td>
+                                                            <td className="mha-muted">{row.source}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </div>
+                            </section>
+
+                            {(parsed.forefront.length > 0 || parsed.antispam.length > 0) && (
+                                <section className="mha-card">
+                                    <div className="mha-cardHeader">
+                                        <SectionIcon icon={icons.antispam} />
+                                        <span>Antispam headers</span>
+                                    </div>
+                                    <div className="mha-cardBody">
+                                        <div className="mha-tableWrapper">
+                                            <table className="mha-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{ width: '230px' }}>Header</th>
+                                                        <th style={{ width: '140px' }}>Key</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {parsed.forefront.map((item, idx) => (
+                                                        <tr key={`ff-${idx}`}>
+                                                            <td>X-Forefront-Antispam-Report</td>
+                                                            <td>{item.key}</td>
+                                                            <td className="mha-mono">{item.value || 'n/a'}</td>
+                                                        </tr>
+                                                    ))}
+                                                    {parsed.antispam.map((item, idx) => (
+                                                        <tr key={`msa-${idx}`}>
+                                                            <td>X-Microsoft-Antispam</td>
+                                                            <td>{item.key}</td>
+                                                            <td className="mha-mono">{item.value || 'n/a'}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+
+                            {parsed && (
+                                <section className="mha-card">
+                                    <div className="mha-cardHeader">
+                                        <SectionIcon icon={icons.headers} />
+                                        <span>All headers</span>
+                                    </div>
+                                    <div className="mha-cardBody">
+                                        {parsed.entries?.length ? (
+                                            <div className="mha-tableWrapper">
+                                                <table className="mha-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{ width: '70px' }}>#</th>
+                                                            <th style={{ width: '240px' }}>Header</th>
+                                                            <th>Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {parsed.entries.map((item, idx) => (
+                                                            <tr key={`${item.name}-${idx}`}>
+                                                                <td>{idx + 1}</td>
+                                                                <td style={{ fontWeight: 700 }}>{item.name}</td>
+                                                                <td className="mha-mono">{item.value}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ) : (
+                                            <p className="mha-muted">No headers parsed.</p>
+                                        )}
+                                    </div>
+                                </section>
+                            )}
+                        </>
                     )}
                 </div>
             </main>
