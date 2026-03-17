@@ -389,7 +389,13 @@ export default function MessageHeaderAnalyzer() {
                 .mha-layout { display: grid; gap: 1.1rem; }
                 .mha-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-top: 0.55rem; }
                 .mha-exportActions { display: flex; gap: 0.5rem; align-items: center; margin: 0; flex-wrap: wrap; }
-                .mha-card { border: 1px solid var(--ifm-toc-border-color); border-radius: 8px; overflow: hidden; background: var(--ifm-background-surface-color); }
+                .mha-card {
+                    border: 1px solid var(--ifm-toc-border-color);
+                    border-radius: 10px;
+                    overflow: hidden;
+                    background: var(--ifm-background-surface-color);
+                    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+                }
                 .mha-cardHeader {
                     background: #0067b8;
                     color: #fff;
@@ -440,6 +446,14 @@ export default function MessageHeaderAnalyzer() {
                     color: var(--ifm-color-emphasis-300);
                 }
                 [data-theme='dark'] .mha-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+                [data-theme='dark'] .mha-card {
+                    background: #141a2f;
+                    border-color: #334164;
+                    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+                }
+                [data-theme='dark'] .mha-cardBody {
+                    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
+                }
                 @media (max-width: 768px) {
                     .mha-kvLabel { width: 140px; }
                 }
