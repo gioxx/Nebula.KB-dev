@@ -536,8 +536,8 @@ export default function MessageHeaderAnalyzer() {
                             Message Header Analyzer
                         </h1>
                         <p style={{ marginBottom: 0 }}>
-                            Paste a raw e-mail header to extract transport, authentication, and antispam diagnostics.<br/>
-                            The report structure is aligned with Microsoft MHA while keeping the Nebula visual style.
+                            Paste a raw e-mail header to extract transport, authentication, and antispam diagnostics.<br />
+                            <strike>Copied wholesale</strike> 😁 Freely inspired by the original Microsoft project (<a href="https://github.com/microsoft/MHA" target="_blank">MHA</a>), slightly revised in terms of the usability of the post-analysis page.
                         </p>
                     </div>
                 </div>
