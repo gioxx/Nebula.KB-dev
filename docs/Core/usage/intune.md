@@ -1,0 +1,109 @@
+---
+sidebar_position: 6
+title: "Intune"
+description: Find Intune configuration profiles assigned to an Entra group.
+hide_title: true
+id: intune
+tags:
+  - Get-IntuneProfileAssignmentsByGroup
+  - Intune
+  - Microsoft Graph
+  - Device Configuration
+  - Entra
+  - Nebula.Core
+---
+
+# Intune helpers
+
+Requires Microsoft Graph. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
+
+## Get-IntuneProfileAssignmentsByGroup
+Show where an Entra group is used in Intune (Graph scopes: `DeviceManagementConfiguration.Read.All`, `DeviceManagementApps.Read.All`, `Group.Read.All`, `Directory.Read.All`).
+
+This command is group-centric. It inspects:
+
+- classic and beta Intune device configurations from `deviceConfigurations`
+- settings catalog policies from `configurationPolicies`
+- Intune apps from `deviceAppManagement/mobileApps`
+
+The output is object-based and pipe-friendly. It can also include parent-group matches when the requested group is nested in other Entra groups.
+
+**Syntax**
+
+```powershell
+Get-IntuneProfileAssignmentsByGroup [-GroupName <String>] [-ProfileName <String>] [-ProfileId <String>] [-IncludeNestedGroups] [-GridView] [-Diagnostic]
+
+Get-IntuneProfileAssignmentsByGroup [-GroupId <String>] [-ProfileName <String>] [-ProfileId <String>] [-IncludeNestedGroups] [-GridView] [-Diagnostic]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` | String | Target Entra group display name. Pipeline accepted. | Yes* | - |
+| `GroupId` | String | Target Entra group object ID (use instead of `GroupName`). | Yes* | - |
+| `ProfileName` | String | Optional filter for profile or app display name. | No | - |
+| `ProfileId` | String | Optional filter for a specific Intune object ID. | No | - |
+| `IncludeNestedGroups` | Switch | Also match parent groups that include the requested Entra group. | No | `False` |
+| `GridView` | Switch | Show additional details in Out-GridView. | No | `False` |
+| `Diagnostic` | Switch | Include diagnostic columns in the returned objects. | No | `False` |
+
+\*Use either `GroupName` or `GroupId`.
+
+**Examples**
+```powershell
+Get-IntuneProfileAssignmentsByGroup -GroupName "Windows 11 Pilot"
+```
+
+```powershell
+Get-IntuneProfileAssignmentsByGroup -GroupId "00000000-0000-0000-0000-000000000000"
+```
+
+```powershell
+"Windows 11 Pilot" | Get-IntuneProfileAssignmentsByGroup -GridView
+```
+
+```powershell
+Get-IntuneProfileAssignmentsByGroup -GroupName "Intune - Reception" -IncludeNestedGroups
+```
+
+```powershell
+Get-IntuneProfileAssignmentsByGroup -GroupName "Intune - Reception" |
+    Where-Object Category -like '*App*'
+```
+
+```powershell
+Get-IntuneProfileAssignmentsByGroup -GroupName "Intune - Reception" -ProfileName "Zoom Workplace" -Diagnostic
+```
+
+**Output**
+
+Default output includes:
+
+| Column | Description |
+| --- | --- |
+| `Category` | Intune surface, for example `Device Configuration`, `Settings Catalog Policy`, `Required App`, `Available App`, or `Uninstall App`. |
+| `Profile Name` | Intune configuration profile display name. |
+| `Profile Type` | Graph OData type for the profile or app object. |
+| `Assignment` | `Include`, `Exclude`, or `Include; Exclude` when both assignment types exist for the same object. |
+
+When `-GridView` or `-Diagnostic` is used, the output also includes:
+
+| Column | Description |
+| --- | --- |
+| `Profile Id` | Intune configuration profile object ID. |
+| `Source` | Graph surface used to retrieve the object. |
+| `Group Name` | Resolved Entra group display name. |
+| `Group Id` | Resolved Entra group object ID. |
+| `Assignment Id` | Assignment object ID or IDs. |
+| `Target OData Type` | Graph target type or types used by the assignments. |
+| `Target Group Id` | Target group object ID or IDs. |
+| `Target Group Name` | Resolved target group display name or names. |
+| `Matched Requested Group` | Boolean indicating whether at least one assignment matched the requested group context. |
+| `App Intent` | Present for app assignments, for example `required`, `available`, or `uninstall`. |
+
+:::note
+Current scope is intentionally focused. The command currently covers `deviceConfigurations`, `configurationPolicies`, and `mobileApps`. It does not yet enumerate all Intune surfaces such as compliance policies, scripts, filters, enrollment profiles, app protection policies, or endpoint security policy families.
+:::
+
+:::tip
+Default console output highlights rows containing `Exclude` with a different color, while the underlying objects remain unchanged for pipeline use.
+:::
