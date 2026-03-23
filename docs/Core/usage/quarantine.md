@@ -161,6 +161,7 @@ Unlock-QuarantineMessageId -MessageId '20230617142935.F5B74194B266E458@contoso.c
 ### Is EXO required for quarantine functions?
 
 Yes. Quarantine cmdlets call `Test-EOLConnection` and expect an active EXO session (`Connect-EOL`/`Connect-Nebula`).
+If the default WAM-based EXO sign-in fails, Nebula now retries automatically with `-DisableWAM`. This is specifically relevant because WAM became the default Exchange Online auth path starting with `ExchangeOnlineManagement` `3.7.0`. It is useful when a PowerShell session survives a Windows lock/sleep cycle but the EXO broker state does not.
 
 ### How do I handle confirmations for destructive actions?
 
