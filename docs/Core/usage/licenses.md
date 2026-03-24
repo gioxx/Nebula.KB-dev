@@ -23,6 +23,7 @@ Backed by Microsoft Graph with a cached SKU catalog. For full details and exampl
 
 :::note User identifier resolution
 User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) support full UPNs/object IDs and short identifiers (for example alias/SamAccountName/UPN prefix) via the shared resolver.
+Now the resolver prefers a Microsoft Graph-friendly identity when available (`-PreferGraphIdentity`), improving reliability for object-ID-based lookups.
 :::
 
 ## Add-UserMsolAccountSku
