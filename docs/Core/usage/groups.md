@@ -11,6 +11,7 @@ tags:
   - Dynamic Distribution Groups
   - Export-DistributionGroups
   - Export-DynamicDistributionGroups
+  - Export-EmptyEntraGroups
   - Export-M365Group
   - Get-DynamicDistributionGroupFilter
   - Get-EntraGroupDevice
@@ -143,6 +144,31 @@ Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
 **Example**
 ```powershell
 Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
+```
+
+## Export-EmptyEntraGroups
+Export Entra groups with zero members.
+
+**Syntax**
+
+```powershell
+Export-EmptyEntraGroups [-CsvFolder <String>] [-Csv]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `CsvFolder` | String | Destination for the CSV file. | No | Current directory |
+| `Csv` | Boolean | Export the report to CSV. Use `-Csv:$false` to return objects instead. | No | `True` |
+
+**Examples**
+```powershell
+# Export every empty Entra group to CSV
+Export-EmptyEntraGroups
+```
+
+```powershell
+# Export to a custom folder
+Export-EmptyEntraGroups -CsvFolder 'C:\Temp\Groups'
 ```
 
 ## Get-DynamicDistributionGroupFilter
