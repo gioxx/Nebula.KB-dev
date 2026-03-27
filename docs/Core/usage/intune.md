@@ -6,6 +6,7 @@ hide_title: true
 id: intune
 tags:
   - Get-IntuneProfileAssignmentsByGroup
+  - Export-IntuneAppInventory
   - Intune
   - Microsoft Graph
   - Device Configuration
@@ -16,6 +17,45 @@ tags:
 # Intune helpers
 
 Requires Microsoft Graph. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
+
+## Export-IntuneAppInventory
+Report Intune-managed devices that have matching applications installed. The report is built from detected apps and can optionally include deployed app status data as well.
+
+**Syntax**
+
+```powershell
+Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-IncludeDeployedApps] [-MaxDevices <Int32>] [-OutputCsvPath <String>] [-OutputJsonPath <String>] [-PivotSummary]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `ApplicationName` (`SearchText`, `Name`, `DisplayName`, `Query`, `AppName`) | String | Application name or wildcard pattern to match. Pipeline accepted. | Yes | - |
+| `MinimumVersion` | String | Minimum application version to keep in the report. | No | - |
+| `FilterByType` | String | App type filter: `Win32`, `Store`, `LOB`, `Web`, `iOS`, `Android`, `macOS`, or `All`. Applies when `-IncludeDeployedApps` is used. | No | `All` |
+| `FilterByPlatform` | String | Device platform filter: `Windows`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
+| `OnlySuccessfulInstalls` | Switch | Keep only successful installs when querying deployment status. | No | `False` |
+| `IncludeDeployedApps` | Switch | Also query deployed app device status. | No | `False` |
+| `MaxDevices` | Int32 | Maximum number of devices to process. | No | `0` |
+| `OutputCsvPath` | String | Optional CSV output path. | No | - |
+| `OutputJsonPath` | String | Optional JSON output path. | No | - |
+| `PivotSummary` | Switch | Print a per-app summary after the report is built. | No | `False` |
+
+**Examples**
+```powershell
+Export-IntuneAppInventory -ApplicationName "TeamViewer"
+```
+
+```powershell
+Export-IntuneAppInventory -ApplicationName "Microsoft*" -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath "apps.csv"
+```
+
+```powershell
+Export-IntuneAppInventory -ApplicationName "Chrome" -MinimumVersion "120.0" -IncludeDeployedApps -PivotSummary
+```
+
+:::note
+`FilterByType` can be evaluated against deployed-app data. When `-IncludeDeployedApps` is not used, the report is based on detected apps only and the type filter is ignored.
+:::
 
 ## Get-IntuneProfileAssignmentsByGroup
 Show where an Entra group is used in Intune (Graph scopes: `DeviceManagementConfiguration.Read.All`, `DeviceManagementApps.Read.All`, `Group.Read.All`, `Directory.Read.All`).
