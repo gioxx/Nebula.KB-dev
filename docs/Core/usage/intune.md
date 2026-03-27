@@ -6,6 +6,7 @@ hide_title: true
 id: intune
 tags:
   - Get-IntuneProfileAssignmentsByGroup
+  - Search-IntuneProfileLocation
   - Export-IntuneAppInventory
   - Intune
   - Microsoft Graph
@@ -18,8 +19,40 @@ tags:
 
 Requires Microsoft Graph. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
 
+## Search-IntuneProfileLocation
+Find which Intune endpoint exposes a profile by name. This is a discovery command that scans multiple Graph surfaces and returns the matching source, profile ID, and OData type.
+
+**Syntax**
+
+```powershell
+Search-IntuneProfileLocation -SearchText <String> [-Exact] [-GridView]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SearchText` (`Name`, `DisplayName`, `ProfileName`, `Query`) | String | Profile name or wildcard pattern to search for. Pipeline accepted. | Yes | - |
+| `Exact` | Switch | Match the profile name exactly instead of using a contains search. | No | `False` |
+| `GridView` | Switch | Show the results in Out-GridView instead of returning objects. | No | `False` |
+
+**Examples**
+```powershell
+Search-IntuneProfileLocation -SearchText "iOS - Wi-Fi M-Smartphone"
+```
+
+```powershell
+Search-IntuneProfileLocation -SearchText "Wi-Fi" -GridView
+```
+
+:::note
+The command scans a curated set of Intune surfaces, including device configurations, configuration policies, compliance policies, enrollment configurations, scripts, and mobile apps.
+:::
+
 ## Export-IntuneAppInventory
 Report Intune-managed devices that have matching applications installed. The report is built from detected apps and can optionally include deployed app status data as well.
+
+:::info Credits
+Original idea credit: Ugur Koc. Reference: <https://www.intuneautomation.com/script/get-application-inventory-report/>.
+:::
 
 **Syntax**
 
