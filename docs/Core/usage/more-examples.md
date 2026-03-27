@@ -58,11 +58,29 @@ Set-MboxLanguage -SourceMailbox 'user@contoso.com' -Language en-US
 Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50
 ```
 
+## Export Intune app inventory
+
+```powershell
+Export-IntuneAppInventory -ApplicationName 'Microsoft*' -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath 'C:\Reports\apps.csv'
+```
+
+## Export deleted item size report
+
+```powershell
+Export-MboxDeletedItemSize -CsvFolder 'C:\Reports\Mailboxes'
+```
+
 ## Export DG and M365 groups with members
 
 ```powershell
 Export-DistributionGroups -CsvFolder 'C:\Reports\DGs'
 Export-M365Group -CsvFolder 'C:\Reports\M365'
+```
+
+## Export empty Entra groups
+
+```powershell
+Export-EmptyEntraGroups -CsvFolder 'C:\Reports\Groups'
 ```
 
 ## Normalize MessageIds from clipboard and release immediately
