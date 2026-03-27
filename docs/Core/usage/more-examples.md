@@ -62,6 +62,8 @@ Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50
 
 ```powershell
 Export-IntuneAppInventory -ApplicationName 'Microsoft*' -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath 'C:\Reports\apps.csv'
+
+Search-IntuneProfileLocation -SearchText 'Wi-Fi' -GridView
 ```
 
 ## Export deleted item size report
