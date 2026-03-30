@@ -51,7 +51,7 @@ The command scans a curated set of Intune surfaces, including device configurati
 Report Intune-managed devices that have matching applications installed. The report is built from detected apps and can optionally include deployed app status data as well.
 
 :::info Credits
-The original script is entirely the work of Ugur Koc (via [intuneautomation.com/script/get-application-inventory-report/](https://www.intuneautomation.com/script/get-application-inventory-report/)). I merely made a few minor tweaks and integrated the rest into the module and this specific function.
+The original script is entirely the work of **Ugur Koc** (via [intuneautomation.com/script/get-application-inventory-report/](https://www.intuneautomation.com/script/get-application-inventory-report/)). I merely made a few minor tweaks and integrated the rest into the module and this specific function.
 :::
 
 **Syntax**
