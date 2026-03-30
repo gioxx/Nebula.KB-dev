@@ -5,48 +5,20 @@ description: Find Intune configuration profiles assigned to an Entra group.
 hide_title: true
 id: intune
 tags:
-  - Get-IntuneProfileAssignmentsByGroup
-  - Search-IntuneProfileLocation
-  - Export-IntuneAppInventory
-  - New-IntuneAppBasedGroup
-  - Intune
-  - Microsoft Graph
   - Device Configuration
   - Entra
+  - Export-IntuneAppInventory
+  - Get-IntuneProfileAssignmentsByGroup
+  - Intune
+  - Microsoft Graph
   - Nebula.Core
+  - New-IntuneAppBasedGroup
+  - Search-IntuneProfileLocation
 ---
 
 # Intune helpers
 
 Requires Microsoft Graph. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
-
-## Search-IntuneProfileLocation
-Find which Intune endpoint exposes a profile by name. This is a discovery command that scans multiple Graph surfaces and returns the matching source, profile ID, and OData type.
-
-**Syntax**
-
-```powershell
-Search-IntuneProfileLocation -SearchText <String> [-Exact] [-GridView]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `SearchText` (`Name`, `DisplayName`, `ProfileName`, `Query`) | String | Profile name or wildcard pattern to search for. Pipeline accepted. | Yes | - |
-| `Exact` | Switch | Match the profile name exactly instead of using a contains search. | No | `False` |
-| `GridView` | Switch | Show the results in Out-GridView instead of returning objects. | No | `False` |
-
-**Examples**
-```powershell
-Search-IntuneProfileLocation -SearchText "iOS - Wi-Fi M-Smartphone"
-```
-
-```powershell
-Search-IntuneProfileLocation -SearchText "Wi-Fi" -GridView
-```
-
-:::note
-The command scans a curated set of Intune surfaces, including device configurations, configuration policies, compliance policies, enrollment configurations, scripts, and mobile apps.
-:::
 
 ## Export-IntuneAppInventory
 Report Intune-managed devices that have matching applications installed. The report is built from detected apps and can optionally include deployed app status data as well.
@@ -90,59 +62,6 @@ Export-IntuneAppInventory -ApplicationName "Chrome" -MinimumVersion "120.0" -Inc
 
 :::note
 `FilterByType` can be evaluated against deployed-app data. When `-IncludeDeployedApps` is not used, the report is based on detected apps only and the type filter is ignored.
-:::
-
-## New-IntuneAppBasedGroup
-Create or update Entra security groups based on apps detected on Intune-managed devices. The command supports multiple apps in a single run, optional version and platform filtering, and a dry-run preview.
-
-:::info Credits
-The original script is entirely the work of **Ugur Koc** (via [intuneautomation.com/script/create-app-based-entra-id-groups/](https://www.intuneautomation.com/script/create-app-based-entra-id-groups/)).  
-I merely made a few minor tweaks and integrated the rest into the module and this specific function.
-:::
-
-**Syntax**
-
-```powershell
-New-IntuneAppBasedGroup -ApplicationName <String> [-GroupName <String>] [-GroupPrefix <String>] [-GroupSuffix <String>] [-UpdateExisting] [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-DryRun] [-MaxDevices <Int32>]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `ApplicationName` (`SearchText`, `Name`, `DisplayName`, `Query`, `AppName`) | String | Application name or wildcard pattern to match. Pipeline accepted. | Yes | - |
-| `GroupName` | String | Explicit full group name to use instead of generating one from prefix and suffix. When supplied, the command creates one aggregated group from all matching devices. | No | - |
-| `GroupPrefix` | String | Prefix applied to generated group names. | No | `Devices-With-` |
-| `GroupSuffix` | String | Suffix applied to generated group names. | No | - |
-| `UpdateExisting` | Switch | Update matching groups instead of skipping them when they already exist. | No | `False` |
-| `MinimumVersion` | String | Minimum application version to keep in the result set. | No | - |
-| `FilterByType` | String | App type filter: `Win32`, `Store`, `LOB`, `Web`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
-| `FilterByPlatform` | String | Device platform filter: `Windows`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
-| `OnlySuccessfulInstalls` | Switch | Keep only successful installs when deployment data is used. | No | `False` |
-| `DryRun` | Switch | Preview the changes without creating or updating groups. | No | `False` |
-| `MaxDevices` | Int32 | Maximum number of devices to process. | No | `0` |
-
-**Examples**
-```powershell
-New-IntuneAppBasedGroup -ApplicationName "TeamViewer"
-```
-
-```powershell
-New-IntuneAppBasedGroup -ApplicationName "TeamViewer" -GroupName "Devices - TeamViewer"
-```
-
-```powershell
-New-IntuneAppBasedGroup -ApplicationName "Microsoft*" -GroupPrefix "SW-" -GroupSuffix "-Installed"
-```
-
-```powershell
-New-IntuneAppBasedGroup -ApplicationName "Chrome" -MinimumVersion "120.0" -UpdateExisting
-```
-
-```powershell
-New-IntuneAppBasedGroup -ApplicationName "*" -FilterByType Win32 -DryRun
-```
-
-:::note
-The command creates Entra security groups and adds devices by resolving Intune-managed devices back to their corresponding Entra device objects. When `-GroupName` is supplied, it overrides generated prefix and suffix values and collapses all matches into a single group target.
 :::
 
 ## Get-IntuneProfileAssignmentsByGroup
@@ -234,4 +153,85 @@ Current scope is intentionally focused. The command currently covers `deviceConf
 
 :::tip
 Default console output highlights rows containing `Exclude` with a different color, while the underlying objects remain unchanged for pipeline use.
+:::
+
+## New-IntuneAppBasedGroup
+Create or update Entra security groups based on apps detected on Intune-managed devices. The command supports multiple apps in a single run, optional version and platform filtering, and a dry-run preview.
+
+:::info Credits
+The original script is entirely the work of **Ugur Koc** (via [intuneautomation.com/script/create-app-based-entra-id-groups/](https://www.intuneautomation.com/script/create-app-based-entra-id-groups/)).  
+I merely made a few minor tweaks and integrated the rest into the module and this specific function.
+:::
+
+**Syntax**
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName <String> [-GroupName <String>] [-GroupPrefix <String>] [-GroupSuffix <String>] [-UpdateExisting] [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-DryRun] [-MaxDevices <Int32>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `ApplicationName` (`SearchText`, `Name`, `DisplayName`, `Query`, `AppName`) | String | Application name or wildcard pattern to match. Pipeline accepted. | Yes | - |
+| `GroupName` | String | Explicit full group name to use instead of generating one from prefix and suffix. When supplied, the command creates one aggregated group from all matching devices. | No | - |
+| `GroupPrefix` | String | Prefix applied to generated group names. | No | `Devices-With-` |
+| `GroupSuffix` | String | Suffix applied to generated group names. | No | - |
+| `UpdateExisting` | Switch | Update matching groups instead of skipping them when they already exist. | No | `False` |
+| `MinimumVersion` | String | Minimum application version to keep in the result set. | No | - |
+| `FilterByType` | String | App type filter: `Win32`, `Store`, `LOB`, `Web`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
+| `FilterByPlatform` | String | Device platform filter: `Windows`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
+| `OnlySuccessfulInstalls` | Switch | Keep only successful installs when deployment data is used. | No | `False` |
+| `DryRun` | Switch | Preview the changes without creating or updating groups. | No | `False` |
+| `MaxDevices` | Int32 | Maximum number of devices to process. | No | `0` |
+
+**Examples**
+```powershell
+New-IntuneAppBasedGroup -ApplicationName "TeamViewer"
+```
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName "TeamViewer" -GroupName "Devices - TeamViewer"
+```
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName "Microsoft*" -GroupPrefix "SW-" -GroupSuffix "-Installed"
+```
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName "Chrome" -MinimumVersion "120.0" -UpdateExisting
+```
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName "*" -FilterByType Win32 -DryRun
+```
+
+:::note
+The command creates Entra security groups and adds devices by resolving Intune-managed devices back to their corresponding Entra device objects. When `-GroupName` is supplied, it overrides generated prefix and suffix values and collapses all matches into a single group target.
+:::
+
+## Search-IntuneProfileLocation
+Find which Intune endpoint exposes a profile by name. This is a discovery command that scans multiple Graph surfaces and returns the matching source, profile ID, and OData type.
+
+**Syntax**
+
+```powershell
+Search-IntuneProfileLocation -SearchText <String> [-Exact] [-GridView]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SearchText` (`Name`, `DisplayName`, `ProfileName`, `Query`) | String | Profile name or wildcard pattern to search for. Pipeline accepted. | Yes | - |
+| `Exact` | Switch | Match the profile name exactly instead of using a contains search. | No | `False` |
+| `GridView` | Switch | Show the results in Out-GridView instead of returning objects. | No | `False` |
+
+**Examples**
+```powershell
+Search-IntuneProfileLocation -SearchText "iOS - Wi-Fi M-Smartphone"
+```
+
+```powershell
+Search-IntuneProfileLocation -SearchText "Wi-Fi" -GridView
+```
+
+:::note
+The command scans a curated set of Intune surfaces, including device configurations, configuration policies, compliance policies, enrollment configurations, scripts, and mobile apps.
 :::
