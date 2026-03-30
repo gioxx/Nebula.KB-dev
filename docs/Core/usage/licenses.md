@@ -98,21 +98,27 @@ Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 
 ## Export-MsolAccountSku
 Export all users with assigned licenses to CSV, mapping SKU part numbers to friendly names.
+Use `-Domain` to limit the export to users whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` match the domain.
 
 **Syntax**
 
 ```powershell
-Export-MsolAccountSku [-CsvFolder <String>] [-ForceLicenseCatalogRefresh]
+Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-ForceLicenseCatalogRefresh]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `CsvFolder` | String | Output folder. | No | Current directory |
+| `Domain` | String | Limit the export to users in the specified domain. | No | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload the license catalog cache. | No | `False` |
 
 **Example**
 ```powershell
 Export-MsolAccountSku -CsvFolder 'C:\Temp\Reports'
+```
+
+```powershell
+Export-MsolAccountSku -Domain 'contoso.com'
 ```
 
 ## Get-TenantMsolAccountSku
