@@ -64,6 +64,16 @@ Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50
 Export-IntuneAppInventory -ApplicationName 'Microsoft*' -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath 'C:\Reports\apps.csv'
 ```
 
+## Create Intune app-based groups
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName 'Chrome' -MinimumVersion '120.0' -UpdateExisting
+```
+
+```powershell
+New-IntuneAppBasedGroup -ApplicationName 'Chrome' -GroupName 'Devices - Chrome'
+```
+
 ## Search Intune profile location
 
 ```powershell
