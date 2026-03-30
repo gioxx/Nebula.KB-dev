@@ -62,7 +62,11 @@ Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50
 
 ```powershell
 Export-IntuneAppInventory -ApplicationName 'Microsoft*' -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath 'C:\Reports\apps.csv'
+```
 
+## Search Intune profile location
+
+```powershell
 Search-IntuneProfileLocation -SearchText 'Wi-Fi' -GridView
 ```
 
