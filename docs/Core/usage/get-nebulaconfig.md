@@ -12,6 +12,8 @@ tags:
 
 # Nebula.Core Configuration
 
+Inspect or reload the active Nebula.Core configuration, including machine and user settings and the license catalog sources.
+
 ## Get-NebulaConfig
 Shows effective configuration, including machine/user config files and license catalog sources.
 
@@ -22,8 +24,8 @@ Get-NebulaConfig
 ```
 
 - No parameters.
-- Outputs summary plus tables (active config and license sources).
-- For more details or examples, run `Get-Help Get-NebulaConfig -Detailed`.
+- Outputs a summary plus tables for the active config and license sources.
+- For full details and examples, run `Get-Help Get-NebulaConfig -Detailed`.
 
 **Output example**
 ```powershell
@@ -67,7 +69,7 @@ Sync-NebulaConfig
 ```
 
 - No parameters.
-- For more details or examples, run `Get-Help Sync-NebulaConfig -Detailed`.
+- For full details and examples, run `Get-Help Sync-NebulaConfig -Detailed`.
 
 ## Questions and answers
 

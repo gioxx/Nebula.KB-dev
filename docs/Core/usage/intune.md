@@ -18,7 +18,7 @@ tags:
 
 # Intune helpers
 
-Requires Microsoft Graph. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
+Requires Microsoft Graph. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
 ## Export-IntuneAppInventory
 Report Intune-managed devices that have matching applications installed. The report is built from detected apps and can optionally include deployed app status data as well.

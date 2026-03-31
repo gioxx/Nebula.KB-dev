@@ -19,7 +19,18 @@ tags:
 
 # License helpers
 
-Backed by Microsoft Graph with a cached SKU catalog. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
+Requires Microsoft Graph and a cached SKU catalog. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
+
+Use `Export-MsolAccountSku` when you need:
+- a full tenant license assignment export
+- a domain-scoped report for a specific mail domain
+- a license-scoped report for users who hold a specific SKU, while still keeping all of their assigned licenses in the CSV
+
+| Scenario | Use this filter | Result |
+| --- | --- | --- |
+| Full export | none | All licensed users and all of their assigned licenses |
+| Domain report | `-Domain` | Only users in the selected domain, with all of their assigned licenses |
+| License report | `-License` | Only users who have the selected license, with all of their assigned licenses |
 
 :::note User identifier resolution
 User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) support full UPNs/object IDs and short identifiers (for example alias/SamAccountName/UPN prefix) via the shared resolver.
@@ -99,17 +110,19 @@ Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 ## Export-MsolAccountSku
 Export all users with assigned licenses to CSV, mapping SKU part numbers to friendly names.
 Use `-Domain` to limit the export to users whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` match the domain.
+Use `-License` to limit the export to users who have at least one matching license, while still exporting all of the licenses assigned to those users.
 
 **Syntax**
 
 ```powershell
-Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-ForceLicenseCatalogRefresh]
+Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String[]>] [-ForceLicenseCatalogRefresh]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `CsvFolder` | String | Output folder. | No | Current directory |
 | `Domain` | String | Limit the export to users in the specified domain. | No | - |
+| `License` | String[] | Limit the export to users who have at least one matching license. Accepts friendly name, SKU part number, or SKU ID. | No | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload the license catalog cache. | No | `False` |
 
 **Example**
@@ -120,6 +133,14 @@ Export-MsolAccountSku -CsvFolder 'C:\Temp\Reports'
 ```powershell
 Export-MsolAccountSku -Domain 'contoso.com'
 ```
+
+```powershell
+Export-MsolAccountSku -License 'Exchange Online (Plan 1)'
+```
+
+:::note License filtered export
+When you pass `-License`, the CSV still includes every license assigned to each matching user. If a user has `Exchange Online (Plan 1)` plus `Microsoft 365 E3`, both rows are exported.
+:::
 
 ## Get-TenantMsolAccountSku
 List tenant SKUs with resolved names, totals, consumed, available (enabled minus consumed), and seat states (filter by name or SKU part number).

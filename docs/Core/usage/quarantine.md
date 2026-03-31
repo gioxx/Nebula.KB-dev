@@ -17,7 +17,7 @@ tags:
 
 # Quarantine helpers
 
-All commands require an active EXO session (`Test-EOLConnection` is called internally). For complete and current details, run `Get-Help <FunctionName> -Detailed`.
+Requires an active EXO session (`Test-EOLConnection` is called internally). For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
 ## Export-QuarantineEml
 Fetch quarantined message(s) by MessageId **or** Identity, save as EML, optionally open, and optionally release to all recipients.

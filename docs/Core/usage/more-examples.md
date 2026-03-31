@@ -12,7 +12,7 @@ tags:
 
 # More examples
 
-Practical recipes that show common ways to use Nebula.Core.
+Practical recipes for common Nebula.Core workflows.
 
 ## Connect EXO and Graph in one call
 

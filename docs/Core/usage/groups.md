@@ -28,7 +28,7 @@ tags:
 
 # Group helpers
 
-Requires EXO (for DGs/role groups) and Microsoft Graph for M365 groups where applicable. For complete, up-to-date info, run `Get-Help <FunctionName> -Detailed`.
+Requires EXO for DGs and role groups, and Microsoft Graph for Microsoft 365 groups where applicable. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
 ## Add-EntraGroupDevice
 Add one or more devices to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).

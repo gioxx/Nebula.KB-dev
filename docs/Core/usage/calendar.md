@@ -14,7 +14,7 @@ tags:
 
 # Calendar helpers
 
-Requires an EXO session. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
+Requires an EXO session. For full details and examples, run `Get-Help <FunctionName> -Detailed` (or `-Examples`).
 
 ## Copy-OoOMessage
 Clone automatic reply (out-of-office) settings from one mailbox to another.

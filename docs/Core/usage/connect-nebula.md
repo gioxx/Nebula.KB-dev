@@ -14,9 +14,9 @@ tags:
   - Nebula.Core
 ---
 
-# Connect (and disconnects) to/from Microsoft 365
+# Connect and disconnect from Microsoft 365
 
-For full, always-up-to-date details and examples, use `Get-Help <FunctionName> -Detailed` or `-Examples`.
+For full details and examples, run `Get-Help <FunctionName> -Detailed` or `-Examples`.
 
 ## Connect-EOL
 Connect to Exchange Online (EXO V3), auto-importing the module and auto-detecting the current user when `-UserPrincipalName` is not supplied.

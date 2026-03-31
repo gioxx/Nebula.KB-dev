@@ -14,7 +14,7 @@ tags:
 
 # Statistic helpers
 
-For full parameter descriptions and up-to-date notes, run `Get-Help Export-MboxStatistics -Detailed` or `Get-Help Get-MboxStatistics -Detailed`.
+For full details and examples, run `Get-Help Export-MboxStatistics -Detailed` or `Get-Help Get-MboxStatistics -Detailed`.
 
 ## Export-MboxStatistics
 Export mailbox statistics (size, quotas, archive info) either to CSV (all mailboxes) or as objects (single mailbox).

@@ -13,7 +13,7 @@ tags:
 
 # Security helpers
 
-Requires a Microsoft Graph session. For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed` (or `-Examples`).
+Requires a Microsoft Graph session. For full details and examples, run `Get-Help <FunctionName> -Detailed` (or `-Examples`).
 
 ## Disable-UserDevices
 Disable all registered devices for specified users.

@@ -14,7 +14,7 @@ tags:
 
 # Compliance helpers
 
-Requires an EXO session with Purview Compliance PowerShell availability (`Connect-IPPSSession`). For full and always-up-to-date details, use `Get-Help <FunctionName> -Detailed`.
+Requires an EXO session with Purview Compliance PowerShell availability (`Connect-IPPSSession`). For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
 ## Search-MboxCutoffWindow
 Create/reuse a Purview Compliance Search to isolate mailbox items by date criteria (estimate + optional preview sample).
