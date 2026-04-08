@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunknebula=globalThis.webpackChunknebula||[]).push([[5870],{7966(e){e.exports=JSON.parse('{"metadata":{"permalink":"/Nebula.KB-dev/news","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);

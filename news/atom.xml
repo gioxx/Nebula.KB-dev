@@ -2,11 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gioxx.github.io/Nebula.KB-dev/news</id>
     <title>Nebula: A family of PowerShell modules that go beyond your workstation Blog</title>
-    <updated>2026-03-11T00:08:00.000Z</updated>
+    <updated>2026-04-07T22:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gioxx.github.io/Nebula.KB-dev/news"/>
     <subtitle>Nebula: A family of PowerShell modules that go beyond your workstation Blog</subtitle>
     <icon>https://gioxx.github.io/Nebula.KB-dev/img/Nebula_Icon_Header.svg</icon>
+    <entry>
+        <title type="html"><![CDATA[Nebula.KB-dev: the most up-to-date documentation]]></title>
+        <id>https://gioxx.github.io/Nebula.KB-dev/news/DocuDev</id>
+        <link href="https://gioxx.github.io/Nebula.KB-dev/news/DocuDev"/>
+        <updated>2026-04-07T22:00:00.000Z</updated>
+        <summary type="html"><![CDATA[If you ever check both gioxx.github.io/Nebula.KB-dev and kb.gioxx.org, there is one simple rule to keep in mind: the -dev documentation is usually the most up to date.]]></summary>
+        <content type="html"><![CDATA[<p>If you ever check both <a href="https://gioxx.github.io/Nebula.KB-dev" target="_blank" rel="noopener noreferrer" class="">gioxx.github.io/Nebula.KB-dev</a> and <a href="https://kb.gioxx.org/" target="_blank" rel="noopener noreferrer" class="">kb.gioxx.org</a>, there is one simple rule to keep in mind: the <code>-dev</code> documentation is usually the most up to date.</p>
+<p>This is not just a technical detail. <code>Nebula.KB-dev</code> is a clone of Nebula.KB built to follow the development versions of the various modules, so it often reflects what will later appear in production releases.</p>
+<p>In practice, if a Nebula module is about to get new features, fixes, or important changes, there is a very good chance that the updated documentation is already available on <code>Nebula.KB-dev</code> before those changes reach the main public site.</p>
+<p>That does not mean <code>kb.gioxx.org</code> is "old" or should be ignored. It simply serves a different purpose: the main site remains the stable reference for the released version, while the <code>-dev</code> branch is the right place to get a preview of what is coming next.</p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>warning</div><div class="admonitionContent_BuS1"><p>There is also an important caveat: using modules that have not yet been officially released on the PowerShell Gallery can mean running into instability, incomplete behavior, or bugs that have not been fixed yet. In other words, if you choose to download the latest builds directly from GitHub before they are published, you do so at your own risk.</p></div></div>
+<p>In short:</p>
+<ul>
+<li class=""><a href="https://kb.gioxx.org/" target="_blank" rel="noopener noreferrer" class="">kb.gioxx.org</a> = documentation for the production version</li>
+<li class=""><a href="https://gioxx.github.io/Nebula.KB-dev" target="_blank" rel="noopener noreferrer" class="">Nebula.KB-dev</a> = documentation for the development version</li>
+<li class="">if you want to see what is coming next, start with <code>Nebula.KB-dev</code></li>
+</ul>
+<p>When a Nebula module is being prepared for a new release, the <code>-dev</code> documentation is often the best place to check first, but it may describe features that are still being tested and may change before the official release.</p>]]></content>
+        <author>
+            <name>Giovanni Solone</name>
+            <uri>https://gioxx.org</uri>
+        </author>
+        <category label="Nebula" term="Nebula"/>
+        <category label="Nebula.KB" term="Nebula.KB"/>
+        <category label="documentation" term="documentation"/>
+        <category label="dev" term="dev"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Retirement of -Credential parameter when connecting to Exchange Online PowerShell]]></title>
         <id>https://gioxx.github.io/Nebula.KB-dev/news/MC1248389</id>
