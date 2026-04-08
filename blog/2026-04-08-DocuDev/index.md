@@ -1,7 +1,7 @@
 ---
 slug: DocuDev
 title: "Differences between the available versions of the documentation"
-date: 2026-04-08T00:00:00+02:00
+date: 2026-04-08T09:00:00+02:00
 authors: [gioxx]
 tags: [nebula, kb, documentation, dev]
 ---
