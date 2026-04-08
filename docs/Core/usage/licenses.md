@@ -148,14 +148,15 @@ List tenant SKUs with resolved names, totals, consumed, available (enabled minus
 **Syntax**
 
 ```powershell
-Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-AsTable] [-GridView]
+Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `Filter` | String | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No | - |
-| `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). Defaults to 5 when specified. | No | `5` |
+| `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). | No | - |
+| `IncludeSampleUsers` | Switch | Return sample users using the default limit of 5 (requires `-Filter`). | No | `False` |
 | `AsTable` | Switch | Format output as a table. | No | `False` |
 | `GridView` | Switch | Show output in a GridView window. | No | `False` |
 
@@ -172,8 +173,17 @@ Get-TenantMsolAccountSku -Filter "E3" -AsTable
 Get-TenantMsolAccountSku -Filter "E3" -SampleUsers
 ```
 
+```powershell
+Get-TenantMsolAccountSku -Filter "E3" -IncludeSampleUsers
+```
+
 :::note Available licenses: how counting works
 `Available` is calculated as `Enabled - Consumed` (never below zero). The `Total` column shows a friendly breakdown (Enabled/Suspended), while `TotalCount` remains the numeric total for scripting.
+:::
+
+:::note Sample users display
+When you request sample users together with `-AsTable`, Nebula.Core prints the license summary as a table and then lists sample users in a separate readable block for each SKU.
+With `-GridView`, Nebula.Core opens a summary grid and, when sample users are requested, a second grid dedicated to sample users.
 :::
 
 :::tip Microsoft 365 Subscriptions (Admin Portal)
@@ -182,6 +192,10 @@ Need renewal/expiration or billing profile details? Open the Microsoft 365 Admin
 
 ## Get-UserMsolAccountSku
 Show licenses assigned to a single user with friendly names.
+
+:::note No assigned licenses
+If the target user exists but has no assigned licenses, Nebula.Core prints an explicit warning instead of returning only the processing header.
+:::
 
 **Syntax**
 
