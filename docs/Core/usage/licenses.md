@@ -111,6 +111,7 @@ Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 Export all users with assigned licenses to CSV, mapping SKU part numbers to friendly names.
 Use `-Domain` to limit the export to users whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` match the domain.
 Use `-License` to limit the export to users who have at least one matching license, while still exporting all of the licenses assigned to those users.
+When the export completes, Nebula.Core prints a success message with the generated CSV path instead of echoing the path as a second pipeline line.
 
 **Syntax**
 
@@ -148,13 +149,14 @@ List tenant SKUs with resolved names, totals, consumed, available (enabled minus
 **Syntax**
 
 ```powershell
-Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
+Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-Domain <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `Filter` | String | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No | - |
+| `Domain` | String | Limit sample users to accounts whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` belong to the selected domain. | No | - |
 | `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). | No | - |
 | `IncludeSampleUsers` | Switch | Return sample users using the default limit of 5 (requires `-Filter`). | No | `False` |
 | `AsTable` | Switch | Format output as a table. | No | `False` |
@@ -177,8 +179,16 @@ Get-TenantMsolAccountSku -Filter "E3" -SampleUsers
 Get-TenantMsolAccountSku -Filter "E3" -IncludeSampleUsers
 ```
 
+```powershell
+Get-TenantMsolAccountSku -Filter "E3" -SampleUsers 5 -Domain "contoso.com"
+```
+
 :::note Available licenses: how counting works
 `Available` is calculated as `Enabled - Consumed` (never below zero). The `Total` column shows a friendly breakdown (Enabled/Suspended), while `TotalCount` remains the numeric total for scripting.
+:::
+
+:::note Domain-scoped samples
+When you pass `-Domain`, only sample users are filtered by that domain. The SKU list itself still follows `-Filter` and the tenant's full license set.
 :::
 
 :::note Sample users display
