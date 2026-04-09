@@ -7,7 +7,6 @@ id: mailboxes
 tags:
   - Add-MboxAlias
   - Add-MboxPermission
-  - Export-MboxAlias
   - Export-MboxPermission
   - Get-MboxAlias
   - Get-MboxLastMessageTrace
@@ -77,32 +76,6 @@ Add-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user
 Add-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user@contoso.com' -PassThru
 ```
 
-## Export-MboxAlias
-Export aliases for auditing.
-
-**Syntax**
-
-```powershell
-Export-MboxAlias [-SourceMailbox <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-Domain <String>]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | String[] | Target mailbox/recipient. Pipeline accepted. | No | - |
-| `Csv` | Switch | Export results to CSV. | No | `False` |
-| `CsvFolder` | String | Destination folder for CSV export. | No | - |
-| `All` | Switch | Export aliases for all non-guest recipients. | No | `False` |
-| `Domain` | String | Export aliases for recipients matching a domain. | No | - |
-
-**Examples**
-```powershell
-Export-MboxAlias -SourceMailbox 'user@contoso.com'
-```
-
-```powershell
-Export-MboxAlias -All -CsvFolder 'C:\Temp'
-```
-
 ## Export-MboxPermission
 Export mailbox permissions to CSV.
 
@@ -126,22 +99,45 @@ Export-MboxPermission -RecipientType Shared -CsvFolder 'C:\Temp'
 Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 ```
 
+:::warning
+`Export-MboxAlias` is deprecated and no longer available. Use `Get-MboxAlias` directly.
+:::
+
 ## Get-MboxAlias
-List aliases for auditing.
+List aliases for auditing. This replaces `Export-MboxAlias`.
+
+`Get-MboxAlias` is now the single command for alias reporting.
+It supports:
+- a single mailbox or recipient identity
+- tenant-wide export with `-All`
+- domain-scoped export with `-Domain`
+- CSV output with `-Csv` and `-CsvFolder`
 
 **Syntax**
 
 ```powershell
-Get-MboxAlias -Identity <String>
+Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-All] [-Domain <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `Identity` | String | Target mailbox/recipient. | Yes | - |
+| `SourceMailbox` (`Identity`) | String | Target mailbox/recipient. Pipeline accepted. | Yes in single mode | - |
+| `Csv` | Switch | Export results to CSV. | No | `False` |
+| `CsvFolder` | String | Destination folder for CSV export. | No | - |
+| `All` | Switch | Export aliases for all non-guest recipients. | No | `False` |
+| `Domain` | String | Export aliases for recipients matching a domain. | No | - |
 
 **Examples**
 ```powershell
-Get-MboxAlias -Identity 'user@contoso.com'
+Get-MboxAlias -SourceMailbox 'user@contoso.com'
+```
+
+```powershell
+Get-MboxAlias -All -CsvFolder 'C:\Temp'
+```
+
+```powershell
+Get-MboxAlias -Domain 'contoso.com' -CsvFolder 'C:\Temp'
 ```
 
 ## Get-MboxLastMessageTrace
