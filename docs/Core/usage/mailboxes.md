@@ -7,6 +7,7 @@ id: mailboxes
 tags:
   - Add-MboxAlias
   - Add-MboxPermission
+  - Export-MboxAlias
   - Export-MboxPermission
   - Get-MboxAlias
   - Get-MboxLastMessageTrace
@@ -99,9 +100,16 @@ Export-MboxPermission -RecipientType Shared -CsvFolder 'C:\Temp'
 Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 ```
 
-:::warning
-`Export-MboxAlias` is deprecated and no longer available. Use `Get-MboxAlias` directly.
-:::
+## Export-MboxAlias
+Deprecated alias report entry point.
+
+`Export-MboxAlias` is deprecated and no longer available as a function. Use [Get-MboxAlias](#get-mboxalias) instead.
+
+The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
+- single mailbox queries
+- tenant-wide export with `-All`
+- domain-scoped export with `-Domain`
+- CSV output with `-Csv` and `-CsvFolder`
 
 ## Get-MboxAlias
 List aliases for auditing. This replaces `Export-MboxAlias`.
