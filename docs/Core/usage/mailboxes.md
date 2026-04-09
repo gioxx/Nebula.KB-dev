@@ -101,8 +101,8 @@ Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 ```
 
 ## Export-MboxAlias
-Deprecated alias report entry point.
 
+:::warning Deprecated function
 `Export-MboxAlias` is deprecated and no longer available as a function. Use [Get-MboxAlias](#get-mboxalias) instead.
 
 The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
@@ -110,9 +110,10 @@ The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
 - tenant-wide export with `-All`
 - domain-scoped export with `-Domain`
 - CSV output with `-Csv` and `-CsvFolder`
+:::
 
 ## Get-MboxAlias
-List aliases for auditing. This replaces `Export-MboxAlias`.
+List aliases for auditing. This also replaces `Export-MboxAlias`.
 
 `Get-MboxAlias` is now the single command for alias reporting.
 It supports:
