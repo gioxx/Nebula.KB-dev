@@ -112,10 +112,7 @@ The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
 - domain-scoped export with `Get-MboxAlias -Domain <domain> -CsvFolder <path>`
 - CSV exports include `DisplayName` and `Name`
 - primary-only recipients are excluded from CSV exports unless `-IncludePrimaryOnly` is used
-
-In other words:
-- `Export-MboxAlias` was only the old export-oriented name
-- `Get-MboxAlias` is now the single command to use for both console output and CSV reporting
+- MOERA addresses are excluded from CSV exports unless `-IncludeMoera` is used
 :::
 
 ## Get-MboxAlias
@@ -136,11 +133,12 @@ Note:
 - `-All` and `-Domain` already export to CSV, so `-Csv` is optional in those modes.
 - `-CsvFolder` controls the export destination for every CSV-producing mode.
 - `-IncludePrimaryOnly` keeps recipients that would otherwise be omitted because they have no secondary aliases.
+- `-IncludeMoera` keeps addresses in the tenant's `onmicrosoft.com` domain that would otherwise be hidden.
 
 **Syntax**
 
 ```powershell
-Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrimaryOnly] [-All] [-Domain <String>]
+Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrimaryOnly] [-IncludeMoera] [-All] [-Domain <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -149,6 +147,7 @@ Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrim
 | `Csv` | Switch | Force CSV export for a single mailbox query. Optional when using `-All` or `-Domain`. | No | `False` |
 | `CsvFolder` | String | Destination folder for CSV export. | No | - |
 | `IncludePrimaryOnly` | Switch | Include recipients with only a primary SMTP address in CSV exports. | No | `False` |
+| `IncludeMoera` | Switch | Include MOERA addresses in CSV exports. | No | `False` |
 | `All` | Switch | Export aliases for all non-guest recipients and write a CSV report. | No | `False` |
 | `Domain` | String | Export aliases for recipients matching a domain and write a CSV report. | No | - |
 
@@ -158,11 +157,19 @@ Get-MboxAlias -SourceMailbox 'user@contoso.com'
 ```
 
 ```powershell
+Get-MboxAlias 'user@contoso.com'
+```
+
+```powershell
 Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -CsvFolder 'C:\Temp'
 ```
 
 ```powershell
 Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludePrimaryOnly -CsvFolder 'C:\Temp'
+```
+
+```powershell
+Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludeMoera -CsvFolder 'C:\Temp'
 ```
 
 ```powershell
