@@ -106,10 +106,16 @@ Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 `Export-MboxAlias` is deprecated and no longer available as a function. Use [Get-MboxAlias](#get-mboxalias) instead.
 
 The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
-- single mailbox queries
-- tenant-wide export with `-All`
-- domain-scoped export with `-Domain`
-- CSV output with `-Csv` and `-CsvFolder`
+- single mailbox queries with `Get-MboxAlias -SourceMailbox <identity>`
+- single mailbox CSV export with `Get-MboxAlias -SourceMailbox <identity> -Csv -CsvFolder <path>`
+- tenant-wide export with `Get-MboxAlias -All -CsvFolder <path>`
+- domain-scoped export with `Get-MboxAlias -Domain <domain> -CsvFolder <path>`
+- CSV exports include `DisplayName` and `Name`
+- primary-only recipients are excluded from CSV exports unless `-IncludePrimaryOnly` is used
+
+In other words:
+- `Export-MboxAlias` was only the old export-oriented name
+- `Get-MboxAlias` is now the single command to use for both console output and CSV reporting
 :::
 
 ## Get-MboxAlias
@@ -120,25 +126,43 @@ It supports:
 - a single mailbox or recipient identity
 - tenant-wide export with `-All`
 - domain-scoped export with `-Domain`
-- CSV output with `-Csv` and `-CsvFolder`
+- CSV output for single mailbox queries with `-Csv` and `-CsvFolder`
+- automatic CSV export for `-All` and `-Domain`
+- optional inclusion of primary-only recipients with `-IncludePrimaryOnly`
+- extra CSV fields `DisplayName` and `Name`
+
+Note:
+- `-Csv` is the explicit switch for single-mailbox exports.
+- `-All` and `-Domain` already export to CSV, so `-Csv` is optional in those modes.
+- `-CsvFolder` controls the export destination for every CSV-producing mode.
+- `-IncludePrimaryOnly` keeps recipients that would otherwise be omitted because they have no secondary aliases.
 
 **Syntax**
 
 ```powershell
-Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-All] [-Domain <String>]
+Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrimaryOnly] [-All] [-Domain <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `SourceMailbox` (`Identity`) | String | Target mailbox/recipient. Pipeline accepted. | Yes in single mode | - |
-| `Csv` | Switch | Export results to CSV. | No | `False` |
+| `Csv` | Switch | Force CSV export for a single mailbox query. Optional when using `-All` or `-Domain`. | No | `False` |
 | `CsvFolder` | String | Destination folder for CSV export. | No | - |
-| `All` | Switch | Export aliases for all non-guest recipients. | No | `False` |
-| `Domain` | String | Export aliases for recipients matching a domain. | No | - |
+| `IncludePrimaryOnly` | Switch | Include recipients with only a primary SMTP address in CSV exports. | No | `False` |
+| `All` | Switch | Export aliases for all non-guest recipients and write a CSV report. | No | `False` |
+| `Domain` | String | Export aliases for recipients matching a domain and write a CSV report. | No | - |
 
 **Examples**
 ```powershell
 Get-MboxAlias -SourceMailbox 'user@contoso.com'
+```
+
+```powershell
+Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -CsvFolder 'C:\Temp'
+```
+
+```powershell
+Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludePrimaryOnly -CsvFolder 'C:\Temp'
 ```
 
 ```powershell
