@@ -29,6 +29,7 @@ tags:
 # Group helpers
 
 Requires EXO for DGs and role groups, and Microsoft Graph for Microsoft 365 groups where applicable. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
+CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
 
 ## Add-EntraGroupDevice
 Add one or more devices to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).

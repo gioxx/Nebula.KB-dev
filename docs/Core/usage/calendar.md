@@ -15,6 +15,7 @@ tags:
 # Calendar helpers
 
 Requires an EXO session. For full details and examples, run `Get-Help <FunctionName> -Detailed` (or `-Examples`).
+CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
 
 ## Copy-OoOMessage
 Clone automatic reply (out-of-office) settings from one mailbox to another.

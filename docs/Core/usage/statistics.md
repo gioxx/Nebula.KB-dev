@@ -15,6 +15,7 @@ tags:
 # Statistic helpers
 
 For full details and examples, run `Get-Help Export-MboxStatistics -Detailed` or `Get-Help Get-MboxStatistics -Detailed`.
+CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
 
 ## Export-MboxStatistics
 Export mailbox statistics (size, quotas, archive info) either to CSV (all mailboxes) or as objects (single mailbox).
