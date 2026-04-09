@@ -104,15 +104,6 @@ Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
 
 :::warning Deprecated function
 `Export-MboxAlias` is deprecated and no longer available as a function. Use [Get-MboxAlias](#get-mboxalias) instead.
-
-The old `Export-MboxAlias` behavior is now covered by `Get-MboxAlias`:
-- single mailbox queries with `Get-MboxAlias -SourceMailbox <identity>`
-- single mailbox CSV export with `Get-MboxAlias -SourceMailbox <identity> -Csv -CsvFolder <path>`
-- tenant-wide export with `Get-MboxAlias -All -CsvFolder <path>`
-- domain-scoped export with `Get-MboxAlias -Domain <domain> -CsvFolder <path>`
-- CSV exports include `DisplayName` and `Name`
-- primary-only recipients are excluded from CSV exports unless `-IncludePrimaryOnly` is used
-- MOERA addresses are excluded from CSV exports unless `-IncludeMoera` is used
 :::
 
 ## Get-MboxAlias
@@ -134,6 +125,7 @@ Note:
 - `-CsvFolder` controls the export destination for every CSV-producing mode.
 - `-IncludePrimaryOnly` keeps recipients that would otherwise be omitted because they have no secondary aliases.
 - `-IncludeMoera` keeps addresses in the tenant's `onmicrosoft.com` domain that would otherwise be hidden.
+- Primary-only exclusion is evaluated after MOERA filtering, so a mailbox with only a primary SMTP and a MOERA proxy stays hidden by default.
 
 **Syntax**
 
@@ -171,6 +163,10 @@ Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludePrimaryOnly -CsvFol
 ```powershell
 Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludeMoera -CsvFolder 'C:\Temp'
 ```
+
+Example behavior:
+- `Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv` hides the MOERA row and keeps the mailbox only if it has a real secondary alias.
+- `Get-MboxAlias -SourceMailbox 'user@contoso.com' -Csv -IncludeMoera` includes the MOERA row as well.
 
 ```powershell
 Get-MboxAlias -All -CsvFolder 'C:\Temp'
