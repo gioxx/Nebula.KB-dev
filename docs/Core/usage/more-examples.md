@@ -55,7 +55,7 @@ Set-MboxLanguage -SourceMailbox 'user@contoso.com' -Language en-US
 ## Export mailbox statistics (CSV, batched)
 
 ```powershell
-Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50
+Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50 -Resume
 ```
 
 ## Export Intune app inventory
