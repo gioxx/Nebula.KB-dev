@@ -18,25 +18,34 @@ For full details and examples, run `Get-Help Export-MboxStatistics -Detailed` or
 CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
 
 ## Export-MboxStatistics
-Export mailbox statistics (size, quotas, archive info) either to CSV (all mailboxes) or as objects (single mailbox).
+Export mailbox statistics (size, quotas, archive info) either to CSV (all mailboxes) or as objects (single mailbox). The CSV export can flush in batches, resume from the latest matching CSV, or resume from a specific file.
 
 **Syntax**
 
 ```powershell
-Export-MboxStatistics [-UserPrincipalName <String>] [-CsvFolder <String>] [-Round] [-BatchSize <Int>]
+Export-MboxStatistics [-UserPrincipalName <String>] [-CsvFolder <String>] [-CsvPath <String>] [-Round] [-BatchSize <Int>] [-Resume] [-MaxConsecutiveErrors <Int>]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `UserPrincipalName` | String | Optional single mailbox identity; when omitted, all mailboxes are exported to CSV. | No | - |
 | `CsvFolder` | String | Output folder (for all-mailbox export). | No | Current directory |
+| `CsvPath` | String | Optional CSV file to resume. When omitted with `-Resume`, the most recent matching CSV in `CsvFolder` is used. | No | - |
 | `Round` | Switch | Round quota values up to the nearest integer GB. | No | `False` |
 | `BatchSize` | Int | Flush to CSV every N mailboxes. | No | `25` |
+| `Resume` | Switch | Resume from an existing mailbox statistics CSV instead of starting a new report. | No | `False` |
+| `MaxConsecutiveErrors` | Int | Stop after this many mailbox-level failures in a row. | No | `5` |
 
 **Examples**
 ```powershell
 # Export every mailbox to CSV (batched writes)
 Export-MboxStatistics -CsvFolder 'C:\Temp\Reports' -Round
+
+# Resume from the latest matching CSV in the folder
+Export-MboxStatistics -CsvFolder 'C:\Temp\Reports' -Resume
+
+# Resume from a specific CSV file
+Export-MboxStatistics -CsvPath 'C:\Temp\Reports\20260414_M365-MailboxStatistics.csv' -Resume
 
 # Inspect a single mailbox as objects
 Export-MboxStatistics -UserPrincipalName 'user@contoso.com'
