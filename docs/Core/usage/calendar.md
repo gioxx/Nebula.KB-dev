@@ -44,6 +44,7 @@ Export calendar permissions for one or more mailboxes to CSV (and optionally to 
 ```powershell
 Export-CalendarPermission [-SourceMailbox <String[]>] [-SourceDomain <String[]>]
                           [-OutputFolder <String>] [-All] [-PassThru]
+                          [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -53,6 +54,10 @@ Export-CalendarPermission [-SourceMailbox <String[]>] [-SourceDomain <String[]>]
 | `OutputFolder` | String | Destination folder for the CSV report. Defaults to current directory. | No | Current directory |
 | `All` | Switch | Analyze every mailbox (CSV is written). | No | `False` |
 | `PassThru` | Switch | Emit the collected permission objects as well as CSV path. | No | `False` |
+| `BatchSize` | Int32 | Number of processed mailboxes to buffer before flushing the CSV. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive mailbox-level failures. | No | `5` |
 
 **Examples**
 ```powershell
@@ -69,6 +74,8 @@ Export-CalendarPermission -All -OutputFolder C:\Temp
 
 :::note
 - CSV is saved as `yyyyMMdd_M365-CalendarPermissions-Report.csv` using module-configured delimiter/encoding.
+- Resume skips rows already present in the selected CSV and defaults to the latest matching report in the output folder.
+- CSV exports include `MailboxIdentity` so resume can match the rows more reliably.
 - Permissions `AvailabilityOnly` and `None` are excluded.
 - If no mailbox/domain is specified and `-All` is not set, the cmdlet scans the entire tenant.
 :::

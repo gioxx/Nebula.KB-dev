@@ -52,12 +52,12 @@ Export-MboxStatistics -UserPrincipalName 'user@contoso.com'
 ```
 
 ## Export-MboxDeletedItemSize
-Export deleted item store usage for user mailboxes. The report is exported to CSV by default.
+Export deleted item store usage for user mailboxes. The report is exported to CSV by default and can be flushed in batches or resumed from a previous CSV. The CSV includes `UserPrincipalName` so resume can skip already exported mailboxes safely.
 
 **Syntax**
 
 ```powershell
-Export-MboxDeletedItemSize [[-UserPrincipalName] <String[]>] [-CsvFolder <String>] [-Csv]
+Export-MboxDeletedItemSize [[-UserPrincipalName] <String[]>] [-CsvFolder <String>] [-Csv] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -65,6 +65,10 @@ Export-MboxDeletedItemSize [[-UserPrincipalName] <String[]>] [-CsvFolder <String
 | `UserPrincipalName` (`User`, `Identity`, `Mailbox`, `SourceMailbox`) | String[] | Optional mailbox identity or identities. When omitted, all user mailboxes are scanned. Pipeline accepted. | No | - |
 | `CsvFolder` | String | Destination folder for the CSV file. | No | Current directory |
 | `Csv` | Boolean | Export the report to CSV. Use `-Csv:$false` to return objects instead. | No | `True` |
+| `BatchSize` | Int | Flush partial results every N processed mailboxes. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV in `CsvFolder` or from `CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. | No | - |
+| `MaxConsecutiveErrors` | Int | Stop after this many consecutive mailbox-level failures. | No | `5` |
 
 **Examples**
 ```powershell
@@ -75,6 +79,11 @@ Export-MboxDeletedItemSize
 ```powershell
 # Export a subset of mailboxes to a custom folder
 'user1@contoso.com','user2@contoso.com' | Export-MboxDeletedItemSize -CsvFolder 'C:\Temp\Reports'
+```
+
+```powershell
+# Resume from the latest matching CSV in the folder
+Export-MboxDeletedItemSize -CsvFolder 'C:\Temp\Reports' -Resume
 ```
 
 ## Get-MboxStatistics
@@ -89,7 +98,7 @@ Get-MboxStatistics [-UserPrincipalName <String>] [-IncludeArchive] [-IncludeMess
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `UserPrincipalName` | String | Optional mailbox identity (also from pipeline, including multiple values); when omitted, all mailboxes are returned. | No | - |
-| `IncludeArchive` | Switch | Include archive size and usage info when archive is enabled. | No | `False` |
+| `IncludeArchive` | Switch | Include archive size, quota, and usage info when archive is enabled. | No | `False` |
 | `IncludeMessageActivity` | Switch | Include message activity fields (`LastReceived`, `LastSent`, `OldestItemReceivedDate`, `OldestItemFolderPath`). | No | `False` |
 | `Round` | Switch | Round quota values up to the nearest integer GB. | No | `True` |
 
@@ -111,6 +120,7 @@ Get-MboxStatistics [-UserPrincipalName <String>] [-IncludeArchive] [-IncludeMess
 - `OldestItemReceivedDate` (only with `-IncludeMessageActivity`)
 - `OldestItemFolderPath` (only with `-IncludeMessageActivity`)
 - `ArchiveSizeGB` (only with `-IncludeArchive`)
+- `ArchiveQuotaGB` (only with `-IncludeArchive`)
 - `ArchivePercentUsed` (only with `-IncludeArchive`)
 
 **Examples**

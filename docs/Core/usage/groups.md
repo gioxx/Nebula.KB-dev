@@ -30,6 +30,8 @@ tags:
 
 Requires EXO for DGs and role groups, and Microsoft Graph for Microsoft 365 groups where applicable. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
+Long-running group exports support `-BatchSize`, `-Resume`, `-CsvPath`, and `-MaxConsecutiveErrors` so partial CSV writes can be resumed safely.
+For resume-aware CSV exports, the generated files include `Group Identity` alongside the existing group/member columns.
 
 ## Add-EntraGroupDevice
 Add one or more devices to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
@@ -93,7 +95,7 @@ Export distribution groups and members.
 **Syntax**
 
 ```powershell
-Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <String>]
+Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -101,10 +103,20 @@ Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <St
 | `DistributionGroup` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All DGs |
 | `Csv` | Switch | Force CSV export. | No | `False` |
 | `CsvFolder` | String | Destination for CSV. | No | Current directory |
+| `All` | Switch | Export every distribution group in the tenant. | No | `False` |
+| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
+| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
 
 **Example**
 ```powershell
 Export-DistributionGroups -DistributionGroup "IT Team" -CsvFolder 'C:\Temp\DGs'
+```
+
+```powershell
+Export-DistributionGroups -All -CsvFolder 'C:\Temp\DGs' -Resume
 ```
 
 ## Export-DynamicDistributionGroups
@@ -113,7 +125,7 @@ Export dynamic DGs and evaluated members.
 **Syntax**
 
 ```powershell
-Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [-CsvFolder <String>]
+Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -121,10 +133,20 @@ Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [
 | `DynamicDistributionGroup` | String[] | Dynamic DG identity. Pipeline accepted. | No | All dynamic DGs |
 | `Csv` | Switch | Force CSV export. | No | `False` |
 | `CsvFolder` | String | Destination for CSV. | No | Current directory |
+| `All` | Switch | Export every dynamic distribution group in the tenant. | No | `False` |
+| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
+| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
 
 **Example**
 ```powershell
 Export-DynamicDistributionGroups -CsvFolder 'C:\Temp\DynDGs'
+```
+
+```powershell
+Export-DynamicDistributionGroups -All -CsvFolder 'C:\Temp\DynDGs' -Resume
 ```
 
 ## Export-M365Group
@@ -133,7 +155,7 @@ Export Microsoft 365 groups (members/owners).
 **Syntax**
 
 ```powershell
-Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
+Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -141,10 +163,20 @@ Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
 | `M365Group` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
 | `Csv` | Switch | Force CSV export. | No | `False` |
 | `CsvFolder` | String | Destination for CSV. | No | Current directory |
+| `All` | Switch | Export every Microsoft 365 group in the tenant. | No | `False` |
+| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
+| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
 
 **Example**
 ```powershell
 Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
+```
+
+```powershell
+Export-M365Group -All -CsvFolder 'C:\Temp\M365' -Resume
 ```
 
 ## Export-EmptyEntraGroups

@@ -52,6 +52,18 @@ New-SharedMailbox -SharedMailboxSMTPAddress "sharedmailbox@contoso.com" `
 Set-MboxLanguage -SourceMailbox 'user@contoso.com' -Language en-US
 ```
 
+## Set usage location for users
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation -UsageLocation IT
+```
+
+## Get usage location for users
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
+```
+
 ## Export mailbox statistics (CSV, batched)
 
 ```powershell

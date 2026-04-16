@@ -31,7 +31,7 @@ I merely made a few minor tweaks and integrated the rest into the module and thi
 **Syntax**
 
 ```powershell
-Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-IncludeDeployedApps] [-MaxDevices <Int32>] [-OutputCsvPath <String>] [-OutputJsonPath <String>] [-PivotSummary]
+Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-IncludeDeployedApps] [-MaxDevices <Int32>] [-OutputCsvPath <String>] [-OutputJsonPath <String>] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>] [-PivotSummary]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -45,6 +45,10 @@ Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [
 | `MaxDevices` | Int32 | Maximum number of devices to process. | No | `0` |
 | `OutputCsvPath` | String | Optional CSV output path. | No | - |
 | `OutputJsonPath` | String | Optional JSON output path. | No | - |
+| `BatchSize` | Int32 | Number of rows to flush at a time when writing CSV output. | No | `25` |
+| `Resume` | Switch | Resume CSV export from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume or export to. When omitted, a default file is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive device-level failures. | No | `5` |
 | `PivotSummary` | Switch | Print a per-app summary after the report is built. | No | `False` |
 
 **Examples**
@@ -62,6 +66,7 @@ Export-IntuneAppInventory -ApplicationName "Chrome" -MinimumVersion "120.0" -Inc
 
 :::note
 `FilterByType` can be evaluated against deployed-app data. When `-IncludeDeployedApps` is not used, the report is based on detected apps only and the type filter is ignored.
+CSV resume works when `-OutputCsvPath` or `-CsvPath` points to a report file; if `-Resume` is used without an explicit path, the cmdlet reuses the latest matching CSV in the current folder or creates a new one.
 :::
 
 ## Get-IntuneProfileAssignmentsByGroup

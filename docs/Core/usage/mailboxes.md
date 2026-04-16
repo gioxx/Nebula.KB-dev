@@ -78,26 +78,30 @@ Add-MboxPermission -SourceMailbox 'sharedmailbox@contoso.com' -UserMailbox 'user
 ```
 
 ## Export-MboxPermission
-Export mailbox permissions to CSV.
+Export mailbox permissions to CSV with optional batching and resume support.
 
 **Syntax**
 
 ```powershell
-Export-MboxPermission -RecipientType <String> [-CsvFolder <String>]
+Export-MboxPermission -RecipientType <String> [-CsvFolder <String>] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `RecipientType` | String | Mailbox scope: `User`, `Shared`, `Room`, `All`. | Yes | - |
-| `CsvFolder` | String | Destination folder for CSV export. | No | - |
+| `RecipientType` | String | Recipient type to analyze: `User`, `Shared`, `Room`, or `All`. | Yes | - |
+| `CsvFolder` | String | Destination folder for the CSV. | No | Current directory |
+| `BatchSize` | Int32 | Number of processed mailboxes buffered before the CSV is flushed. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive mailbox-level failures. | No | `5` |
 
 **Examples**
 ```powershell
-Export-MboxPermission -RecipientType Shared -CsvFolder 'C:\Temp'
+Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp' -Resume
 ```
 
 ```powershell
-Export-MboxPermission -RecipientType All -CsvFolder 'C:\Temp'
+Export-MboxPermission -RecipientType Shared -CsvFolder 'C:\Temp' -CsvPath 'C:\Temp\20260414_M365-MboxPermissions-Report.csv'
 ```
 
 ## Export-MboxAlias
@@ -116,13 +120,17 @@ It supports:
 - domain-scoped export with `-Domain`
 - CSV output for single mailbox queries with `-Csv` and `-CsvFolder`
 - automatic CSV export for `-All` and `-Domain`
+- batch flushing and resume for long-running CSV exports with `-BatchSize`, `-Resume`, `-CsvPath`, and `-MaxConsecutiveErrors`
 - optional inclusion of primary-only recipients with `-IncludePrimaryOnly`
 - extra CSV fields `DisplayName` and `Name`
+- extra CSV fields `UserPrincipalName` and `IsMoera` in CSV exports
 
 Note:
 - `-Csv` is the explicit switch for single-mailbox exports.
 - `-All` and `-Domain` already export to CSV, so `-Csv` is optional in those modes.
 - `-CsvFolder` controls the export destination for every CSV-producing mode.
+- `-Resume` reuses the latest matching CSV in the target folder unless `-CsvPath` is specified.
+- `-BatchSize` controls how many processed recipients are buffered before the CSV is flushed.
 - `-IncludePrimaryOnly` keeps recipients that would otherwise be omitted because they have no secondary aliases.
 - `-IncludeMoera` keeps addresses in the tenant's `onmicrosoft.com` domain that would otherwise be hidden.
 - Primary-only exclusion is evaluated after MOERA filtering, so a mailbox with only a primary SMTP and a MOERA proxy stays hidden by default.
@@ -130,7 +138,7 @@ Note:
 **Syntax**
 
 ```powershell
-Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrimaryOnly] [-IncludeMoera] [-All] [-Domain <String>]
+Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrimaryOnly] [-IncludeMoera] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>] [-All] [-Domain <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -140,6 +148,10 @@ Get-MboxAlias -SourceMailbox <String> [-Csv] [-CsvFolder <String>] [-IncludePrim
 | `CsvFolder` | String | Destination folder for CSV export. | No | - |
 | `IncludePrimaryOnly` | Switch | Include recipients with only a primary SMTP address in CSV exports. | No | `False` |
 | `IncludeMoera` | Switch | Include MOERA addresses in CSV exports. | No | `False` |
+| `BatchSize` | Int32 | Number of processed recipients to buffer before flushing the CSV. | No | `25` |
+| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive recipient-level failures. | No | `5` |
 | `All` | Switch | Export aliases for all non-guest recipients and write a CSV report. | No | `False` |
 | `Domain` | String | Export aliases for recipients matching a domain and write a CSV report. | No | - |
 
@@ -174,6 +186,14 @@ Get-MboxAlias -All -CsvFolder 'C:\Temp'
 
 ```powershell
 Get-MboxAlias -Domain 'contoso.com' -CsvFolder 'C:\Temp'
+```
+
+```powershell
+Get-MboxAlias -All -CsvFolder 'C:\Temp' -Resume
+```
+
+```powershell
+Get-MboxAlias -Domain 'contoso.com' -CsvFolder 'C:\Temp' -Resume -CsvPath 'C:\Temp\20260414_M365-Alias-Report.csv'
 ```
 
 ## Get-MboxLastMessageTrace
