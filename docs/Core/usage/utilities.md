@@ -6,6 +6,7 @@ hide_title: true
 id: utilities
 tags:
   - Format-MessageIDsFromClipboard
+  - Format-QuotedListFromClipboard
   - Format-SortedEmailsFromClipboard
   - Get-NebulaModuleUpdates
   - Nebula.Core
@@ -14,7 +15,7 @@ tags:
 
 # Utilities
 
-For full details and examples, run `Get-Help Format-MessageIDsFromClipboard -Detailed` or `Get-Help Format-SortedEmailsFromClipboard -Detailed`.
+For full details and examples, run `Get-Help Format-MessageIDsFromClipboard -Detailed`, `Get-Help Format-SortedEmailsFromClipboard -Detailed`, or `Get-Help Format-QuotedListFromClipboard -Detailed`.
 
 ## Format-MessageIDsFromClipboard
 
@@ -71,6 +72,29 @@ Format-SortedEmailsFromClipboard [-PassThru]
 **Example**
 ```powershell
 Format-SortedEmailsFromClipboard -PassThru
+```
+
+## Format-QuotedListFromClipboard
+
+:::note
+The function name is `Format-QuotedListFromClipboard`. It is the generic clipboard formatter for Excel-style columns or any other plain-text list.
+:::
+
+Formats clipboard text as a quoted, comma-separated list. It reads the clipboard, splits on lines and tabs, trims values, removes duplicates while preserving the first occurrence, and copies the final output back to the clipboard.
+
+**Syntax**
+
+```powershell
+Format-QuotedListFromClipboard [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `PassThru` | Switch | Emit the formatted string to the pipeline. | No | `False` |
+
+**Example**
+```powershell
+Format-QuotedListFromClipboard -PassThru
 ```
 
 ## Get-NebulaModuleUpdates

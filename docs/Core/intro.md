@@ -30,7 +30,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 - Licenses: Graph-backed SKU catalog and user/license exports.
 - Quarantine: search, export EML, release/delete in bulk.
 - Statistics: mailbox size/quota exports (CSV or object mode).
-- Utilities: clipboard helpers for message IDs and e-mails (`mids`, `fse`).
+- Utilities: clipboard helpers for message IDs, e-mails, and generic quoted lists (`mids`, `fse`, `Format-QuotedListFromClipboard`).
 
 :::tip Use Get-Help
 Every function exposes built-in help. Use `Get-Help <FunctionName> -Detailed` or `-Examples` for notes, parameters, and prerequisites.

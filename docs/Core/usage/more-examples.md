@@ -116,3 +116,9 @@ Export-EmptyEntraGroups -CsvFolder 'C:\Reports\Groups'
 ```powershell
 Format-MessageIDsFromClipboard   # formats, releases, and shows output
 ```
+
+## Format any clipboard list as quoted values
+
+```powershell
+Format-QuotedListFromClipboard -PassThru
+```
