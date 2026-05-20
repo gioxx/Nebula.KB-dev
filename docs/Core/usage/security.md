@@ -7,6 +7,7 @@ id: security
 tags:
   - Disable-UserDevices
   - Disable-UserSignIn
+  - Get-ContentFilterPolicy
   - Edit-ContentFilterPolicy
   - Revoke-UserSessions
   - Nebula.Core
@@ -52,35 +53,6 @@ Disable-UserSignIn -UserPrincipalName <String[]> [-PassThru]
 Disable-UserSignIn -UserPrincipalName user1@contoso.com -Confirm:$false
 ```
 
-## Revoke-UserSessions
-Force sign-out by revoking refresh tokens for users.
-
-**Syntax**
-```powershell
-Revoke-UserSessions [-All] [-UserPrincipalName <String[]>] [-Exclude <String[]>] [-PassThru]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `All` | Switch | Target every user in the tenant. | No | `False` |
-| `UserPrincipalName` (`Identity`) | String[] | Users to target (UPN/object ID/short identifier). Pipeline accepted. | No | - |
-| `Exclude` | String[] | Users to skip (UPN/object ID/short identifier; applies to both -All and explicit lists). | No | - |
-| `PassThru` | Switch | Emit the impacted users. | No | `False` |
-
-**Examples**
-```powershell
-Revoke-UserSessions -UserPrincipalName user1@contoso.com,user2@contoso.com
-```
-
-```powershell
-Revoke-UserSessions -All -Exclude user@contoso.com -Confirm:$false
-```
-
-Notes:
-- Supports `-WhatIf`/`-Confirm` for safety.
-- Skips missing users and reports exclusions.
-- User identities are resolved through `Find-UserRecipient`, so short identifiers are supported.
-
 ## Edit-ContentFilterPolicy
 Update hosted content filter allow/block lists and keep the related allowed-senders group and transport-rule domain exceptions in sync.
 
@@ -113,3 +85,57 @@ Notes:
 - The command returns a summary object with the refreshed policy state.
 - When adding allowed senders, missing mail contacts are created and hidden from the address list if `-AllowedSendersGroup` is provided.
 - When adding or removing allowed domains, matching transport-rule exceptions are updated too if `-TransportRuleNames` is provided.
+
+## Get-ContentFilterPolicy
+List hosted content filter policies and inspect their current allow/block lists.
+
+**Syntax**
+```powershell
+Get-ContentFilterPolicy [[-Identity] <String[]>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Identity` (`SpamFilter`, `PolicyName`) | String[] | One or more policy names to inspect. If omitted, all policies are returned. Pipeline accepted. | No | - |
+
+**Examples**
+```powershell
+Get-ContentFilterPolicy
+```
+
+```powershell
+Get-ContentFilterPolicy -Identity Contoso
+```
+
+Notes:
+- The output includes list counts and the resolved allow/block entries.
+- Use this before `Edit-ContentFilterPolicy` if you want to see the current configuration.
+
+## Revoke-UserSessions
+Force sign-out by revoking refresh tokens for users.
+
+**Syntax**
+```powershell
+Revoke-UserSessions [-All] [-UserPrincipalName <String[]>] [-Exclude <String[]>] [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `All` | Switch | Target every user in the tenant. | No | `False` |
+| `UserPrincipalName` (`Identity`) | String[] | Users to target (UPN/object ID/short identifier). Pipeline accepted. | No | - |
+| `Exclude` | String[] | Users to skip (UPN/object ID/short identifier; applies to both -All and explicit lists). | No | - |
+| `PassThru` | Switch | Emit the impacted users. | No | `False` |
+
+**Examples**
+```powershell
+Revoke-UserSessions -UserPrincipalName user1@contoso.com,user2@contoso.com
+```
+
+```powershell
+Revoke-UserSessions -All -Exclude user@contoso.com -Confirm:$false
+```
+
+Notes:
+- Supports `-WhatIf`/`-Confirm` for safety.
+- Skips missing users and reports exclusions.
+- User identities are resolved through `Find-UserRecipient`, so short identifiers are supported.
