@@ -39,37 +39,6 @@ User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) sup
 Now the resolver prefers a Microsoft Graph-friendly identity when available (`-PreferGraphIdentity`), improving reliability for object-ID-based lookups.
 :::
 
-## Set-UserUsageLocation
-Quickly update the Microsoft Graph `UsageLocation` for one or more users coming from the pipeline or an explicit list.
-If `-UsageLocation` is omitted, Nebula.Core uses the configured `UsageLocation` value from `settings.psd1` and falls back to `US`.
-
-**Syntax**
-
-```powershell
-Set-UserUsageLocation -UserPrincipalName <String[]> [-UsageLocation <String>] [-PassThru]
-Set-UserUsageLocation <UserPrincipalName> [-UsageLocation <String>] [-PassThru]
-'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation [-UsageLocation <String>] [-PassThru]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
-| `UsageLocation` | String | Two-letter country code to set. When omitted, the configured NebulaCore default is used. | No | Configured value or `US` |
-| `PassThru` | Switch | Emit processed users as objects. | No | `False` |
-
-**Examples**
-```powershell
-Set-UserUsageLocation -UserPrincipalName 'user@contoso.com' -UsageLocation IT
-```
-
-```powershell
-'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation -UsageLocation DE
-```
-
-```powershell
-Get-MgUser -Filter "endsWith(userPrincipalName,'@contoso.com')" | Set-UserUsageLocation -UsageLocation FR -PassThru
-```
-
 ## Get-UserUsageLocation
 Read the current Microsoft Graph `UsageLocation` for one or more users. The output includes the configured NebulaCore default so you can compare the live value against your expected baseline.
 
@@ -390,6 +359,37 @@ Remove-UserMsolAccountSku 'user@contoso.com' -License 'Exchange Online (Plan 2)'
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -All
+```
+
+## Set-UserUsageLocation
+Quickly update the Microsoft Graph `UsageLocation` for one or more users coming from the pipeline or an explicit list.
+If `-UsageLocation` is omitted, Nebula.Core uses the configured `UsageLocation` value from `settings.psd1` and falls back to `US`.
+
+**Syntax**
+
+```powershell
+Set-UserUsageLocation -UserPrincipalName <String[]> [-UsageLocation <String>] [-PassThru]
+Set-UserUsageLocation <UserPrincipalName> [-UsageLocation <String>] [-PassThru]
+'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation [-UsageLocation <String>] [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
+| `UsageLocation` | String | Two-letter country code to set. When omitted, the configured NebulaCore default is used. | No | Configured value or `US` |
+| `PassThru` | Switch | Emit processed users as objects. | No | `False` |
+
+**Examples**
+```powershell
+Set-UserUsageLocation -UserPrincipalName 'user@contoso.com' -UsageLocation IT
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation -UsageLocation DE
+```
+
+```powershell
+Get-MgUser -Filter "endsWith(userPrincipalName,'@contoso.com')" | Set-UserUsageLocation -UsageLocation FR -PassThru
 ```
 
 ## Update-LicenseCatalog
