@@ -91,12 +91,13 @@ List hosted content filter policies and inspect their current allow/block lists.
 
 **Syntax**
 ```powershell
-Get-ContentFilterPolicy [[-Identity] <String[]>]
+Get-ContentFilterPolicy [[-Identity] <String[]>] [-Detailed]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `Identity` (`SpamFilter`, `PolicyName`) | String[] | One or more policy names to inspect. If omitted, all policies are returned. Pipeline accepted. | No | - |
+| `Detailed` | Switch | Include the resolved allow/block lists in the output. | No | `False` |
 
 **Examples**
 ```powershell
@@ -107,8 +108,13 @@ Get-ContentFilterPolicy
 Get-ContentFilterPolicy -Identity Contoso
 ```
 
+```powershell
+Get-ContentFilterPolicy -Detailed
+```
+
 Notes:
-- The output includes list counts and the resolved allow/block entries.
+- The default output is compact and shows counts.
+- Use `-Detailed` to include the resolved allow/block entries.
 - Use this before `Edit-ContentFilterPolicy` if you want to see the current configuration.
 
 ## Revoke-UserSessions
