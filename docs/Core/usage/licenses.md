@@ -39,37 +39,6 @@ User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) sup
 Now the resolver prefers a Microsoft Graph-friendly identity when available (`-PreferGraphIdentity`), improving reliability for object-ID-based lookups.
 :::
 
-## Get-UserUsageLocation
-Read the current Microsoft Graph `UsageLocation` for one or more users. The output includes the configured NebulaCore default so you can compare the live value against your expected baseline.
-
-**Syntax**
-
-```powershell
-Get-UserUsageLocation -UserPrincipalName <String[]>
-Get-UserUsageLocation <UserPrincipalName>
-'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
-
-**Output**
-- `UserPrincipalName`
-- `DisplayName`
-- `UsageLocation`
-- `ConfiguredDefaultUsageLocation`
-- `MatchesConfiguredDefault`
-
-**Examples**
-```powershell
-Get-UserUsageLocation -UserPrincipalName 'user@contoso.com'
-```
-
-```powershell
-'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
-```
-
 ## Add-UserMsolAccountSku
 Assign licenses by friendly name (resolved via catalog), SKU part number, or SKU ID to a user.
 
@@ -281,6 +250,37 @@ Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -Clipboard
 
 ```powershell
 Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -CheckAvailability
+```
+
+## Get-UserUsageLocation
+Read the current Microsoft Graph `UsageLocation` for one or more users. The output includes the configured NebulaCore default so you can compare the live value against your expected baseline.
+
+**Syntax**
+
+```powershell
+Get-UserUsageLocation -UserPrincipalName <String[]>
+Get-UserUsageLocation <UserPrincipalName>
+'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
+
+**Output**
+- `UserPrincipalName`
+- `DisplayName`
+- `UsageLocation`
+- `ConfiguredDefaultUsageLocation`
+- `MatchesConfiguredDefault`
+
+**Examples**
+```powershell
+Get-UserUsageLocation -UserPrincipalName 'user@contoso.com'
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
 ```
 
 ## Move-UserMsolAccountSku
