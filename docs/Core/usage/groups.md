@@ -149,6 +149,31 @@ Export-DynamicDistributionGroups -CsvFolder 'C:\Temp\DynDGs'
 Export-DynamicDistributionGroups -All -CsvFolder 'C:\Temp\DynDGs' -Resume
 ```
 
+## Export-EmptyEntraGroups
+Export Entra groups with zero members.
+
+**Syntax**
+
+```powershell
+Export-EmptyEntraGroups [-CsvFolder <String>] [-Csv]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `CsvFolder` | String | Destination for the CSV file. | No | Current directory |
+| `Csv` | Boolean | Export the report to CSV. Use `-Csv:$false` to return objects instead. | No | `True` |
+
+**Examples**
+```powershell
+# Export every empty Entra group to CSV
+Export-EmptyEntraGroups
+```
+
+```powershell
+# Export to a custom folder
+Export-EmptyEntraGroups -CsvFolder 'C:\Temp\Groups'
+```
+
 ## Export-M365Group
 Export Microsoft 365 groups (members/owners).
 
@@ -177,31 +202,6 @@ Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
 
 ```powershell
 Export-M365Group -All -CsvFolder 'C:\Temp\M365' -Resume
-```
-
-## Export-EmptyEntraGroups
-Export Entra groups with zero members.
-
-**Syntax**
-
-```powershell
-Export-EmptyEntraGroups [-CsvFolder <String>] [-Csv]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `CsvFolder` | String | Destination for the CSV file. | No | Current directory |
-| `Csv` | Boolean | Export the report to CSV. Use `-Csv:$false` to return objects instead. | No | `True` |
-
-**Examples**
-```powershell
-# Export every empty Entra group to CSV
-Export-EmptyEntraGroups
-```
-
-```powershell
-# Export to a custom folder
-Export-EmptyEntraGroups -CsvFolder 'C:\Temp\Groups'
 ```
 
 ## Get-DynamicDistributionGroupFilter
@@ -248,30 +248,6 @@ Get-EntraGroupDevice "PC123"
 "00000000-0000-0000-0000-000000000000" | Get-EntraGroupDevice -TreatInputAsId -GridView
 ```
 
-## Get-EntraGroupUser
-Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
-
-**Syntax**
-
-```powershell
-Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
-
-**Examples**
-```powershell
-Get-EntraGroupUser "user@contoso.com"
-```
-
-```powershell
-"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
-```
-
 ## Get-EntraGroupMembers
 Show the members of an Entra group (users, devices, and other directory objects) (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
 
@@ -311,6 +287,30 @@ Get-EntraGroupMembers "intune - app - netterm" -IncludeDeviceUsers
 - When `-IncludeDeviceUsers` is used and the member is a device, the output includes a `Device Owners/Users` column.
 - If owners and users are identical, the list is shown once; otherwise owners and users are combined in the same column.
 :::
+
+## Get-EntraGroupUser
+Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
+
+**Syntax**
+
+```powershell
+Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
+
+**Examples**
+```powershell
+Get-EntraGroupUser "user@contoso.com"
+```
+
+```powershell
+"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
+```
 
 ## Get-RoleGroupsMembers
 List Exchange Online role groups and members.
