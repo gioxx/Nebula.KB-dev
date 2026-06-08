@@ -13,7 +13,13 @@ const config = {
   tagline: 'Flawed by design, just like my code.',
   favicon: 'img/Nebula_Icon_Header.svg',
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: {
+      removeLegacyPostBuildHeadAttribute: true,
+      useCssCascadeLayers: true,
+      siteStorageNamespacing: true,
+      mdx1CompatDisabledByDefault: true,
+      fasterByDefault: false,
+    }, // Improve compatibility with the upcoming Docusaurus v4
   },
   url: 'https://gioxx.github.io',
   baseUrl: '/Nebula.KB-dev/',
