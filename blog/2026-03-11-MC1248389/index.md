@@ -10,7 +10,7 @@ tags: [microsoft, exchange, powershell, core]
 
 Microsoft is retiring the [-Credential](https://learn.microsoft.com/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps#-credential) parameter used when connecting to Exchange Online PowerShell. Starting with module versions released in July 2026 and later, the -Credential parameter will be removed from both [Connect-ExchangeOnline](https://learn.microsoft.com/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps) and [Connect-IppsSession](https://learn.microsoft.com/powershell/module/exchangepowershell/connect-ippssession?view=exchange-ps) cmdlets. Organizations using this parameter in automation scripts must migrate to a supported authentication method before that date. This change improves security by moving away from legacy authentication methods that do not support modern protections such as multifactor authentication (MFA).
 
-<!-- truncate -->
+{/* truncate */}
 
 ### When this will happen
 
