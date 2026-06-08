@@ -10,11 +10,9 @@ tags:
   - Export-MsolAccountSku
   - Get-TenantMsolAccountSku
   - Get-UserMsolAccountSku
-  - Get-UserUsageLocation
   - Move-UserMsolAccountSku
   - Remove-UserMsolAccountSku
   - Update-LicenseCatalog
-  - Set-UserUsageLocation
   - Nebula.Core
   - Licenses
 ---
@@ -34,7 +32,7 @@ Use `Export-MsolAccountSku` when you need:
 | Domain report | `-Domain` | Only users in the selected domain, with all of their assigned licenses |
 | License report | `-License` | Only users who have the selected license, with all of their assigned licenses |
 
-:::note User identifier resolution
+:::note[User identifier resolution]
 User-centric license cmdlets (`Add/Get/Remove/Copy/Move-UserMsolAccountSku`) support full UPNs/object IDs and short identifiers (for example alias/SamAccountName/UPN prefix) via the shared resolver.
 Now the resolver prefers a Microsoft Graph-friendly identity when available (`-PreferGraphIdentity`), improving reliability for object-ID-based lookups.
 :::
@@ -77,11 +75,11 @@ Add-UserMsolAccountSku 'user@contoso.com' -License 'Microsoft 365 Business Stand
 'user1@contoso.com','user2@contoso.com' | Add-UserMsolAccountSku -License 'Microsoft 365 Business Standard EEA (no Teams)'
 ```
 
-:::note Mandatory usage location parameter
+:::note[Mandatory usage location parameter]
 If the target user has no `UsageLocation`, Nebula.Core sets it automatically using the `UsageLocation` key from your configuration (default `US`, override via `%USERPROFILE%\.NebulaCore\settings.psd1`). If updating the usage location fails, license assignment stops.
 :::
 
-:::warning Licenses availability
+:::warning[Licenses availability]
 If the tenant does not have units available for the requested license, the assignment is avoided and a warning message is displayed.
 :::
 
@@ -113,14 +111,11 @@ Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 Export all users with assigned licenses to CSV, mapping SKU part numbers to friendly names.
 Use `-Domain` to limit the export to users whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` match the domain.
 Use `-License` to limit the export to users who have at least one matching license, while still exporting all of the licenses assigned to those users.
-Use `-BatchSize` to flush partial results while processing.
-Use `-Resume` to continue from the latest matching CSV in the folder, or `-CsvPath` to resume from a specific file. Resume skips users already present in the CSV by `UserPrincipalName`.
-When the export completes, Nebula.Core prints a success message with the generated CSV path instead of echoing the path as a second pipeline line.
 
 **Syntax**
 
 ```powershell
-Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String[]>] [-ForceLicenseCatalogRefresh] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
+Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String[]>] [-ForceLicenseCatalogRefresh]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -129,10 +124,6 @@ Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String
 | `Domain` | String | Limit the export to users in the specified domain. | No | - |
 | `License` | String[] | Limit the export to users who have at least one matching license. Accepts friendly name, SKU part number, or SKU ID. | No | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload the license catalog cache. | No | `False` |
-| `BatchSize` | Int | Flush partial results every N processed users. | No | `50` |
-| `Resume` | Switch | Resume from the latest matching CSV in `CsvFolder` or from `CsvPath`. | No | `False` |
-| `CsvPath` | String | Explicit CSV file to resume. | No | - |
-| `MaxConsecutiveErrors` | Int | Stop after this many consecutive user-level failures. | No | `5` |
 
 **Example**
 ```powershell
@@ -147,12 +138,7 @@ Export-MsolAccountSku -Domain 'contoso.com'
 Export-MsolAccountSku -License 'Exchange Online (Plan 1)'
 ```
 
-```powershell
-# Resume an interrupted export from a specific file
-Export-MsolAccountSku -CsvPath 'C:\Temp\Reports\20260414_M365-User-License-Report.csv' -Resume
-```
-
-:::note License filtered export
+:::note[License filtered export]
 When you pass `-License`, the CSV still includes every license assigned to each matching user. If a user has `Exchange Online (Plan 1)` plus `Microsoft 365 E3`, both rows are exported.
 :::
 
@@ -162,14 +148,13 @@ List tenant SKUs with resolved names, totals, consumed, available (enabled minus
 **Syntax**
 
 ```powershell
-Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-Domain <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
+Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `Filter` | String | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No | - |
-| `Domain` | String | Limit sample users to accounts whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` belong to the selected domain. | No | - |
 | `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). | No | - |
 | `IncludeSampleUsers` | Switch | Return sample users using the default limit of 5 (requires `-Filter`). | No | `False` |
 | `AsTable` | Switch | Format output as a table. | No | `False` |
@@ -192,31 +177,23 @@ Get-TenantMsolAccountSku -Filter "E3" -SampleUsers
 Get-TenantMsolAccountSku -Filter "E3" -IncludeSampleUsers
 ```
 
-```powershell
-Get-TenantMsolAccountSku -Filter "E3" -SampleUsers 5 -Domain "contoso.com"
-```
-
-:::note Available licenses: how counting works
+:::note[Available licenses: how counting works]
 `Available` is calculated as `Enabled - Consumed` (never below zero). The `Total` column shows a friendly breakdown (Enabled/Suspended), while `TotalCount` remains the numeric total for scripting.
 :::
 
-:::note Domain-scoped samples
-When you pass `-Domain`, only sample users are filtered by that domain. The SKU list itself still follows `-Filter` and the tenant's full license set.
-:::
-
-:::note Sample users display
+:::note[Sample users display]
 When you request sample users together with `-AsTable`, Nebula.Core prints the license summary as a table and then lists sample users in a separate readable block for each SKU.
 With `-GridView`, Nebula.Core opens a summary grid and, when sample users are requested, a second grid dedicated to sample users.
 :::
 
-:::tip Microsoft 365 Subscriptions (Admin Portal)
+:::tip[Microsoft 365 Subscriptions (Admin Portal)]
 Need renewal/expiration or billing profile details? Open the Microsoft 365 Admin Center subscriptions page: https://admin.cloud.microsoft/?#/subscriptions
 :::
 
 ## Get-UserMsolAccountSku
 Show licenses assigned to a single user with friendly names.
 
-:::note No assigned licenses
+:::note[No assigned licenses]
 If the target user exists but has no assigned licenses, Nebula.Core prints an explicit warning instead of returning only the processing header.
 :::
 
@@ -250,37 +227,6 @@ Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -Clipboard
 
 ```powershell
 Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -CheckAvailability
-```
-
-## Get-UserUsageLocation
-Read the current Microsoft Graph `UsageLocation` for one or more users. The output includes the configured NebulaCore default so you can compare the live value against your expected baseline.
-
-**Syntax**
-
-```powershell
-Get-UserUsageLocation -UserPrincipalName <String[]>
-Get-UserUsageLocation <UserPrincipalName>
-'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
-
-**Output**
-- `UserPrincipalName`
-- `DisplayName`
-- `UsageLocation`
-- `ConfiguredDefaultUsageLocation`
-- `MatchesConfiguredDefault`
-
-**Examples**
-```powershell
-Get-UserUsageLocation -UserPrincipalName 'user@contoso.com'
-```
-
-```powershell
-'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
 ```
 
 ## Move-UserMsolAccountSku
@@ -359,37 +305,6 @@ Remove-UserMsolAccountSku 'user@contoso.com' -License 'Exchange Online (Plan 2)'
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -All
-```
-
-## Set-UserUsageLocation
-Quickly update the Microsoft Graph `UsageLocation` for one or more users coming from the pipeline or an explicit list.
-If `-UsageLocation` is omitted, Nebula.Core uses the configured `UsageLocation` value from `settings.psd1` and falls back to `US`.
-
-**Syntax**
-
-```powershell
-Set-UserUsageLocation -UserPrincipalName <String[]> [-UsageLocation <String>] [-PassThru]
-Set-UserUsageLocation <UserPrincipalName> [-UsageLocation <String>] [-PassThru]
-'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation [-UsageLocation <String>] [-PassThru]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | Target user UPN, object ID, or short identifier. Accepts pipeline input. | Yes | - |
-| `UsageLocation` | String | Two-letter country code to set. When omitted, the configured NebulaCore default is used. | No | Configured value or `US` |
-| `PassThru` | Switch | Emit processed users as objects. | No | `False` |
-
-**Examples**
-```powershell
-Set-UserUsageLocation -UserPrincipalName 'user@contoso.com' -UsageLocation IT
-```
-
-```powershell
-'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation -UsageLocation DE
-```
-
-```powershell
-Get-MgUser -Filter "endsWith(userPrincipalName,'@contoso.com')" | Set-UserUsageLocation -UsageLocation FR -PassThru
 ```
 
 ## Update-LicenseCatalog

@@ -21,7 +21,7 @@ For full details and examples, run `Get-Help Find-ADAccountExpirations -Detailed
 
 `Find-ADAccountExpirations` scans Active Directory for users with a valid expiration date. By default it returns only enabled accounts; use `-IncludeDisabled` to include disabled accounts. You can filter by target date and/or email domain, export results to CSV, and optionally extend account expirations. Output is objects by default; use `-AsTable` for formatted display.
 
-:::caution Date handling (midnight, exact vs. before)
+:::caution[Date handling (midnight, exact vs. before)]
 `TargetDate` is interpreted as a date boundary: the comparison is done on the **date only** (midnight).  
 - **Default behavior**: accounts expiring **on or before** the `TargetDate` date are included.  
 - **With `-ExactDate`**: only accounts expiring **on that exact date** are included.  

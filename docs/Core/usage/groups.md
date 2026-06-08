@@ -29,9 +29,6 @@ tags:
 # Group helpers
 
 Requires EXO for DGs and role groups, and Microsoft Graph for Microsoft 365 groups where applicable. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
-CSV export commands in this section finish with a success message that includes the generated CSV path, and they do not echo the path as a second pipeline line.
-Long-running group exports support `-BatchSize`, `-Resume`, `-CsvPath`, and `-MaxConsecutiveErrors` so partial CSV writes can be resumed safely.
-For resume-aware CSV exports, the generated files include `Group Identity` alongside the existing group/member columns.
 
 ## Add-EntraGroupDevice
 Add one or more devices to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
@@ -95,7 +92,7 @@ Export distribution groups and members.
 **Syntax**
 
 ```powershell
-Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
+Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -103,20 +100,10 @@ Export-DistributionGroups [-DistributionGroup <String[]>] [-Csv] [-CsvFolder <St
 | `DistributionGroup` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All DGs |
 | `Csv` | Switch | Force CSV export. | No | `False` |
 | `CsvFolder` | String | Destination for CSV. | No | Current directory |
-| `All` | Switch | Export every distribution group in the tenant. | No | `False` |
-| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
-| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
-| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
-| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
-| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
 
 **Example**
 ```powershell
 Export-DistributionGroups -DistributionGroup "IT Team" -CsvFolder 'C:\Temp\DGs'
-```
-
-```powershell
-Export-DistributionGroups -All -CsvFolder 'C:\Temp\DGs' -Resume
 ```
 
 ## Export-DynamicDistributionGroups
@@ -125,7 +112,7 @@ Export dynamic DGs and evaluated members.
 **Syntax**
 
 ```powershell
-Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
+Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [-CsvFolder <String>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -133,20 +120,30 @@ Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [
 | `DynamicDistributionGroup` | String[] | Dynamic DG identity. Pipeline accepted. | No | All dynamic DGs |
 | `Csv` | Switch | Force CSV export. | No | `False` |
 | `CsvFolder` | String | Destination for CSV. | No | Current directory |
-| `All` | Switch | Export every dynamic distribution group in the tenant. | No | `False` |
-| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
-| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
-| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
-| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
-| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
 
 **Example**
 ```powershell
 Export-DynamicDistributionGroups -CsvFolder 'C:\Temp\DynDGs'
 ```
 
+## Export-M365Group
+Export Microsoft 365 groups (members/owners).
+
+**Syntax**
+
 ```powershell
-Export-DynamicDistributionGroups -All -CsvFolder 'C:\Temp\DynDGs' -Resume
+Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `M365Group` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
+| `Csv` | Switch | Force CSV export. | No | `False` |
+| `CsvFolder` | String | Destination for CSV. | No | Current directory |
+
+**Example**
+```powershell
+Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
 ```
 
 ## Export-EmptyEntraGroups
@@ -172,36 +169,6 @@ Export-EmptyEntraGroups
 ```powershell
 # Export to a custom folder
 Export-EmptyEntraGroups -CsvFolder 'C:\Temp\Groups'
-```
-
-## Export-M365Group
-Export Microsoft 365 groups (members/owners).
-
-**Syntax**
-
-```powershell
-Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>] [-All] [-GridView] [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `M365Group` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
-| `Csv` | Switch | Force CSV export. | No | `False` |
-| `CsvFolder` | String | Destination for CSV. | No | Current directory |
-| `All` | Switch | Export every Microsoft 365 group in the tenant. | No | `False` |
-| `GridView` | Switch | Show the result in Out-GridView instead of returning objects. | No | `False` |
-| `BatchSize` | Int32 | Number of processed groups buffered before the CSV is flushed. | No | `25` |
-| `Resume` | Switch | Resume from the latest matching CSV or from `-CsvPath`. | No | `False` |
-| `CsvPath` | String | Explicit CSV file to resume. When omitted, the latest matching CSV is used. | No | - |
-| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive group-member retrieval failures. | No | `5` |
-
-**Example**
-```powershell
-Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
-```
-
-```powershell
-Export-M365Group -All -CsvFolder 'C:\Temp\M365' -Resume
 ```
 
 ## Get-DynamicDistributionGroupFilter
@@ -248,6 +215,30 @@ Get-EntraGroupDevice "PC123"
 "00000000-0000-0000-0000-000000000000" | Get-EntraGroupDevice -TreatInputAsId -GridView
 ```
 
+## Get-EntraGroupUser
+Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
+
+**Syntax**
+
+```powershell
+Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
+
+**Examples**
+```powershell
+Get-EntraGroupUser "user@contoso.com"
+```
+
+```powershell
+"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
+```
+
 ## Get-EntraGroupMembers
 Show the members of an Entra group (users, devices, and other directory objects) (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
 
@@ -288,30 +279,6 @@ Get-EntraGroupMembers "intune - app - netterm" -IncludeDeviceUsers
 - If owners and users are identical, the list is shown once; otherwise owners and users are combined in the same column.
 :::
 
-## Get-EntraGroupUser
-Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
-
-**Syntax**
-
-```powershell
-Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
-
-**Examples**
-```powershell
-Get-EntraGroupUser "user@contoso.com"
-```
-
-```powershell
-"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
-```
-
 ## Get-RoleGroupsMembers
 List Exchange Online role groups and members.
 
@@ -349,7 +316,7 @@ Get-UserGroups -UserPrincipalName <String> [-GridView]
 - Default output columns: `GroupName`, `GroupMail`
 - With `-GridView`: additional details are included (description, type, ID, etc.)
 
-:::warning Breaking Change (version 1.2.0 or newer)
+:::warning[Breaking Change (version 1.2.0 or newer)]
 `Get-UserGroups` now returns `GroupName` and `GroupMail` instead of `Group Name` and `Group Mail`.
 Update any legacy filters/scripts accordingly, for example: use `$_.GroupName` instead of `$_.'Group Name'`.
 :::
@@ -439,7 +406,7 @@ Remove-EntraGroupUser -GroupName "Project Team" -ClearAll
 Remove-EntraGroupUser -GroupName "Project Team" -ClearAll -WhatIf
 ```
 
-:::note User resolution
+:::note[User resolution]
 `Add/Get/Remove-EntraGroupUser` now use the shared resolver (`Find-UserRecipient`), so short identifiers are supported in addition to full UPNs and object IDs.
 :::
 
