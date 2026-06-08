@@ -111,6 +111,20 @@ Export-M365Group -CsvFolder 'C:\Reports\M365'
 Export-EmptyEntraGroups -CsvFolder 'C:\Reports\Groups'
 ```
 
+## Create and manage Entra security group owners
+
+```powershell
+New-EntraSecurityGroup -GroupName 'Sec - Finance' -Description 'Finance security group'
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Add-EntraGroupOwner -GroupName 'Sec - Finance'
+```
+
+```powershell
+Copy-EntraGroupOwner -SourceGroupName 'Sec - Finance' -DestinationGroupName 'Sec - Finance - Test'
+```
+
 ## Normalize MessageIds from clipboard and release immediately
 
 ```powershell

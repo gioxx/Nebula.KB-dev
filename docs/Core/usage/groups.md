@@ -1,12 +1,13 @@
 ---
 sidebar_position: 5
 title: "Groups"
-description: Export distribution/dynamic groups, M365 groups, role groups, and user/device memberships.
+description: Export distribution/dynamic groups, M365 groups, role groups, and user/device memberships, plus Entra security-group ownership helpers.
 hide_title: true
 id: groups
 tags:
   - Add-EntraGroupDevice
   - Add-EntraGroupUser
+  - Add-EntraGroupOwner
   - Distribution Groups
   - Dynamic Distribution Groups
   - Export-DistributionGroups
@@ -21,8 +22,11 @@ tags:
   - Get-UserGroups
   - Microsoft 365 Unified Groups
   - Nebula.Core
+  - New-EntraSecurityGroup
   - Remove-EntraGroupDevice
   - Remove-EntraGroupUser
+  - Remove-EntraGroupOwner
+  - Copy-EntraGroupOwner
   - Search-EntraGroup
 ---
 
@@ -58,6 +62,34 @@ Add-EntraGroupDevice [-GroupName <String>] [-GroupId <String>] [[-DeviceIdentifi
 Add-EntraGroupDevice "PC1" -GroupId "00000000-0000-0000-0000-000000000000" -PassThru
 ```
 
+## Add-EntraGroupOwner
+Add one or more owners to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
+
+**Syntax**
+
+```powershell
+Add-EntraGroupOwner [-GroupName <String>] [-GroupId <String>] [[-OwnerIdentifier] <String[]>] [-TreatInputAsId] [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `OwnerIdentifier` | String[] | User principal name, display name, or object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `OwnerIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `PassThru` | Switch | Emit a status object per owner. | No | `False` |
+
+\*Use either `GroupName` or `GroupId`.
+
+**Examples**
+```powershell
+"user1@contoso.com","user2@contoso.com" | Add-EntraGroupOwner -GroupName "Project Team"
+```
+
+```powershell
+Add-EntraGroupOwner "user1@contoso.com" -GroupId "00000000-0000-0000-0000-000000000000" -PassThru
+```
+
 ## Add-EntraGroupUser
 Add one or more users to an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
 
@@ -84,6 +116,35 @@ Add-EntraGroupUser [-GroupName <String>] [-GroupId <String>] [[-UserIdentifier] 
 
 ```powershell
 Add-EntraGroupUser "user1@contoso.com" -GroupId "00000000-0000-0000-0000-000000000000" -PassThru
+```
+
+## Copy-EntraGroupOwner
+Copy owners from one Entra group to another without removing existing owners from the destination.
+
+**Syntax**
+
+```powershell
+Copy-EntraGroupOwner -SourceGroupName <String> -DestinationGroupName <String> [-PassThru]
+Copy-EntraGroupOwner -SourceGroupId <String> -DestinationGroupId <String> [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceGroupName` (`Source`, `From`) | String | Source group display name. | Yes* | - |
+| `SourceGroupId` | String | Source group object ID (use instead of `SourceGroupName`). | Yes* | - |
+| `DestinationGroupName` (`Destination`, `To`) | String | Destination group display name. | Yes* | - |
+| `DestinationGroupId` | String | Destination group object ID (use instead of `DestinationGroupName`). | Yes* | - |
+| `PassThru` | Switch | Emit a status object per copied owner. | No | `False` |
+
+\*Use the `Name` pair or the `Id` pair.
+
+**Examples**
+```powershell
+Copy-EntraGroupOwner -SourceGroupName "HR" -DestinationGroupName "HR - Test"
+```
+
+```powershell
+Copy-EntraGroupOwner -SourceGroupId "00000000-0000-0000-0000-000000000000" -DestinationGroupId "11111111-1111-1111-1111-111111111111" -PassThru
 ```
 
 ## Export-DistributionGroups
@@ -126,26 +187,6 @@ Export-DynamicDistributionGroups [-DynamicDistributionGroup <String[]>] [-Csv] [
 Export-DynamicDistributionGroups -CsvFolder 'C:\Temp\DynDGs'
 ```
 
-## Export-M365Group
-Export Microsoft 365 groups (members/owners).
-
-**Syntax**
-
-```powershell
-Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `M365Group` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
-| `Csv` | Switch | Force CSV export. | No | `False` |
-| `CsvFolder` | String | Destination for CSV. | No | Current directory |
-
-**Example**
-```powershell
-Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
-```
-
 ## Export-EmptyEntraGroups
 Export Entra groups with zero members.
 
@@ -169,6 +210,26 @@ Export-EmptyEntraGroups
 ```powershell
 # Export to a custom folder
 Export-EmptyEntraGroups -CsvFolder 'C:\Temp\Groups'
+```
+
+## Export-M365Group
+Export Microsoft 365 groups (members/owners).
+
+**Syntax**
+
+```powershell
+Export-M365Group [-M365Group <String[]>] [-Csv] [-CsvFolder <String>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `M365Group` | String[] | Group identity (name/alias/SMTP). Pipeline accepted. | No | All M365 groups |
+| `Csv` | Switch | Force CSV export. | No | `False` |
+| `CsvFolder` | String | Destination for CSV. | No | Current directory |
+
+**Example**
+```powershell
+Export-M365Group -M365Group "Project A" -CsvFolder 'C:\Temp\M365'
 ```
 
 ## Get-DynamicDistributionGroupFilter
@@ -215,30 +276,6 @@ Get-EntraGroupDevice "PC123"
 "00000000-0000-0000-0000-000000000000" | Get-EntraGroupDevice -TreatInputAsId -GridView
 ```
 
-## Get-EntraGroupUser
-Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
-
-**Syntax**
-
-```powershell
-Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
-```
-
-| Parameter | Type | Description | Required | Default |
-| --- | --- | --- | :---: | --- |
-| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
-| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
-| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
-
-**Examples**
-```powershell
-Get-EntraGroupUser "user@contoso.com"
-```
-
-```powershell
-"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
-```
-
 ## Get-EntraGroupMembers
 Show the members of an Entra group (users, devices, and other directory objects) (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
 
@@ -278,6 +315,30 @@ Get-EntraGroupMembers "intune - app - netterm" -IncludeDeviceUsers
 - When `-IncludeDeviceUsers` is used and the member is a device, the output includes a `Device Owners/Users` column.
 - If owners and users are identical, the list is shown once; otherwise owners and users are combined in the same column.
 :::
+
+## Get-EntraGroupUser
+Show the Entra groups a user belongs to (Graph scopes: `Group.Read.All`, `Directory.Read.All`).
+
+**Syntax**
+
+```powershell
+Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `GridView` | Switch | Show details in Out-GridView. | No | `False` |
+
+**Examples**
+```powershell
+Get-EntraGroupUser "user@contoso.com"
+```
+
+```powershell
+"00000000-0000-0000-0000-000000000000" | Get-EntraGroupUser -TreatInputAsId -GridView
+```
 
 ## Get-RoleGroupsMembers
 List Exchange Online role groups and members.
@@ -330,6 +391,31 @@ Get-UserGroups -UserPrincipalName 'user@contoso.com'
 Get-UserGroups 'user@contoso.com' | Where-Object { $_.GroupName -like '*portion-of-group-name*' }
 ```
 
+## New-EntraSecurityGroup
+Create a new Entra security group with a generated mail nickname unless one is supplied.
+
+**Syntax**
+
+```powershell
+New-EntraSecurityGroup -GroupName <String> [-Description <String>] [-MailNickname <String>] [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` (`DisplayName`, `Name`) | String | Display name of the new security group. | Yes | - |
+| `Description` | String | Optional group description. | No | - |
+| `MailNickname` | String | Optional mail nickname. When omitted, a sanitized value is generated from `GroupName`. | No | Generated |
+| `PassThru` | Switch | Return the created group object. | No | `False` |
+
+**Examples**
+```powershell
+New-EntraSecurityGroup -GroupName "Sec - Finance"
+```
+
+```powershell
+New-EntraSecurityGroup -GroupName "Sec - Finance" -Description "Finance security group" -PassThru
+```
+
 ## Remove-EntraGroupDevice
 Remove one or more devices from an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
 
@@ -367,6 +453,44 @@ Remove-EntraGroupDevice -GroupName "Zero Trust Devices" -ClearAll
 ```powershell
 Remove-EntraGroupDevice -GroupName "Zero Trust Devices" -ClearAll -WhatIf
 ```
+
+## Remove-EntraGroupOwner
+Remove one or more owners from an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
+
+**Syntax**
+
+```powershell
+Remove-EntraGroupOwner [-GroupName <String>] [-GroupId <String>] [[-OwnerIdentifier] <String[]>] [-TreatInputAsId] [-PassThru]
+Remove-EntraGroupOwner [-GroupName <String>] [-GroupId <String>] -ClearAll [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `OwnerIdentifier` | String[] | User principal name, display name, or object ID. Pipeline accepted. | Yes | - |
+| `TreatInputAsId` | Switch | Treat every `OwnerIdentifier` as an object ID (skip name lookup). | No | `False` |
+| `ClearAll` | Switch | Remove all owners from the group. Prompts for confirmation. | No | `False` |
+| `PassThru` | Switch | Emit a status object per owner. | No | `False` |
+
+\*Use either `GroupName` or `GroupId`.
+
+**Examples**
+```powershell
+"user1@contoso.com","user2@contoso.com" | Remove-EntraGroupOwner -GroupName "Project Team"
+```
+
+```powershell
+Remove-EntraGroupOwner -GroupName "Project Team" -ClearAll
+```
+
+```powershell
+Remove-EntraGroupOwner -GroupName "Project Team" -ClearAll -WhatIf
+```
+
+:::note[Owner resolution]
+`Add/Remove-EntraGroupOwner` use the same user resolver behavior as the membership cmdlets, and `Copy-EntraGroupOwner` preserves existing destination owners while skipping duplicates.
+:::
 
 ## Remove-EntraGroupUser
 Remove one or more users from an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
