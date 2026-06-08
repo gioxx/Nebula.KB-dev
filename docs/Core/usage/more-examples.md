@@ -111,10 +111,22 @@ Export-M365Group -CsvFolder 'C:\Reports\M365'
 Export-EmptyEntraGroups -CsvFolder 'C:\Reports\Groups'
 ```
 
-## Create and manage Entra security group owners
+## Create, clone, and manage Entra security groups
 
 ```powershell
 New-EntraSecurityGroup -GroupName 'Sec - Finance' -Description 'Finance security group'
+```
+
+```powershell
+Set-EntraGroupDescription -GroupName 'GitLab-Prod' -Description 'Production GitLab access group'
+```
+
+```powershell
+Set-EntraGroupDisplayName -GroupName 'GitLab-Prod' -DisplayName 'GitLab - Production'
+```
+
+```powershell
+Copy-EntraGroup -SourceGroupName 'GitLab-Prod' -DestinationGroupName 'GitLab-Prod-Test' -SkipOwners
 ```
 
 ```powershell

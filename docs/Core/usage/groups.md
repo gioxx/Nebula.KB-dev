@@ -6,8 +6,10 @@ hide_title: true
 id: groups
 tags:
   - Add-EntraGroupDevice
-  - Add-EntraGroupUser
   - Add-EntraGroupOwner
+  - Add-EntraGroupUser
+  - Copy-EntraGroup
+  - Copy-EntraGroupOwner
   - Distribution Groups
   - Dynamic Distribution Groups
   - Export-DistributionGroups
@@ -23,11 +25,12 @@ tags:
   - Microsoft 365 Unified Groups
   - Nebula.Core
   - New-EntraSecurityGroup
+  - Remove-EntraGroupOwner
   - Remove-EntraGroupDevice
   - Remove-EntraGroupUser
-  - Remove-EntraGroupOwner
-  - Copy-EntraGroupOwner
   - Search-EntraGroup
+  - Set-EntraGroupDescription
+  - Set-EntraGroupDisplayName
 ---
 
 # Group helpers
@@ -116,6 +119,42 @@ Add-EntraGroupUser [-GroupName <String>] [-GroupId <String>] [[-UserIdentifier] 
 
 ```powershell
 Add-EntraGroupUser "user1@contoso.com" -GroupId "00000000-0000-0000-0000-000000000000" -PassThru
+```
+
+## Copy-EntraGroup
+Clone an Entra group into a new or existing group. By default the cmdlet copies description, owners, and members; dynamic groups are cloned as a static snapshot of their current members.
+
+**Syntax**
+
+```powershell
+Copy-EntraGroup -SourceGroupName <String> -DestinationGroupName <String> [-SkipMembers] [-SkipOwners] [-SkipDescription] [-PassThru]
+Copy-EntraGroup -SourceGroupId <String> -DestinationGroupId <String> [-SkipMembers] [-SkipOwners] [-SkipDescription] [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SourceGroupName` (`Source`, `From`) | String | Source group display name. | Yes* | - |
+| `SourceGroupId` | String | Source group object ID (use instead of `SourceGroupName`). | Yes* | - |
+| `DestinationGroupName` (`Destination`, `To`) | String | Destination group display name. If no group with this name exists, a new one is created. | Yes* | - |
+| `DestinationGroupId` | String | Destination group object ID (use instead of `DestinationGroupName`). | Yes* | - |
+| `SkipMembers` | Switch | Do not copy members. | No | `False` |
+| `SkipOwners` | Switch | Do not copy owners. | No | `False` |
+| `SkipDescription` | Switch | Do not copy the source description. | No | `False` |
+| `PassThru` | Switch | Emit a summary object for the clone operation. | No | `False` |
+
+\*Use the `Name` pair or the `Id` pair.
+
+**Examples**
+```powershell
+Copy-EntraGroup -SourceGroupName "GitLab-Prod" -DestinationGroupName "GitLab-Prod-Test"
+```
+
+```powershell
+Copy-EntraGroup -SourceGroupName "GitLab-Prod" -DestinationGroupName "GitLab-Prod-Test" -SkipOwners -PassThru
+```
+
+```powershell
+Copy-EntraGroup -SourceGroupId "00000000-0000-0000-0000-000000000000" -DestinationGroupId "11111111-1111-1111-1111-111111111111" -SkipMembers
 ```
 
 ## Copy-EntraGroupOwner
@@ -564,4 +603,72 @@ Search-EntraGroup -SearchText "legacy apps" -SearchIn Description
 
 ```powershell
 "marketing" | Search-EntraGroup -SearchIn Any -GridView
+```
+
+## Set-EntraGroupDescription
+Update the description of an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
+
+The first positional argument is treated as the group identifier, so you can pass the current group name or its object ID without typing `-GroupName` or `-GroupId`.
+
+**Syntax**
+
+```powershell
+Set-EntraGroupDescription -GroupName <String> -Description <String> [-PassThru]
+Set-EntraGroupDescription -GroupId <String> -Description <String> [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` (`DisplayName`, `Name`) | String | Target group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `Description` | String | New description. Pass an empty string to clear it. | Yes | - |
+| `PassThru` | Switch | Return the updated group object. | No | `False` |
+
+\*Use either `GroupName` or `GroupId`.
+
+**Examples**
+```powershell
+Set-EntraGroupDescription GitLab-Prod -Description "Production GitLab access group"
+```
+
+```powershell
+Set-EntraGroupDescription -GroupName "GitLab-Prod" -Description "Production GitLab access group"
+```
+
+```powershell
+Set-EntraGroupDescription -GroupId "00000000-0000-0000-0000-000000000000" -Description "" -PassThru
+```
+
+## Set-EntraGroupDisplayName
+Update the display name of an Entra group (Graph scopes: `Group.ReadWrite.All`, `Directory.Read.All`).
+
+The first positional argument is treated as the current group identifier, so you can pass the current group name or its object ID without typing `-GroupName` or `-GroupId`.
+
+**Syntax**
+
+```powershell
+Set-EntraGroupDisplayName -GroupName <String> -DisplayName <String> [-PassThru]
+Set-EntraGroupDisplayName -GroupId <String> -DisplayName <String> [-PassThru]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `GroupName` (`CurrentName`, `CurrentDisplayName`) | String | Current group display name. | Yes* | - |
+| `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
+| `DisplayName` | String | New display name for the group. | Yes | - |
+| `PassThru` | Switch | Return the updated group object. | No | `False` |
+
+\*Use either `GroupName` or `GroupId`.
+
+**Examples**
+```powershell
+Set-EntraGroupDisplayName GitLab-Prod -DisplayName "GitLab - Production"
+```
+
+```powershell
+Set-EntraGroupDisplayName -GroupName "GitLab-Prod" -DisplayName "GitLab - Production"
+```
+
+```powershell
+Set-EntraGroupDisplayName -GroupId "00000000-0000-0000-0000-000000000000" -DisplayName "GitLab - Production" -PassThru
 ```
