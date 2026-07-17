@@ -31,7 +31,7 @@ I merely made a few minor tweaks and integrated the rest into the module and thi
 **Syntax**
 
 ```powershell
-Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-IncludeDeployedApps] [-MaxDevices <Int32>] [-OutputCsvPath <String>] [-OutputJsonPath <String>] [-PivotSummary]
+Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [-FilterByType <String>] [-FilterByPlatform <String>] [-OnlySuccessfulInstalls] [-IncludeDeployedApps] [-LastInventory] [-MaxDevices <Int32>] [-OutputCsvPath <String>] [-OutputJsonPath <String>] [-PivotSummary]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -42,6 +42,7 @@ Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [
 | `FilterByPlatform` | String | Device platform filter: `Windows`, `iOS`, `Android`, `macOS`, or `All`. | No | `All` |
 | `OnlySuccessfulInstalls` | Switch | Keep only successful installs when querying deployment status. | No | `False` |
 | `IncludeDeployedApps` | Switch | Also query deployed app device status. | No | `False` |
+| `LastInventory` | Switch | Include the managed device last Intune sync date in the report. | No | `False` |
 | `MaxDevices` | Int32 | Maximum number of devices to process. | No | `0` |
 | `OutputCsvPath` | String | Optional CSV output path. | No | - |
 | `OutputJsonPath` | String | Optional JSON output path. | No | - |
@@ -60,8 +61,39 @@ Export-IntuneAppInventory -ApplicationName "Microsoft*" -IncludeDeployedApps -Fi
 Export-IntuneAppInventory -ApplicationName "Chrome" -MinimumVersion "120.0" -IncludeDeployedApps -PivotSummary
 ```
 
+```powershell
+Export-IntuneAppInventory -ApplicationName "*java*" -FilterByPlatform Windows -LastInventory
+```
+
 :::note
 `FilterByType` can be evaluated against deployed-app data. When `-IncludeDeployedApps` is not used, the report is based on detected apps only and the type filter is ignored.
+When `-FilterByPlatform` narrows the report to a single platform, the `Platform` column is omitted from the report output because it would otherwise repeat the same value on every row.
+`LastInventory` is formatted through Nebula.Core configuration, so its display follows `DateTimeString_Full` and, when configured, `DateTimeTimeZone`.
+:::
+
+## Get-IntuneAppPresence
+Check whether a single Intune-managed device has a matching app installed and return one summary row. This is the quickest way to verify one machine without the full inventory report.
+
+**Syntax**
+
+```powershell
+Get-IntuneAppPresence -DeviceName <String> -ApplicationName <String> [-MinimumVersion <String>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `DeviceName` | String | Intune managed device name to inspect. | Yes | - |
+| `ApplicationName` (`SearchText`, `Name`, `DisplayName`, `Query`, `AppName`) | String | Application name or wildcard pattern to match. | Yes | - |
+| `MinimumVersion` | String | Minimum application version to consider a match. | No | - |
+
+**Examples**
+
+```powershell
+Get-IntuneAppPresence -DeviceName "UE5CG30740PT" -ApplicationName "*java*"
+```
+
+:::tip
+The command returns a single summary object with `Present`, `Version`, `Publisher`, and `LastInventory` fields, so it is better suited for quick spot checks than the full inventory export.
 :::
 
 ## Get-IntuneProfileAssignmentsByGroup

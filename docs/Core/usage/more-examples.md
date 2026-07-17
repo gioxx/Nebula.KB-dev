@@ -76,6 +76,10 @@ Export-MboxStatistics -CsvFolder 'C:\Reports\Mailboxes' -Round -BatchSize 50 -Re
 Export-IntuneAppInventory -ApplicationName 'Microsoft*' -IncludeDeployedApps -FilterByType Win32 -OutputCsvPath 'C:\Reports\apps.csv'
 ```
 
+```powershell
+Export-IntuneAppInventory -ApplicationName '*java*' -FilterByPlatform Windows -LastInventory
+```
+
 ## Create Intune app-based groups
 
 ```powershell

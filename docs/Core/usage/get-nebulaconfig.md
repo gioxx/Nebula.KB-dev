@@ -41,7 +41,7 @@ MachineConfigLoaded : False
 
 Key                   Value
 ---                   -----
-CSV_DefaultLimiter    ;
+CSV_DefaultLimiter    ,
 CSV_Encoding          ISO-8859-15
 CheckUpdatesOnConnect True
 CheckUpdatesIntervalHours 24
@@ -81,14 +81,17 @@ Below is an example of a `settings.psd1` file that you can save in your user fol
 
 ```powershell
 @{
-    CSV_DefaultLimiter  = ";"
+    CSV_DefaultLimiter  = ","
     CSV_Encoding        = 'ISO-8859-15'
     CheckUpdatesOnConnect = $false
     CheckUpdatesIntervalHours = 24
     DateTimeString_Full = 'dd/MM/yyyy HH:mm:ss'
+    DateTimeTimeZone    = 'Eastern Standard Time'
     UsageLocation       = 'IT'
 }
 ```
+
+`DateTimeTimeZone` controls the default time zone used for user-facing timestamps. Nebula.Core ships with `Eastern Standard Time` by default to stay aligned with the module's `UsageLocation = US` baseline. You can override it with a Windows time zone ID such as `W. Europe Standard Time`, or a cross-platform ID like `Europe/Rome` if your environment supports it.
 
 ### Where is the license catalog stored?
 
