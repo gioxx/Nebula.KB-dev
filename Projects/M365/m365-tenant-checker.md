@@ -114,3 +114,6 @@ m365-tenant-checker/
 - Backend uses `requests` with a 5s timeout; network issues return `500`.
 - HTML is served directly by Flask (`/`), so no separate static server is required.
 - Dockerfile currently uses Python **3.15 slim**; pin to an LTS version if needed for production.
+
+## License
+MIT License. See `LICENSE` in the repo. The favicon uses [Twemoji](https://twemoji.twitter.com/) graphics (© 2020 Twitter, Inc and contributors), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).

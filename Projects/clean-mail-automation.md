@@ -223,7 +223,15 @@ clean-mail-automation/
 - `entrypoint.sh` writes cron configuration(s), starts the status server, and executes a first immediate cleanup.
 - `SCHEDULE_DAY=1`, `SCHEDULE_HOUR=1`, `SCHEDULE_MIN=30` means every Monday at 01:30.
 - `--days` (CLI) overrides `CLEAN_DAYS` for that run.
-- Container logs are available with `docker logs email_cleaner`.
+- Container logs are available with `docker logs email_cleaner`, or monitored live via Portainer's container logs UI.
+
+## Customization
+- Set `CLEAN_DAYS` (or pass `--days`) to change the deletion threshold.
+- Adjust `SCHEDULE_DAY`/`SCHEDULE_HOUR`/`SCHEDULE_MIN` for a different cron schedule.
+- Use `MAILBOX_CONFIGS` to clean multiple mailboxes in a single container run.
+
+## Contribution
+Contributions, issues, and feature requests are welcome — fork the repository and submit pull requests.
 
 ## License
 MIT License. See `LICENSE` in the repository.
