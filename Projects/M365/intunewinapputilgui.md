@@ -22,9 +22,11 @@ PowerShell module with a WPF front‑end that wraps Microsoft’s `IntuneWinAppU
 - GUI over all required switches (`-c`, `-s`, `-o`) with browse dialogs.
 - Auto-download and cache of the latest `IntuneWinAppUtil.exe` from Microsoft’s GitHub release.
 - Remembers tool path in `%APPDATA%\IntuneWinAppUtilGUI\config.json`; optional update-check banner.
-- Detects PSAppDeployToolkit usage and proposes installer/output names; sanitizes invalid filename characters.
+- Detects PSAppDeployToolkit usage and proposes setup file/output names, including MSI-backed packages; sanitizes invalid filename characters.
 - Path-length indicators plus final MAX_PATH validation at run time.
-- Optional flags: `-ShowVersion` to display installed/latest module versions, `-ForceUpdateBanner` for testing.
+- Windows-version-safe UI labels (no emoji glyphs) in the WPF interface.
+- In-app **Help** dialog covering command-line switches and keyboard shortcuts.
+- Optional flags: `-ShowVersion` to display installed/latest module versions, `-ForceUpdateBanner` for testing, `-Diag` for startup/shutdown diagnostics (handles, GDI handles, memory).
 
 ## Requirements
 - Windows 10/11.
@@ -49,7 +51,7 @@ Optionally add the module folder to `$env:PSModulePath` for persistence.
 | Field | Required | Notes |
 | --- | :---: | --- |
 | Source Folder (`-c`) | ✅ | Root containing the installer. |
-| Setup File (`-s`) | ✅ | EXE or MSI; auto-suggested when possible. |
+| Setup File (`-s`) | ✅ | EXE or MSI; auto-suggested when possible, including MSI-backed PSAppDeployToolkit packages. |
 | Output Folder (`-o`) | ✅ | Target `.intunewin` location. |
 | IntuneWinAppUtil | ✅\* | Path to the tool or let the GUI download it automatically. |
 | Final Filename | Optional | Output name; invalid chars stripped. |
@@ -75,13 +77,15 @@ IntuneWinAppUtilGUI/
 ```
 
 ## Operational notes
-- `ESC` closes the window; `ENTER` runs packaging.
+- Use the in-app **Help** button to review switches/shortcuts; `ESC` closes the window (after confirmation); `ENTER` runs packaging.
 - `Show-IntuneWinAppUtilGUI -ShowVersion` prints installed/latest module versions.
 - `Show-IntuneWinAppUtilGUI -ForceUpdateBanner` simulates the update banner.
-- Module version in repo: **1.0.7**.
+- `Show-IntuneWinAppUtilGUI -Diag` writes startup/shutdown diagnostics (handles, GDI handles, memory usage).
+- `-Verbose`/`-Debug` are preserved when the GUI relaunches itself in STA mode.
+- Module version in repo: **1.0.9**.
 - UI title reflects the module version (see `UI/UI.xaml`).
 - Reference table of upstream IntuneWinAppUtil releases: `Tools/IntuneWinAppUtilVersions.md`.
-- On Windows 10 or earlier some emojis (✅, 🚀, 🔧) may render as fallback symbols due to font support. Cosmetic only; functionality is unaffected.
+- UI no longer uses emoji glyphs (Windows-version-safe labels instead), so the old Windows 10 emoji-rendering caveat no longer applies.
 
 ## License
 MIT License. See `LICENSE` in the repo.
