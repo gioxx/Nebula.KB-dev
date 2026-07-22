@@ -220,7 +220,7 @@ Get-MboxLastMessageTrace -SourceMailbox 'user@contoso.com' -IncludeTrace
 ```
 
 ## Get-MboxPermission
-List mailbox permissions.
+List mailbox permissions. The output heading also shows the source mailbox `RecipientTypeDetails` value (for example, `SharedMailbox`).
 
 **Syntax**
 
