@@ -110,7 +110,7 @@ Add-EntraGroupUser [-GroupName <String>] [-GroupId <String>] [[-UserIdentifier] 
 | --- | --- | --- | :---: | --- |
 | `GroupName` | String | Target group display name. | Yes* | - |
 | `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `UserIdentifier` | String[] | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `UserIdentifier` | String[] | UPN/display name/object ID, external e-mail for invited guests, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
 | `TreatInputAsId` | Switch | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
 | `PassThru` | Switch | Emit a status object per user. | No | `False` |
 
@@ -376,7 +376,7 @@ Get-EntraGroupUser [[-UserIdentifier] <String>] [-TreatInputAsId] [-GridView]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserIdentifier` | String | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `UserIdentifier` | String | UPN/display name/object ID, external e-mail for invited guests, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
 | `TreatInputAsId` | Switch | Treat the `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
 | `GridView` | Switch | Show details in Out-GridView. | No | `False` |
 
@@ -561,7 +561,7 @@ Remove-EntraGroupUser [-GroupName <String>] [-GroupId <String>] -ClearAll [-Pass
 | --- | --- | --- | :---: | --- |
 | `GroupName` | String | Target group display name. | Yes* | - |
 | `GroupId` | String | Target group object ID (use instead of `GroupName`). | Yes* | - |
-| `UserIdentifier` | String[] | UPN/display name/object ID, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
+| `UserIdentifier` | String[] | UPN/display name/object ID, external e-mail for invited guests, plus short identifiers (alias/SamAccountName/UPN prefix). Pipeline accepted. | Yes | - |
 | `TreatInputAsId` | Switch | Treat every `UserIdentifier` as an object ID (skip name lookup). | No | `False` |
 | `ClearAll` | Switch | Remove all user members from the group (devices and other objects are not removed). Prompts for confirmation. | No | `False` |
 | `PassThru` | Switch | Emit a status object per user. | No | `False` |
@@ -586,7 +586,7 @@ Remove-EntraGroupUser -GroupName "Project Team" -ClearAll -WhatIf
 ```
 
 :::note[User resolution]
-`Add/Get/Remove-EntraGroupUser` now use the shared resolver (`Find-UserRecipient`), so short identifiers are supported in addition to full UPNs and object IDs.
+`Add/Get/Remove-EntraGroupUser` accept the external e-mail address of an invited Entra guest. Tenant UPNs and object IDs keep the direct Microsoft Graph lookup; only a failed direct lookup falls back to the shared resolver (`Find-UserRecipient`) for a Graph-compatible identity.
 :::
 
 ## Search-EntraGroup
