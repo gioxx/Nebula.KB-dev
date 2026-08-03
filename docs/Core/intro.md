@@ -27,6 +27,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 - Configuration: `Get-NebulaConfig`, `Sync-NebulaConfig`.
 - Mailboxes: aliases, permissions, quotas, language, shared mailbox setup, sent-items copy.
 - Groups: export distribution/dynamic/M365 groups, role groups, and memberships.
+- Enterprise Applications: export, import, clone, and diff App Registrations + Service Principals within the same tenant.
 - Licenses: Graph-backed SKU catalog and user/license exports.
 - Quarantine: search, export EML, release/delete in bulk.
 - Statistics: mailbox size/quota exports (CSV or object mode).
