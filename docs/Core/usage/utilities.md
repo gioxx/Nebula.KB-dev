@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 14
 title: "Utilities"
 description: Clipboard helpers for quarantine identities and e-mail address lists.
 hide_title: true

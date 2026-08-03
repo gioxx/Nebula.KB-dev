@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 11
 title: "Security"
 description: Disable devices, block sign-in, edit content filter policies, and revoke sessions via Microsoft Graph.
 hide_title: true

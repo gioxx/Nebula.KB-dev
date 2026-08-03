@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 title: "Groups"
 description: Export distribution/dynamic groups, M365 groups, role groups, and user/device memberships, plus Entra security-group ownership helpers.
 hide_title: true

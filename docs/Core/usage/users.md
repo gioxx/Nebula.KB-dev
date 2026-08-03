@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 13
 title: "Users"
 description: Search and resolve Entra users, including guests and partial identity matches.
 hide_title: true

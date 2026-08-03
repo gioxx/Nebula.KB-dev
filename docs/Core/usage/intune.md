@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: "Intune"
 description: Find Intune configuration profiles assigned to an Entra group.
 hide_title: true

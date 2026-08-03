@@ -1,5 +1,5 @@
 ---
-sidebar_position: 12
+sidebar_position: 5
 title: "Enterprise Applications"
 description: Export, import, clone, and diff Enterprise Applications (App Registration + Service Principal) within the same Entra tenant.
 hide_title: true

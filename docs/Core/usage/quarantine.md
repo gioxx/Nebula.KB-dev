@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 10
 title: "Quarantine"
 description: Search, export, release, or delete Exchange Online quarantine items.
 hide_title: true

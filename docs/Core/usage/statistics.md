@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 12
 title: "Statistics"
 description: Export mailbox statistics for reporting or capacity checks.
 hide_title: true
