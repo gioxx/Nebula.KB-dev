@@ -107,6 +107,10 @@ Copy-UserMsolAccountSku -SourceUserPrincipalName 'user1@contoso.com' -Destinatio
 Copy-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 ```
 
+:::warning[Licenses availability]
+Before assigning, Nebula.Core checks tenant seat availability for each source license. Licenses with no available units are skipped with a warning instead of failing the whole copy; every license that does have availability is still assigned.
+:::
+
 ## Export-MsolAccountSku
 Export all users with assigned licenses to CSV, mapping SKU part numbers to friendly names.
 Use `-Domain` to limit the export to users whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` match the domain.
@@ -252,6 +256,10 @@ Move-UserMsolAccountSku -SourceUserPrincipalName 'user1@contoso.com' -Destinatio
 ```powershell
 Move-UserMsolAccountSku 'user1@contoso.com' 'user2@contoso.com'
 ```
+
+:::warning[Licenses availability]
+Before assigning, Nebula.Core checks tenant seat availability for each source license. A license with no available units is left on the source (not removed) instead of failing the whole move; every license that does have availability is still assigned to the destination and removed from the source.
+:::
 
 ## Remove-UserMsolAccountSku
 Remove licenses from a user by friendly name (resolved via catalog), SKU part number, or SKU ID.
