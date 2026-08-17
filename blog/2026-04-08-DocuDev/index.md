@@ -8,6 +8,8 @@ tags: [nebula, kb, documentation, dev]
 
 If you ever check both [Nebula.KB-dev](https://gioxx.github.io/Nebula.KB-dev) and [kb.gioxx.org](https://kb.gioxx.org), there is one simple rule to keep in mind: the `-dev` documentation is usually the most up to date.
 
+{/* truncate */}
+
 This is not just a technical detail. `Nebula.KB-dev` is a clone of Nebula.KB built to follow the development versions of the various modules, so it usually reflects what will later appear in production releases before the public site does.
 
 In practice, if a Nebula module is about to get new features, fixes, or important changes, the updated documentation is very likely already available on `Nebula.KB-dev` first.

@@ -13,6 +13,16 @@ core:
   permalink: /core
   description: Updates concerning Nebula.Core
 
+documentation:
+  label: Documentation
+  permalink: /documentation
+  description: Updates concerning Nebula documentation
+
+dev:
+  label: Development
+  permalink: /dev
+  description: Updates concerning Nebula development versions
+
 kb:
   label: Nebula.KB
   permalink: /kb

@@ -8,9 +8,11 @@ tags: [nebula, kb, microsoft]
 
 I have re-enabled the internal Docusaurus blog and, starting today, this space will be one of the reference points for Nebula project updates (the main one is and will remain my personal blog, but this is where English translations of those same articles can live, along with micro-updates that may have an impact on end users).
 
+{/* truncate */}
+
 ![Hello World](./472097903_b781a0f4f8_b.jpg)
 
-:::note Credits
+:::note[Credits]
 Original photograph: https://www.flickr.com/photos/oskay/472097903
 :::
 
