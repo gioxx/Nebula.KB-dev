@@ -54,7 +54,7 @@ Connect-EOL -DisableWAM -Device
 ```
 
 ## Connect-Nebula
-One-shot helper that ensures EXO is connected, then (optionally) connects Microsoft Graph.
+One-shot helper that connects Microsoft Graph first and then Exchange Online with WAM disabled. The order and EXO authentication mode are intentional: they let Graph load its dependencies before Exchange Online and avoid the known cross-module assembly and broker conflict. Use `-SkipGraph` when only an EXO session is required and you want the normal EXO WAM flow.
 
 **Syntax**
 
@@ -167,7 +167,7 @@ For real usability checks after long idle periods, prefer `ExchangeOnlineHealthy
 
 ### What happens if Exchange Online auth breaks after a Windows lock or idle period?
 
-Nebula still tries the normal EXO login first, which uses WAM by default starting with `ExchangeOnlineManagement` `3.7.0`. If the broker fails with a WAM/MSAL error, `Connect-EOL` retries automatically with `-DisableWAM`.
+When using `Connect-Nebula`, Microsoft Graph is initialized first and the subsequent EXO login uses `-DisableWAM`, so the Graph/EXO authentication modules do not clash in the same PowerShell process. Direct `Connect-EOL` calls still try the normal WAM-based login first (WAM is the default starting with `ExchangeOnlineManagement` `3.7.0`) and retry with `-DisableWAM` when the broker reports a recognized WAM/MSAL error.
 
 If you want to bypass WAM immediately, use:
 
