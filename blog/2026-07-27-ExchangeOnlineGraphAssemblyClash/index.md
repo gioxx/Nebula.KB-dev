@@ -302,15 +302,16 @@ Only after the clean WAM test succeeds should the `Connect-Nebula` implementatio
 
 Some administrators report a related but distinct symptom after a Graph session is already connected and healthy: running many delegated Graph operations in sequence (for example, 50 license or group changes in a loop) triggers a WAM account-picker prompt on individual operations instead of failing once at connect time. This is not the `WithLogging`/`RuntimeBroker` exception described above — the session connects fine — but it belongs to the same family of problems, since it stems from the WAM broker behaving unreliably once the mixed Exchange Online/Graph authentication assemblies are loaded in the process.
 
-Because this is a broker UX regression rather than a hard failure, the general "new process" and "clean module set" guidance above still applies first. If the prompts persist in an otherwise clean, single-purpose session and you have many delegated Graph operations to run, bypass the WAM broker for Graph entirely for that session:
+`Connect-MgGraph -UseDeviceCode` was tried as a workaround for this friction and **does not reliably help**: in a field test, `Connect-Nebula -GraphDeviceCode` failed with `Authentication timed out after 120 seconds due to inactivity` instead of ever printing a device code, consistent with a WAM broker prompt still being attempted underneath (WAM's own dialog auto-cancels after roughly two minutes of inactivity) and with the [Why retrying does not help](#why-retrying-does-not-help) section already listing device-code as ineffective for this regression. Do not rely on it.
+
+The reliable mitigation is the same one used for the connect-time clash: close **every** PowerShell window (disconnecting sessions in the same process is not enough — the loaded assemblies stay loaded), open a fresh process, and run the normal, WAM-based combined flow:
 
 ```powershell
-Connect-Nebula -GraphDeviceCode
+Import-Module Nebula.Core
+Connect-Nebula
 ```
 
-Device-code authentication does not use the WAM broker, so it does not resurface the account picker per operation. The code is only required once per authentication (Microsoft Graph PowerShell caches the resulting token locally); subsequent calls in the same session reuse it silently.
-
-This is a workaround for the account-picker friction specifically, not a confirmed fix for the connect-time assembly clash — the "switching Graph to device-code authentication" item in [Why retrying does not help](#why-retrying-does-not-help) still applies to that failure mode. Use process isolation and version pinning (below) if you need to resolve the underlying clash itself.
+If the account-picker prompts still resurface per operation in an otherwise clean, single-purpose process, treat it as further field evidence of the same upstream regression and track [msgraph-sdk-powershell issue #3394](https://github.com/microsoftgraph/msgraph-sdk-powershell/issues/3394) rather than working around it with device-code. For unattended or bulk scripted runs, app-only certificate-based Graph authentication (`Connect-MgGraph -ClientId ... -CertificateThumbprint ...`) avoids interactive broker prompts entirely and is a more dependable option than delegated auth for that scenario.
 
 ## Other operational options
 

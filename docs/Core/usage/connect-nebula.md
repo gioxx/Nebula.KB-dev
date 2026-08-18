@@ -79,7 +79,7 @@ Connect-Nebula -GraphScopes 'User.Read.All','Directory.Read.All' -AutoInstall
 ```
 
 :::tip[Repeated Graph auth prompts during bulk operations]
-If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is a related WAM broker friction, not a normal re-auth. Bypass the broker for that session with `Connect-Nebula -GraphDeviceCode`: the device code is only needed once, then the token is reused silently for the rest of the session. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background.
+If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is related WAM broker friction from the known Exchange Online/Graph assembly clash, not a normal re-auth. `-GraphDeviceCode` is **not** a reliable workaround for it — in practice it can fail with `Authentication timed out after 120 seconds due to inactivity` instead of prompting a code. Close every PowerShell window (not just disconnect) and re-run plain `Connect-Nebula` in a fresh process instead. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background and unattended/bulk-script alternatives (app-only certificate auth).
 :::
 
 :::note[Automatic update function]
