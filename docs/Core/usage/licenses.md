@@ -194,6 +194,10 @@ With `-GridView`, Nebula.Core opens a summary grid and, when sample users are re
 Need renewal/expiration or billing profile details? Open the Microsoft 365 Admin Center subscriptions page: https://admin.cloud.microsoft/?#/subscriptions
 :::
 
+:::note[Offline fallback to stale cache]
+If the license catalog file can't be downloaded from GitHub (network issue, GitHub outage, ...) after all retry attempts, Nebula.Core falls back to the last cached copy instead of failing, and prints a warning noting the cache is stale. The command still works, just with a possibly outdated SKU catalog. If no cache exists yet, the error is still raised.
+:::
+
 ## Get-UserMsolAccountSku
 Show licenses assigned to a single user with friendly names.
 

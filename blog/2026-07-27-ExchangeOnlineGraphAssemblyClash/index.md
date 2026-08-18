@@ -298,6 +298,20 @@ Treat the following as evidence that the workaround is still required:
 
 Only after the clean WAM test succeeds should the `Connect-Nebula` implementation be changed to stop forcing `-DisableWAM`. Repeat the test after every update of PowerShell, ExchangeOnlineManagement, Microsoft.Graph, or any `Microsoft.Graph.*` submodule.
 
+## Related friction: repeated account-picker prompts during bulk Graph operations
+
+Some administrators report a related but distinct symptom after a Graph session is already connected and healthy: running many delegated Graph operations in sequence (for example, 50 license or group changes in a loop) triggers a WAM account-picker prompt on individual operations instead of failing once at connect time. This is not the `WithLogging`/`RuntimeBroker` exception described above — the session connects fine — but it belongs to the same family of problems, since it stems from the WAM broker behaving unreliably once the mixed Exchange Online/Graph authentication assemblies are loaded in the process.
+
+Because this is a broker UX regression rather than a hard failure, the general "new process" and "clean module set" guidance above still applies first. If the prompts persist in an otherwise clean, single-purpose session and you have many delegated Graph operations to run, bypass the WAM broker for Graph entirely for that session:
+
+```powershell
+Connect-Nebula -GraphDeviceCode
+```
+
+Device-code authentication does not use the WAM broker, so it does not resurface the account picker per operation. The code is only required once per authentication (Microsoft Graph PowerShell caches the resulting token locally); subsequent calls in the same session reuse it silently.
+
+This is a workaround for the account-picker friction specifically, not a confirmed fix for the connect-time assembly clash — the "switching Graph to device-code authentication" item in [Why retrying does not help](#why-retrying-does-not-help) still applies to that failure mode. Use process isolation and version pinning (below) if you need to resolve the underlying clash itself.
+
 ## Other operational options
 
 If the temporary sequence is not suitable, consider one of these alternatives:
