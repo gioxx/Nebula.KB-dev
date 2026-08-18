@@ -22,6 +22,8 @@ For full details and examples, run `Get-Help <FunctionName> -Detailed` or `-Exam
 Connect to Exchange Online (EXO V3), auto-importing the module and auto-detecting the current user when `-UserPrincipalName` is not supplied.
 By default it tries the standard interactive sign-in flow with WAM. This matters because WAM became the default Exchange Online auth path starting with `ExchangeOnlineManagement` `3.7.0`. If the EXO module fails with a WAM/MSAL broker error, Nebula automatically retries with `-DisableWAM`.
 
+`Connect-ExchangeOnline`'s own cosmetic "Sign in by Web Account Manager (WAM) is enabled by default" notice is hidden on every call unless you pass `-Verbose` — useful when diagnosing WAM/broker issues, otherwise just noise repeated on every sign-in.
+
 **Syntax**
 
 ```powershell
