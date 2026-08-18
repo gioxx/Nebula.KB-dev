@@ -323,6 +323,33 @@ If the temporary sequence is not suitable, consider one of these alternatives:
 
 Do not blindly downgrade production modules. Older combinations may have their own defects or support limitations, and a version pair that works on Windows PowerShell 5.1 may behave differently on PowerShell 7.
 
+### A simpler pin: keep Exchange Online below the WAM-by-default release
+
+Web Account Manager only became the default Exchange Online sign-in path starting with `ExchangeOnlineManagement` **3.7.0**. Below that version, `Connect-ExchangeOnline` never touches the WAM broker at all, so it cannot clash with whatever authentication path Microsoft.Graph.Authentication uses in the same process — regardless of the installed Graph version. This is a smaller, more surgical pin than pulling the whole Graph module family back to an older release, and it avoids app-only/certificate reconfiguration entirely for interactive admin use.
+
+```powershell
+# Close every PowerShell window first.
+Get-InstalledModule ExchangeOnlineManagement -AllVersions | Select-Object Name, Version
+Uninstall-Module ExchangeOnlineManagement -AllVersions -Force
+Install-Module ExchangeOnlineManagement -RequiredVersion 3.6.0 -Scope CurrentUser -Force
+```
+
+Then, in a fresh PowerShell process:
+
+```powershell
+Import-Module Nebula.Core
+Connect-Nebula
+```
+
+With Exchange Online below 3.7.0, `Connect-EOL`/`Connect-Nebula` no longer need `-DisableWAM`: the classic (non-WAM) interactive flow is used automatically, so there is no broker for Graph's authentication stack to conflict with.
+
+Trade-offs to weigh before pinning down:
+
+- You lose any fix or feature shipped in ExchangeOnlineManagement 3.7.0 and later, including the .NET dependency changes tied to 3.10.0+.
+- Microsoft can deprecate older module releases with limited notice; a pin is a maintenance liability, not a permanent fix.
+- It only addresses the Exchange Online side of the clash. If a future Graph release introduces the same kind of default broker behavior, the same class of conflict can reappear from the other direction.
+- This does not fix the upstream regression — it removes one of the two colliding broker paths. Re-test without the pin after every Exchange Online or Graph update, using the same verification steps as [How to verify when WAM can return](#how-to-verify-when-wam-can-return).
+
 ## This is not MC1248389
 
 [MC1248389](/news/MC1248389) concerns the future removal of the `-Credential` parameter from `Connect-ExchangeOnline` and `Connect-IppsSession`. Microsoft postponed that client-side removal to ExchangeOnlineManagement releases starting in **December 2026**.
