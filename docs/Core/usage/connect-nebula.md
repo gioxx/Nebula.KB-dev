@@ -53,6 +53,10 @@ Connect-EOL -DisableWAM
 Connect-EOL -DisableWAM -Device
 ```
 
+:::note[Pinned pre-3.7.2 ExchangeOnlineManagement]
+`-DisableWAM` and `-Device` only exist on `Connect-ExchangeOnline` starting with `ExchangeOnlineManagement` 3.7.2 (the release that made WAM the default). If you've intentionally pinned an older version as a workaround for the Graph/EOL assembly clash, `Connect-EOL` detects this and silently ignores `-DisableWAM` (nothing to disable) or warns and falls back to the standard interactive flow for `-Device`, instead of failing with a parameter-binding error.
+:::
+
 ## Connect-Nebula
 One-shot helper that connects Microsoft Graph first and then Exchange Online with WAM disabled. The order and EXO authentication mode are intentional: they let Graph load its dependencies before Exchange Online and avoid the known cross-module assembly and broker conflict. Use `-SkipGraph` when only an EXO session is required and you want the normal EXO WAM flow.
 
