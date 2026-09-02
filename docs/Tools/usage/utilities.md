@@ -97,16 +97,19 @@ Update-CSVDelimiter -FilePath 'C:\path\to\file.csv' -Encoding 'UTF8' -ToSemicolo
 
 ## Update-PS7
 
-`Update-PS7` runs the official Microsoft helper script to install or upgrade PowerShell 7 via MSI.
+`Update-PS7` runs the official Microsoft helper script to install or upgrade PowerShell 7 via MSI, pinned to the actual latest release.
 
 **Syntax**
 
 ```powershell
-Update-PS7
+Update-PS7 [-Force]
 ```
 
 :::note
-- Downloads `aka.ms/install-powershell.ps1` and executes it with `-UseMSI`.
+- Queries the GitHub Releases API (`api.github.com/repos/PowerShell/PowerShell/releases/latest`) for the latest version, since the `aka.ms/install-powershell.ps1` buildinfo endpoint can lag behind real releases.
+- Passes that version to the installer (`-Version <version> -UseMSI`) so it always fetches the actual latest build instead of whatever the buildinfo endpoint currently returns.
+- If the installed version already matches the latest release, it warns and skips the install; use `-Force` to reinstall anyway.
+- If the GitHub API lookup fails, it falls back to running the installer without pinning a version.
 - Ideal for keeping managed endpoints on the latest stable PowerShell release.
 - The installer UI appears; run from an elevated session for system-wide upgrades.
 - On Windows PowerShell 5.1, the function enforces TLS 1.2 before downloading.
@@ -117,3 +120,7 @@ Update-PS7
 ### Does `Update-PS7` install silently?
 
 No. It downloads and runs the official Microsoft script with the interactive MSI (`-UseMSI`). Use an elevated session for system-wide upgrades.
+
+### What if I'm already on the latest version?
+
+`Update-PS7` compares your running version against the latest GitHub release and skips the install with a warning. Pass `-Force` to reinstall regardless.
