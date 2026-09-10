@@ -1,13 +1,23 @@
 [
   {
-    "id": "mc1248389",
+    "id": "exo-graph-assembly-clash",
     "enabled": true,
     "severity": "high",
-    "title": "Exchange Online: -Credential retirement (July 2026)",
-    "message": "Scripts using -Credential with Connect-ExchangeOnline / Connect-IppsSession may break after module updates released from July 2026.",
-    "href": "/news/MC1248389#impact-on-nebula-modules-starting-july-2026",
-    "publishedAt": "2026-03-11",
-    "startDate": "2026-03-11"
+    "title": "PowerShell regression: Exchange Online and Microsoft Graph assembly clash",
+    "message": "ExchangeOnlineManagement 3.10.x and Microsoft.Graph 2.38.x can fail when authenticating in the same PowerShell 7 session. A temporary connection sequence is available.",
+    "href": "/news/exchange-online-graph-assembly-clash",
+    "publishedAt": "2026-07-27",
+    "startDate": "2026-07-27"
+  },
+  {
+    "id": "mc1248389",
+    "enabled": true,
+    "severity": "medium",
+    "title": "Exchange Online: -Credential retirement moved to December 2026",
+    "message": "Microsoft postponed the client-side removal of -Credential. The retirement now applies to Exchange Online PowerShell module releases starting in December 2026.",
+    "href": "/news/MC1248389#impact-on-nebula-modules-starting-december-2026",
+    "publishedAt": "2026-07-16",
+    "startDate": "2026-07-16"
   },
   {
     "id": "welcome-news",
