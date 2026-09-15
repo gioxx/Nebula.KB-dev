@@ -97,7 +97,7 @@ Update-CSVDelimiter -FilePath 'C:\path\to\file.csv' -Encoding 'UTF8' -ToSemicolo
 
 ## Update-PS7
 
-`Update-PS7` runs the official Microsoft helper script to install or upgrade PowerShell 7 via MSI, pinned to the actual latest release.
+`Update-PS7` runs the official Microsoft helper script to install or upgrade PowerShell 7 via MSI, always fetching the latest stable release.
 
 **Syntax**
 
@@ -106,10 +106,10 @@ Update-PS7 [-Force]
 ```
 
 :::note
-- Queries the GitHub Releases API (`api.github.com/repos/PowerShell/PowerShell/releases/latest`) for the latest version, since the `aka.ms/install-powershell.ps1` buildinfo endpoint can lag behind real releases.
-- Passes that version to the installer (`-Version <version> -UseMSI`) so it always fetches the actual latest build instead of whatever the buildinfo endpoint currently returns.
+- Queries the GitHub Releases API (`api.github.com/repos/PowerShell/PowerShell/releases/latest`) for the latest version, since the `aka.ms/install-powershell.ps1` buildinfo endpoint can lag behind real releases. This is used only to decide whether an install is needed.
+- Runs the installer with `-UseMSI`. The upstream `install-powershell.ps1` script no longer accepts a `-Version` parameter, so it always installs the latest stable release; version pinning isn't possible.
 - If the installed version already matches the latest release, it warns and skips the install; use `-Force` to reinstall anyway.
-- If the GitHub API lookup fails, it falls back to running the installer without pinning a version.
+- If the GitHub API lookup fails, it falls back to running the installer directly.
 - Ideal for keeping managed endpoints on the latest stable PowerShell release.
 - The installer UI appears; run from an elevated session for system-wide upgrades.
 - On Windows PowerShell 5.1, the function enforces TLS 1.2 before downloading.

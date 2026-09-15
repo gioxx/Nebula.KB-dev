@@ -21,6 +21,10 @@ tags:
 
 Requires Microsoft Graph and a cached SKU catalog. For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
+:::note[Primary and custom catalogs]
+SKU part numbers are resolved against the primary catalog (`M365_licenses.json`, sourced from Microsoft's official CSV) first, then against a custom catalog (`M365_licenses_custom.json`) for SKUs Microsoft hasn't published there yet. Both are cached locally and shown by `Get-NebulaConfig`. Lookup also strips invisible Unicode characters (e.g. zero-width spaces occasionally present in `SkuPartNumber` values returned by Graph for some tenants/SKUs) before matching, so those SKUs resolve correctly instead of showing up as unmapped.
+:::
+
 Use `Export-MsolAccountSku` when you need:
 - a full tenant license assignment export
 - a domain-scoped report for a specific mail domain
