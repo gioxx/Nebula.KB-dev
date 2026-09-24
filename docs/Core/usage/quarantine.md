@@ -6,6 +6,7 @@ hide_title: true
 id: quarantine
 tags:
   - Export-QuarantineEml
+  - Get-QuarantineForMailbox
   - Get-QuarantineFrom
   - Get-QuarantineFromDomain
   - Get-QuarantineToRelease
@@ -48,6 +49,33 @@ Export-QuarantineEml -MessageId '20230617142935.F5B74194B266E458@contoso.com' `
 # Export using an Identity (e.g., copied from Get-QuarantineMessage)
 Export-QuarantineEml -Identity 'f3a3dda8-3f78-46c9-332b-08de38f41262\a94e1c02-1d07-7d44-fd2b-482688059fbb' `
   -DestinationFolder C:\Temp\Quarantine
+```
+
+## Get-QuarantineForMailbox
+List quarantined messages for a mailbox, checked across all of its SMTP aliases (primary and secondary), since `Get-QuarantineMessage -RecipientAddress` only matches the exact address a message was sent to. Defaults to a 15-day lookback (`Get-QuarantineMessage` itself defaults to 7).
+
+**Syntax**
+
+```powershell
+Get-QuarantineForMailbox -Identity <String[]> [-IncludeReleased] [-Days <Int>] [-StartReceivedDate <DateTime>] [-EndReceivedDate <DateTime>]
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `Identity` | String[] | Mailbox identity/identities (UPN, alias, email address, etc). Pipeline accepted. | Yes | - |
+| `IncludeReleased` | Switch | Include messages already released. | No | `False` |
+| `Days` | Int | Days back to search (1-30). Ignored if `-StartReceivedDate` is specified. | No | `15` |
+| `StartReceivedDate` | DateTime | Explicit start of the search window. Overrides `-Days`. | No | - |
+| `EndReceivedDate` | DateTime | Explicit end of the search window. | No | Now |
+
+**Example**
+```powershell
+Get-QuarantineForMailbox -Identity 'alice.dileo@geamco.it'
+```
+
+```powershell
+# Look back 30 days instead of the 15-day default
+Get-QuarantineForMailbox -Identity 'alice.dileo@geamco.it' -Days 30
 ```
 
 ## Get-QuarantineFrom
