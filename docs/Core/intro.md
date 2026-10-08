@@ -23,14 +23,19 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 **Nebula.Core** is a PowerShell module that wraps common Microsoft 365 and Exchange Online admin tasks with safer defaults, clear logging, and CSV-friendly outputs. Use it to connect, inspect, export, and remediate faster.
 
 ## What's included
-- Connections: `Connect-Nebula`, `Connect-EOL`, `Disconnect-Nebula` (with health checks and optional Graph).
+- Connections: `Connect-Nebula`, `Connect-EOL`, `Disconnect-Nebula`, `Update-NebulaConnections` (with health checks, session repair, and optional Graph).
 - Configuration: `Get-NebulaConfig`, `Sync-NebulaConfig`.
-- Mailboxes: aliases, permissions, quotas, language, shared mailbox setup, sent-items copy.
-- Groups: export distribution/dynamic/M365 groups, role groups, and memberships.
+- Calendar: out-of-office replies, calendar permission exports, and room details.
+- Compliance: mailbox cutoff-window searches and MRM cleanup.
+- Mailboxes: aliases, permissions, quotas, language, shared mailbox setup, sent-items copy, last-seen activity.
+- Groups: export distribution/dynamic/M365 groups and role groups; manage Entra group members, devices, and owners.
 - Enterprise Applications: export, import, clone, and diff App Registrations + Service Principals within the same tenant.
-- Licenses: Graph-backed SKU catalog and user/license exports.
+- Intune: app inventory, app-based device groups, and profile assignment lookups.
+- Licenses: Graph-backed SKU catalog, license assignment/copy/move, usage location, and user/license exports.
 - Quarantine: search, export EML, release/delete in bulk.
+- Security: disable devices and sign-in, revoke sessions, edit content filter policies.
 - Statistics: mailbox size/quota exports (CSV or object mode).
+- Users: search and remove Entra users.
 - Utilities: clipboard helpers for message IDs and e-mails (`mids`, `fse`).
 
 :::tip[Use Get-Help]
@@ -45,7 +50,7 @@ You can ask questions directly there instead of browsing every section manually.
 :::
 
 ## Requirements
-- PowerShell 5.1+ (or 7+ recommended).
+- PowerShell 5.1+ (or 7+ recommended). Microsoft is phasing out Microsoft Graph PowerShell SDK support for Windows PowerShell 5.1, and SDK v3 targets PowerShell 7 only, so plan to run Nebula.Core on PowerShell 7.
 - Exchange Online Management module for EXO features.
 - Microsoft Graph PowerShell SDK for Graph-backed commands (licenses, M365 groups, etc.).
 - Proper tenant permissions for the actions you run.

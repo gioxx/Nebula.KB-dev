@@ -27,8 +27,8 @@ Copy-OoOMessage -SourceMailbox <String> -DestinationMailbox <String> [-ForceEnab
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | String | Mailbox to read auto-reply configuration from. Pipeline accepted. | Yes | - |
-| `DestinationMailbox` | String | Mailbox to apply the configuration to. | Yes | - |
+| `SourceMailbox` (`Identity`, `Source`) | String | Mailbox to read auto-reply configuration from. Pipeline accepted. | Yes | - |
+| `DestinationMailbox` (`Destination`) | String | Mailbox to apply the configuration to. | Yes | - |
 | `ForceEnable` | Switch | Enable auto-replies immediately on the destination, ignoring source state/schedule. | No | `False` |
 | `PassThru` | Switch | Emit the updated destination configuration. | No | `False` |
 
@@ -49,7 +49,7 @@ Export-CalendarPermission [-SourceMailbox <String[]>] [-SourceDomain <String[]>]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | String[] | Mailboxes to analyze. Pipeline accepted. | No | None (`All` mailboxes if no scope is provided) |
+| `SourceMailbox` (`Identity`, `Mailbox`) | String[] | Mailboxes to analyze. Pipeline accepted. | No | None (`All` mailboxes if no scope is provided) |
 | `SourceDomain` | String[] | Domain filter (includes all matching mailboxes). | No | None (`All` mailboxes if no scope is provided) |
 | `OutputFolder` | String | Destination folder for the CSV report. Defaults to current directory. | No | Current directory |
 | `All` | Switch | Analyze every mailbox (CSV is written). | No | `False` |

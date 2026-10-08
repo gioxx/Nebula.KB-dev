@@ -28,7 +28,7 @@ Export-MboxStatistics [-UserPrincipalName <String>] [-CsvFolder <String>] [-CsvP
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Optional single mailbox identity; when omitted, all mailboxes are exported to CSV. | No | - |
+| `UserPrincipalName` (`User`, `Identity`) | String | Optional single mailbox identity; when omitted, all mailboxes are exported to CSV. | No | - |
 | `CsvFolder` | String | Output folder (for all-mailbox export). | No | Current directory |
 | `CsvPath` | String | Optional CSV file to resume. When omitted with `-Resume`, the most recent matching CSV in `CsvFolder` is used. | No | - |
 | `Round` | Switch | Round quota values up to the nearest integer GB. | No | `False` |
@@ -92,15 +92,15 @@ Return a simplified mailbox statistics view as objects.
 **Syntax**
 
 ```powershell
-Get-MboxStatistics [-UserPrincipalName <String>] [-IncludeArchive] [-IncludeMessageActivity] [-Round]
+Get-MboxStatistics [-UserPrincipalName <String>] [-IncludeArchive] [-IncludeMessageActivity] [-Round <Boolean>]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Optional mailbox identity (also from pipeline, including multiple values); when omitted, all mailboxes are returned. | No | - |
+| `UserPrincipalName` (`User`, `Identity`) | String | Optional mailbox identity (also from pipeline, including multiple values); when omitted, all mailboxes are returned. | No | - |
 | `IncludeArchive` | Switch | Include archive size, quota, and usage info when archive is enabled. | No | `False` |
 | `IncludeMessageActivity` | Switch | Include message activity fields (`LastReceived`, `LastSent`, `OldestItemReceivedDate`, `OldestItemFolderPath`). | No | `False` |
-| `Round` | Switch | Round quota values up to the nearest integer GB. | No | `True` |
+| `Round` | Boolean | Round quota values up to the nearest integer GB. Use `-Round:$false` to keep decimals. | No | `True` |
 
 **Output (main fields)**
 - `DisplayName`

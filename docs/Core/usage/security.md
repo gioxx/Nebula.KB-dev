@@ -27,7 +27,7 @@ Disable-UserDevices -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
+| `UserPrincipalName` (`Identity`, `User`, `UPN`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
 | `PassThru` | Switch | Emit the impacted devices. | No | `False` |
 
 **Example**
@@ -45,7 +45,7 @@ Disable-UserSignIn -UserPrincipalName <String[]> [-PassThru]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` (`Identity`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
+| `UserPrincipalName` (`Identity`, `User`, `UPN`) | String[] | Target users (UPN/object ID/short identifier). Pipeline accepted. | Yes | - |
 | `PassThru` | Switch | Emit the impacted users. | No | `False` |
 
 **Example**
@@ -136,7 +136,7 @@ Revoke-UserSessions [-All] [-UserPrincipalName <String[]>] [-Exclude <String[]>]
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `All` | Switch | Target every user in the tenant. | No | `False` |
-| `UserPrincipalName` (`Identity`) | String[] | Users to target (UPN/object ID/short identifier). Pipeline accepted. | No | - |
+| `UserPrincipalName` (`Identity`, `User`, `UPN`) | String[] | Users to target (UPN/object ID/short identifier). Pipeline accepted. | No | - |
 | `Exclude` | String[] | Users to skip (UPN/object ID/short identifier; applies to both -All and explicit lists). | No | - |
 | `PassThru` | Switch | Emit the impacted users. | No | `False` |
 
@@ -152,4 +152,4 @@ Revoke-UserSessions -All -Exclude user@contoso.com -Confirm:$false
 Notes:
 - Supports `-WhatIf`/`-Confirm` for safety.
 - Skips missing users and reports exclusions.
-- User identities are resolved through `Find-UserRecipient`, so short identifiers are supported.
+- User identities are looked up in Microsoft Graph first (UPN, mail, or object ID, in batches of 20); only identities Graph can't find fall back to `Find-UserRecipient`, so short identifiers are still supported.

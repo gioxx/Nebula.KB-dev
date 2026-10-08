@@ -10,8 +10,10 @@ tags:
   - Export-MsolAccountSku
   - Get-TenantMsolAccountSku
   - Get-UserMsolAccountSku
+  - Get-UserUsageLocation
   - Move-UserMsolAccountSku
   - Remove-UserMsolAccountSku
+  - Set-UserUsageLocation
   - Update-LicenseCatalog
   - Nebula.Core
   - Licenses
@@ -53,10 +55,10 @@ Add-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCat
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
+| `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 **Examples**
 ```powershell
@@ -99,8 +101,8 @@ Copy-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceUserPrincipalName` | String | Source user UPN, object ID, or short identifier. | Yes | - |
-| `DestinationUserPrincipalName` | String | Destination user UPN, object ID, or short identifier. | Yes | - |
+| `SourceUserPrincipalName` (`Source`, `From`) | String | Source user UPN, object ID, or short identifier. | Yes | - |
+| `DestinationUserPrincipalName` (`Destination`, `To`) | String | Destination user UPN, object ID, or short identifier. | Yes | - |
 
 **Example**
 ```powershell
@@ -124,6 +126,7 @@ Use `-License` to limit the export to users who have at least one matching licen
 
 ```powershell
 Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String[]>] [-ForceLicenseCatalogRefresh]
+                      [-BatchSize <Int32>] [-Resume] [-CsvPath <String>] [-MaxConsecutiveErrors <Int32>]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -132,6 +135,10 @@ Export-MsolAccountSku [-CsvFolder <String>] [-Domain <String>] [-License <String
 | `Domain` | String | Limit the export to users in the specified domain. | No | - |
 | `License` | String[] | Limit the export to users who have at least one matching license. Accepts friendly name, SKU part number, or SKU ID. | No | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload the license catalog cache. | No | `False` |
+| `BatchSize` | Int32 | Number of processed users before flushing partial CSV output. | No | `50` |
+| `Resume` | Switch | Resume from the latest matching CSV in the target folder or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume. When omitted, the most recent matching CSV in the target folder is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive user-level failures. | No | `5` |
 
 **Example**
 ```powershell
@@ -156,14 +163,15 @@ List tenant SKUs with resolved names, totals, consumed, available (enabled minus
 **Syntax**
 
 ```powershell
-Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
+Get-TenantMsolAccountSku [-ForceLicenseCatalogRefresh] [-Filter <String>] [-Domain <String>] [-SampleUsers <Int32>] [-IncludeSampleUsers] [-AsTable] [-GridView]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
 | `Filter` | String | Show only licenses whose name or `SkuPartNumber` contains the provided text. | No | - |
-| `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). | No | - |
+| `Domain` | String | Limit sample users to accounts whose `Mail`, `UserPrincipalName`, or `ProxyAddresses` belong to the domain. | No | - |
+| `SampleUsers` | Int32 | Return up to N sample users per license (requires `-Filter`). | No | `5` |
 | `IncludeSampleUsers` | Switch | Return sample users using the default limit of 5 (requires `-Filter`). | No | `False` |
 | `AsTable` | Switch | Format output as a table. | No | `False` |
 | `GridView` | Switch | Show output in a GridView window. | No | `False` |
@@ -218,11 +226,11 @@ Get-UserMsolAccountSku <UserPrincipalName> [-Clipboard] [-CheckAvailability] [-F
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target UPN, object ID, or short identifier. | Yes | - |
+| `UserPrincipalName` (`User`, `UPN`) | String | Target UPN, object ID, or short identifier. | Yes | - |
 | `Clipboard` | Switch | Copy the resolved license names (fallback: `SkuPartNumber`) to the clipboard as `"License1","License2"`. | No | `False` |
 | `CheckAvailability` | Switch | Show tenant available seat counts for the assigned SKUs. | No | `False` |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 **Example**
 ```powershell
@@ -241,6 +249,32 @@ Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -Clipboard
 Get-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -CheckAvailability
 ```
 
+## Get-UserUsageLocation
+Read the current usage location for one or more users, next to the configured Nebula.Core default (`UsageLocation`), so you can compare them at a glance.
+
+**Syntax**
+
+```powershell
+Get-UserUsageLocation -UserPrincipalName <String[]>
+```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | User principal name, object ID, or short identifier. Pipeline accepted. | Yes | - |
+
+**Examples**
+```powershell
+Get-UserUsageLocation -UserPrincipalName user@contoso.com
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Get-UserUsageLocation
+```
+
+```powershell
+Get-MgUser -Filter "endsWith(userPrincipalName,'@contoso.com')" | Get-UserUsageLocation
+```
+
 ## Move-UserMsolAccountSku
 Move all licenses (with disabled plans preserved) from one user to another.
 
@@ -253,8 +287,8 @@ Move-UserMsolAccountSku <SourceUserPrincipalName> <DestinationUserPrincipalName>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceUserPrincipalName` | String | Source user UPN, object ID, or short identifier. | Yes | - |
-| `DestinationUserPrincipalName` | String | Destination user UPN, object ID, or short identifier. | Yes | - |
+| `SourceUserPrincipalName` (`Source`, `From`) | String | Source user UPN, object ID, or short identifier. | Yes | - |
+| `DestinationUserPrincipalName` (`Destination`, `To`) | String | Destination user UPN, object ID, or short identifier. | Yes | - |
 
 **Example**
 ```powershell
@@ -282,10 +316,10 @@ Remove-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicense
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
+| `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
@@ -293,10 +327,10 @@ Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalog
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Target user UPN, object ID, or short identifier. | Yes | - |
+| `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `All` | Switch | Remove all assigned licenses. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Include exception details in error messages. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 **Examples**
 ```powershell
@@ -323,22 +357,44 @@ Remove-UserMsolAccountSku 'user@contoso.com' -License 'Exchange Online (Plan 2)'
 Remove-UserMsolAccountSku -UserPrincipalName 'user@contoso.com' -All
 ```
 
-## Update-LicenseCatalog
-Refresh the local license catalog cache (download SKU mappings).
+## Set-UserUsageLocation
+Update the usage location for one or more users. When `-UsageLocation` is omitted, the configured Nebula.Core default is used (`UsageLocation`, `US` unless overridden). Users already at the target value are skipped. Supports `-WhatIf`/`-Confirm`.
 
 **Syntax**
 
 ```powershell
-Update-LicenseCatalog [-Force]
+Set-UserUsageLocation -UserPrincipalName <String[]> [-UsageLocation <String>] [-PassThru]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `Force` | Switch | Force a refresh even if cache exists. | No | `False` |
+| `UserPrincipalName` (`User`, `UPN`, `Identity`) | String[] | User principal name, object ID, or short identifier. Pipeline accepted. | Yes | - |
+| `UsageLocation` | String | Two-letter country code to set. | No | Configured `UsageLocation` |
+| `PassThru` | Switch | Emit the processed users as objects. | No | `False` |
+
+**Examples**
+```powershell
+Set-UserUsageLocation -UserPrincipalName user@contoso.com -UsageLocation IT
+```
+
+```powershell
+'user1@contoso.com','user2@contoso.com' | Set-UserUsageLocation -UsageLocation DE
+```
+
+## Update-LicenseCatalog
+Refresh the local license catalog cache (download SKU mappings). It always redownloads the primary and custom catalogs, regardless of cache age.
+
+**Syntax**
+
+```powershell
+Update-LicenseCatalog
+```
+
+- No parameters.
 
 **Example**
 ```powershell
-Update-LicenseCatalog -Force
+Update-LicenseCatalog
 ```
 
 ## Questions and answers

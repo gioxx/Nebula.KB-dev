@@ -47,6 +47,7 @@ CheckUpdatesOnConnect True
 CheckUpdatesIntervalHours 24
 DateTimeString_CSV    yyyyMMdd
 DateTimeString_Full   dd/MM/yyyy HH:mm:ss
+DateTimeTimeZone      Eastern Standard Time
 LicenseCacheDays      7
 LicenseCacheDirectory C:\Users\john.doe\.NebulaCore\Cache
 MaxFieldLength        35
@@ -95,4 +96,4 @@ Below is an example of a `settings.psd1` file that you can save in your user fol
 
 ### Where is the license catalog stored?
 
-In the cache directory shown in `UserConfigRoot` (typically `%USERPROFILE%\.NebulaCore\Cache`). `Update-LicenseCatalog` refreshes it; `-ForceLicenseCatalogRefresh` redownloads during reports.
+In the directory shown in `LicenseCacheDirectory` (default `%USERPROFILE%\.NebulaCore\Cache`); cached files are refreshed automatically after `LicenseCacheDays` (default `7`). `Update-LicenseCatalog` refreshes it; `-ForceLicenseCatalogRefresh` redownloads during reports.

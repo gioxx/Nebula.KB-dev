@@ -89,7 +89,7 @@ Get-QuarantineFrom -SenderAddress <String[]> [-IncludeReleased]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SenderAddress` | String[] | Sender address(es). Pipeline accepted. | Yes | - |
+| `SenderAddress` (`Sender`) | String[] | Sender address(es). Pipeline accepted. | Yes | - |
 | `IncludeReleased` | Switch | Include messages already released. | No | `False` |
 
 **Example**
@@ -152,13 +152,17 @@ Unlock-QuarantineFrom -SenderAddress <String[]> [-ReportFalsePositive] [-Confirm
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SenderAddress` | String[] | Sender address(es). Pipeline accepted. | Yes | - |
+| `SenderAddress` (`Sender`) | String[] | Sender address(es). Pipeline accepted. | Yes | - |
 | `ReportFalsePositive` | Switch | Also report as false positive. | No | `False` |
 
 **Example**
 ```powershell
 Unlock-QuarantineFrom -SenderAddress 'user@contoso.com' -ReportFalsePositive -Confirm:$false
 ```
+
+:::tip
+`Unlock-QuarantineFrom` is also available as `rqf` (alias).
+:::
 
 ## Unlock-QuarantineMessageId
 Bulk-release messages for specific message IDs or identities (to all recipients, with optional false-positive report). Confirmation is controlled by `SupportsShouldProcess`; use `-Confirm:$false` when you want to suppress prompts.
@@ -171,7 +175,7 @@ Unlock-QuarantineMessageId [-MessageId <String[]>] [-Identity <String[]>] [-Repo
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `MessageId` | String[] | MessageId values (with/without angle brackets). Pipeline accepted. | One of MessageId/Identity | - |
+| `MessageId` (`Id`) | String[] | MessageId values (with/without angle brackets). Pipeline accepted. | One of MessageId/Identity | - |
 | `Identity` | String[] | Quarantine Identity values (e.g., GUID\GUID). Pipeline accepted. | One of MessageId/Identity | - |
 | `ReportFalsePositive` | Switch | Also report as false positive. | No | `False` |
 

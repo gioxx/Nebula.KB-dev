@@ -33,7 +33,7 @@ Connect-EOL [-UserPrincipalName <String>] [-DelegatedOrganization <String>] [-Di
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | UPN/e-mail for the EXO auth prompt. | No | Current user (`Find-UserConnected`) |
+| `UserPrincipalName` (`UPN`, `User`) | String | UPN/e-mail for the EXO auth prompt. | No | Current user (`Find-UserConnected`) |
 | `DelegatedOrganization` | String | Target customer tenant (delegated admin). | No | - |
 | `DisableWAM` | Switch | Disable Web Account Manager (WAM) for EXO sign-in. | No | `False` |
 | `Device` | Switch | Use device-code auth for EXO. | No | `False` |
@@ -66,7 +66,7 @@ One-shot helper that connects Microsoft Graph first and then Exchange Online wit
 
 ```powershell
 Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTenantId <String>]
-               [-GraphDeviceCode] [-AutoInstall] [-ForceReconnect] [-SkipGraph]
+               [-GraphDeviceCode] [-GraphLoginHint <String>] [-AutoInstall] [-ForceReconnect] [-SkipGraph]
 ```
 
 | Parameter | Type | Description | Required | Default |
@@ -75,6 +75,7 @@ Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTe
 | `GraphScopes` | String[] | Graph delegated scopes to request. | No | `User.Read.All` |
 | `GraphTenantId` | String | Tenant ID/domain for Graph. | No | - |
 | `GraphDeviceCode` | Switch | Use device code instead of browser for Graph. | No | `False` |
+| `GraphLoginHint` | String | UPN passed as `-LoginHint` to `Connect-MgGraph`, so the WAM broker can resolve the target account without repeated prompts. | No | `UserPrincipalName` |
 | `AutoInstall` | Switch | Auto-install missing modules. | No | `False` |
 | `ForceReconnect` | Switch | Skip health checks and reconnect both services. | No | `False` |
 | `SkipGraph` | Switch | Connect only EXO, skip Graph entirely. | No | `False` |
@@ -85,13 +86,13 @@ Connect-Nebula -GraphScopes 'User.Read.All','Directory.Read.All' -AutoInstall
 ```
 
 :::tip[Repeated Graph auth prompts during bulk operations]
-If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is related WAM broker friction from the known Exchange Online/Graph assembly clash, not a normal re-auth. `-GraphDeviceCode` is **not** a reliable workaround for it — in practice it can fail with `Authentication timed out after 120 seconds due to inactivity` instead of prompting a code. Close every PowerShell window (not just disconnect) and re-run plain `Connect-Nebula` in a fresh process instead. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background and unattended/bulk-script alternatives (app-only certificate auth).
+If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is related WAM broker friction from the known Exchange Online/Graph assembly clash, not a normal re-auth. `-GraphDeviceCode` is **not** a reliable workaround for it — in practice it can fail with `Authentication timed out after 120 seconds due to inactivity` instead of prompting a code. Close every PowerShell window (not just disconnect) and re-run plain `Connect-Nebula` in a fresh process instead. Since 1.2.3, Nebula.Core bulk functions send Microsoft Graph requests in batches of 20, so when this happens you get at most one prompt per batch instead of one per item. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background and unattended/bulk-script alternatives (app-only certificate auth).
 :::
 
 :::note[Automatic update function]
 By default, `Connect-Nebula` checks PowerShell Gallery for updates of `Nebula.*` modules plus the meta modules `ExchangeOnlineManagement` and `Microsoft.Graph`, warning only when updates are available.
 Disable it by setting `CheckUpdatesOnConnect = $false` in your `settings.psd1` and then run `Sync-NebulaConfig`.
-You can also throttle checks by setting `CheckUpdatesIntervalHours` (default is `24`).
+You can also throttle checks by setting `CheckUpdatesIntervalHours` (default is `72`).
 Run `Get-NebulaModuleUpdates` anytime to trigger a manual check.
 :::
 
@@ -128,14 +129,22 @@ By default it runs lightweight health probes (unless `-SkipHealthCheck`) which c
 Get-NebulaConnections [-SkipHealthCheck]
 ```
 
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SkipHealthCheck` | Switch | Skip the health probes and only report whether session contexts are present. | No | `False` |
+
 ## Update-NebulaConnections
-Explicit refresh entry point for connection status checks. It runs the same checks as `Get-NebulaConnections` and is preferred when your intent is to "refresh/revive" current sessions.
+Explicit refresh entry point for connection status checks. It runs the same health probes as `Get-NebulaConnections` and, unless `-SkipHealthCheck` is used, reconnects any service found disconnected or unhealthy (stale/broken session), reusing the detected user and, for Microsoft Graph, the scopes already granted to the current session. Use it when your intent is to "refresh/revive" current sessions.
 
 **Syntax**
 
 ```powershell
 Update-NebulaConnections [-SkipHealthCheck]
 ```
+
+| Parameter | Type | Description | Required | Default |
+| --- | --- | --- | :---: | --- |
+| `SkipHealthCheck` | Switch | Skip probe and repair entirely and only report whether session contexts are present. | No | `False` |
 
 **Returned properties**
 

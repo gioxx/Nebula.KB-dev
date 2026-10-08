@@ -207,7 +207,7 @@ Get-MboxLastMessageTrace -SourceMailbox <String> [-IncludeTrace]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | String | Target mailbox/recipient. Pipeline accepted. | No | - |
+| `SourceMailbox` (`Identity`, `UserPrincipalName`, `Mailbox`, `UPN`) | String | Target mailbox/recipient. Pipeline accepted. | Yes | - |
 | `IncludeTrace` | Switch | Include raw message trace objects in the output. | No | `False` |
 
 **Example**
@@ -225,12 +225,13 @@ List mailbox permissions. The output heading also shows the source mailbox `Reci
 **Syntax**
 
 ```powershell
-Get-MboxPermission -Identity <String>
+Get-MboxPermission -SourceMailbox <String> [-IncludeSummary]
 ```
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `Identity` | String | Target mailbox. | Yes | - |
+| `SourceMailbox` (`Identity`) | String | Mailbox identity to inspect. Pipeline accepted. | Yes | - |
+| `IncludeSummary` | Switch | Display a short summary of counts. | No | `False` |
 
 **Examples**
 ```powershell
@@ -288,7 +289,7 @@ Get-UserLastSeen -User <String>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `User` (`Identity`, `UserPrincipalName`) | String | Target mailbox identity. Pipeline accepted. | No | - |
+| `User` (`Identity`, `UserPrincipalName`) | String | Target mailbox identity. Pipeline accepted. | Yes | - |
 
 **Example**
 ```powershell
@@ -297,7 +298,8 @@ Get-UserLastSeen -User 'user@contoso.com'
 
 Notes:
 - Requires Exchange Online connection. Graph sign-in logs are included when `AuditLog.Read.All` + `Directory.Read.All` scopes are available.
-- Output includes `LastUserActionTime`, `LastInteractiveSignIn`, `LastSeen`, and the `Source` used.
+- Output includes `LastUserActionTime`, `LastInteractiveSignIn`, `LastSeen`, and the `Source` used. `LastInteractiveSignIn` is returned in UTC, as provided by Microsoft Graph.
+- When mailboxes are piped in, sign-in logs are read in batches of 20 per Graph request and results are emitted in the same order.
 
 ## New-SharedMailbox
 Create a shared mailbox.
@@ -406,7 +408,7 @@ Set-MboxRulesQuota -SourceMailbox <String[]>
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SourceMailbox` (`Identity`) | String[] | Target mailbox(es). Pipeline accepted. | No | - |
+| `SourceMailbox` (`Identity`) | String[] | Target mailbox(es). Pipeline accepted. | Yes | - |
 
 **Example**
 ```powershell

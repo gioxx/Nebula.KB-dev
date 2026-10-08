@@ -47,6 +47,10 @@ Export-IntuneAppInventory -ApplicationName <String> [-MinimumVersion <String>] [
 | `OutputCsvPath` | String | Optional CSV output path. | No | - |
 | `OutputJsonPath` | String | Optional JSON output path. | No | - |
 | `PivotSummary` | Switch | Print a per-app summary after the report is built. | No | `False` |
+| `BatchSize` | Int32 | Number of rows to flush at a time when writing CSV output. | No | `25` |
+| `Resume` | Switch | Resume CSV export from the latest matching CSV or from `-CsvPath`. | No | `False` |
+| `CsvPath` | String | Explicit CSV file to resume or export to. When omitted, a default file is used. | No | - |
+| `MaxConsecutiveErrors` | Int32 | Stop after this many consecutive device-level failures. | No | `5` |
 
 **Examples**
 ```powershell
@@ -117,7 +121,7 @@ Get-IntuneProfileAssignmentsByGroup [-GroupId <String>] [-ProfileName <String>] 
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `GroupName` | String | Target Entra group display name. Pipeline accepted. | Yes* | - |
+| `GroupName` (`Group`, `DisplayName`, `Name`, `Identity`) | String | Target Entra group display name. Pipeline accepted. | Yes* | - |
 | `GroupId` | String | Target Entra group object ID (use instead of `GroupName`). | Yes* | - |
 | `ProfileName` | String | Optional filter for profile or app display name. | No | - |
 | `ProfileId` | String | Optional filter for a specific Intune object ID. | No | - |
@@ -238,6 +242,8 @@ New-IntuneAppBasedGroup -ApplicationName "*" -FilterByType Win32 -DryRun
 
 :::note
 The command creates Entra security groups and adds devices by resolving Intune-managed devices back to their corresponding Entra device objects. When `-GroupName` is supplied, it overrides generated prefix and suffix values and collapses all matches into a single group target.
+
+Devices are added one reference at a time inside Microsoft Graph batches, so a device that is already a member is reported without failing the rest. With `-UpdateExisting`, no members are removed from a group when Entra device resolution fails or is incomplete, and a target is skipped (not re-created) when the lookup of the existing group fails.
 :::
 
 ## Search-IntuneProfileLocation

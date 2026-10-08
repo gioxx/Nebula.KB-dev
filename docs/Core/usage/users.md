@@ -6,7 +6,6 @@ hide_title: true
 id: users
 tags:
   - Find-UserConnected
-  - Find-UserRecipient
   - Search-EntraUser
   - Remove-EntraUser
   - Nebula.Core
@@ -33,7 +32,7 @@ Search-EntraUser -SearchText <String> [-SearchIn <String>] [-IndexOnly] [-Detail
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `SearchText` | String | Text to search in display name, UPN, and/or mail. Pipeline accepted. | Yes | - |
+| `SearchText` (`Search`, `Query`, `Text`, `Name`, `DisplayName`, `UserPrincipalName`, `Mail`) | String | Text to search in display name, UPN, and/or mail. Pipeline accepted. | Yes | - |
 | `SearchIn` | String | Search target: DisplayName, UserPrincipalName, Mail, Any. | No | `Any` |
 | `IndexOnly` | Switch | Use Graph indexed search only. Faster, but may miss guest fragments and other partial matches. | No | `False` |
 | `Detailed` | Switch | Show match source, guest fragment, and user metadata columns. | No | `False` |
@@ -69,7 +68,7 @@ Remove-EntraUser -UserPrincipalName <String> [-PassThru] [-WhatIf] [-Confirm]
 
 | Parameter | Type | Description | Required | Default |
 | --- | --- | --- | :---: | --- |
-| `UserPrincipalName` | String | Exact user principal name to remove. Pipeline accepted. | Yes | - |
+| `UserPrincipalName` (`UPN`, `Identity`) | String | Exact user principal name to remove. Pipeline accepted. | Yes | - |
 | `PassThru` | Switch | Return the removed user details after deletion. | No | `False` |
 
 **Examples**
