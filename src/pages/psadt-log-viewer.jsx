@@ -308,14 +308,43 @@ export default function PsadtLogViewerPage() {
     const [filterText, setFilterText] = useState('');
     const [fileInfo, setFileInfo] = useState('');
     const [expandedMessages, setExpandedMessages] = useState({});
+    const [parseError, setParseError] = useState('');
 
     const tableWrapperRef = useRef(null);
 
     const filteredEntries = filterEntries(entries, filterLevel, filterComponent, filterText);
     const summary = computeSummary(entries);
 
+    function runParse(content, sourceName) {
+        const source = sourceName ? `"${sourceName}"` : 'The pasted text';
+
+        if (!content.trim()) {
+            setParseError(sourceName
+                ? `${source} is empty.`
+                : 'Nothing to parse: paste a PSADT log or choose a log file first.');
+            setEntries([]);
+            setComponents([]);
+            return;
+        }
+
+        const result = parseLogText(content);
+        setEntries(result.entries);
+        setComponents(result.components);
+        setFilterComponent('all');
+        setExpandedMessages({});
+
+        if (!result.entries.length) {
+            setParseError(content.includes('\u0000')
+                ? `${source} looks like a binary file, not a text log. Please choose a PSADT / CMTrace .log file.`
+                : `${source} does not contain any PSADT / CMTrace log entries. Expected lines like <![LOG[message]LOG]!><time="..." date="..." component="..." type="1" ...>. Make sure you selected the right file.`);
+        } else {
+            setParseError('');
+        }
+    }
+
     function handleFileSelect(e) {
-        const file = e.target.files?.[0];
+        const input = e.target;
+        const file = input.files?.[0];
         if (!file) return;
 
         const reader = new FileReader();
@@ -325,21 +354,22 @@ export default function PsadtLogViewerPage() {
             setFileInfo(`Loaded file: ${file.name} (${file.size} bytes)`);
 
             // Auto-parse when loading a file
-            const result = parseLogText(content);
-            setEntries(result.entries);
-            setComponents(result.components);
-            setFilterComponent('all');
-            setExpandedMessages({});
+            runParse(content, file.name);
+        };
+        reader.onerror = () => {
+            setEntries([]);
+            setComponents([]);
+            setFileInfo('');
+            setParseError(`Could not read "${file.name}". The file may be locked, too large or not a text file.`);
         };
         reader.readAsText(file);
+
+        // Allow re-selecting the same file after a failed attempt
+        input.value = '';
     }
 
     function handleParseClick() {
-        const result = parseLogText(rawText);
-        setEntries(result.entries);
-        setComponents(result.components);
-        setFilterComponent('all');
-        setExpandedMessages({});
+        runParse(rawText, '');
     }
 
     function toggleExpandMessage(id) {
@@ -428,12 +458,12 @@ export default function PsadtLogViewerPage() {
                     </div>
                 </div>
 
-                <p className="margin-bottom--md" style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
+                <div className="margin-bottom--md" style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
                     <Admonition type="danger" title="Data Privacy">
                         Everything stays in your browser; no files are uploaded or stored on the server.<br/>
                         All analysis is performed by your browser.
                     </Admonition>
-                </p>
+                </div>
 
                 {/* Upload + Parse */}
                 <div className="margin-bottom--md">
@@ -483,6 +513,14 @@ export default function PsadtLogViewerPage() {
                     value={rawText}
                     onChange={(e) => setRawText(e.target.value)}
                 />
+
+                {parseError && (
+                    <div className="margin-top--md" role="alert">
+                        <Admonition type="warning" title="Unable to parse log">
+                            {parseError}
+                        </Admonition>
+                    </div>
+                )}
 
                 {/* Summary + filters + status only if we have entries */}
                 {entries.length > 0 && (

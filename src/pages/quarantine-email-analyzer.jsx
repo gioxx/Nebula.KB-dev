@@ -507,12 +507,12 @@ export default function QuarantineEmailAnalyzer() {
                         </p>
                     </div>
                 </div>
-                <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
+                <div style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
                     <Admonition type="danger" title="Data Privacy">
                         Everything stays in your browser; no files are uploaded or stored on the server.<br/>
                         All analysis is performed by your browser.
                     </Admonition>
-                </p>
+                </div>
 
                 <div className="margin-bottom--sm">
                     <label className="button button--secondary button--sm" style={{ cursor: 'pointer', marginRight: '0.5rem' }}>
@@ -679,12 +679,12 @@ export default function QuarantineEmailAnalyzer() {
                         <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '-0.35rem' }}>
                             Righe con domini consumer comuni (es. gmail.com, outlook.com) sono evidenziate per valutare rapidamente l&apos;uso di &quot;Exclude Domain&quot;.
                         </p>
-                        <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '-0.35rem' }}>
+                        <div style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '-0.35rem' }}>
                             <Admonition type="tip">
                                 Click column headers to sort (A-Z / Z-A / none).<br/>
                                 If you deselect the flag "Frequent", rows marked as Frequent are always hidden even if they have other flags.
                             </Admonition>
-                        </p>
+                        </div>
                         <div className="margin-top--sm margin-bottom--sm" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <button
                                 type="button"

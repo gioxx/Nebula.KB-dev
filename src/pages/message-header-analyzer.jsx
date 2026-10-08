@@ -541,12 +541,12 @@ export default function MessageHeaderAnalyzer() {
                         </p>
                     </div>
                 </div>
-                <p style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
+                <div style={{ fontSize: '.85rem', color: 'var(--ifm-color-secondary-text)', marginTop: '1rem' }}>
                     <Admonition type="danger" title="Data Privacy">
                         Everything stays in your browser; no files are uploaded or stored on the server.<br/>
                         All analysis is performed by your browser.
                     </Admonition>
-                </p>
+                </div>
 
                 <div className="mha-layout">
                     <div className="mha-actions">
