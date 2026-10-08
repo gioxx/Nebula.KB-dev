@@ -17,7 +17,7 @@ The bug is in PowerShell itself, not in Nebula: a plain `Get-Process | Out-GridV
 {/* truncate */}
 
 :::danger[Current status — October 8, 2026]
-The upstream report, [PowerShell/PowerShell issue #27994](https://github.com/PowerShell/PowerShell/issues/27994), is still open and no fixed PowerShell release has been confirmed yet. Starting with **Nebula.Core 1.2.3**, Nebula detects PowerShell 7.6.6 and no longer calls `Out-GridView` there. On older Nebula.Core versions, follow the workarounds below.
+The upstream report, [PowerShell/PowerShell issue #27994](https://github.com/PowerShell/PowerShell/issues/27994), is still open and no fixed PowerShell release has been confirmed yet. Starting with **Nebula.Core 1.3.0**, Nebula detects PowerShell 7.6.6 and no longer calls `Out-GridView` there. On older Nebula.Core versions, follow the workarounds below.
 :::
 
 ## Am I affected?
@@ -48,9 +48,9 @@ Any command that shows its results with `-GridView` freezes on 7.6.6:
 
 Commands run without `-GridView` are not affected.
 
-## What Nebula.Core 1.2.3 changes
+## What Nebula.Core 1.3.0 changes
 
-Starting with Nebula.Core 1.2.3, every `-GridView` goes through one internal check. On PowerShell 7.6.6:
+Starting with Nebula.Core 1.3.0, every `-GridView` goes through one internal check. On PowerShell 7.6.6:
 
 - Nebula prints a warning pointing to the upstream issue and **writes the results to the console** instead of opening the grid, so the command completes and you still get your data (you can pipe it to `Export-Csv`, `Format-Table`, and so on).
 - `Get-QuarantineToRelease -GridView` normally lets you **select** which messages to release or delete. Since the selection grid can't be shown, Nebula treats it as **nothing selected**. Combined with `-ReleaseSelected` or `-DeleteSelected`, this means no message is released or deleted. Without this safeguard, a broken selection could have fallen back to acting on every quarantined message in the interval.
@@ -80,7 +80,7 @@ If a session is already frozen, close the window (or end the `pwsh` process) and
 
 ## Quarantine: be careful with older versions
 
-On Nebula.Core versions before 1.2.3, `Get-QuarantineToRelease -GridView -ReleaseSelected` (or `-DeleteSelected`) freezes before any message is processed, so no message is released or deleted by mistake. The risk is a different one: if you end up removing `-GridView` to get the command to finish, there is no selection step any more, and `-ReleaseSelected`/`-DeleteSelected` apply to **every** message in the interval (each one still asks for confirmation unless you pass `-Confirm:$false`). On 7.6.6, run the command without `-ReleaseSelected`/`-DeleteSelected` to review the list first, then release individual messages with `Unlock-QuarantineMessageId`, or do the selection from Windows PowerShell 5.1.
+On Nebula.Core versions before 1.3.0, `Get-QuarantineToRelease -GridView -ReleaseSelected` (or `-DeleteSelected`) freezes before any message is processed, so no message is released or deleted by mistake. The risk is a different one: if you end up removing `-GridView` to get the command to finish, there is no selection step any more, and `-ReleaseSelected`/`-DeleteSelected` apply to **every** message in the interval (each one still asks for confirmation unless you pass `-Confirm:$false`). On 7.6.6, run the command without `-ReleaseSelected`/`-DeleteSelected` to review the list first, then release individual messages with `Unlock-QuarantineMessageId`, or do the selection from Windows PowerShell 5.1.
 
 ## How to follow the issue
 
