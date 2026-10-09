@@ -243,7 +243,7 @@ New-IntuneAppBasedGroup -ApplicationName "*" -FilterByType Win32 -DryRun
 :::note
 The command creates Entra security groups and adds devices by resolving Intune-managed devices back to their corresponding Entra device objects. When `-GroupName` is supplied, it overrides generated prefix and suffix values and collapses all matches into a single group target.
 
-Devices are added one reference at a time inside Microsoft Graph batches, so a device that is already a member is reported without failing the rest. With `-UpdateExisting`, no members are removed from a group when Entra device resolution fails or is incomplete, and a target is skipped (not re-created) when the lookup of the existing group fails.
+Devices are added one reference at a time inside Microsoft Graph batches, so a device that is already a member is reported without failing the rest. With `-UpdateExisting`, no members are removed from a group when Entra device resolution fails or is incomplete (including a matching device with no Azure AD device ID or no Entra device), and a target is skipped (not re-created) when the lookup of the existing group fails.
 :::
 
 ## Search-IntuneProfileLocation

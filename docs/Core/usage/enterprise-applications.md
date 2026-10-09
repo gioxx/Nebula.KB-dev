@@ -18,12 +18,24 @@ tags:
 
 # Enterprise Applications
 
-Requires Microsoft Graph (`Application.ReadWrite.All`, `Directory.Read.All` for write operations; `Application.Read.All` is enough for `Compare-EnterpriseApplication` when comparing two files). For full details and examples, run `Get-Help <FunctionName> -Detailed`.
+Requires Microsoft Graph (`Application.ReadWrite.All`, `Directory.Read.All` for write operations, plus `AppRoleAssignment.ReadWrite.All` when `-IncludeAppRoleAssignments` is used; `Application.Read.All` is enough for `Compare-EnterpriseApplication` when comparing two files). For full details and examples, run `Get-Help <FunctionName> -Detailed`.
 
 These four cmdlets let you clone or diff an Enterprise Application (an Entra Application/App Registration plus its Service Principal) between environments in the **same tenant** — for example, building a production app from a tested one, or the other way around.
 
 :::info[What is/isn't copied]
-- Copied: display name, sign-in audience, identifier URIs, notes, tags, redirect URIs (Web/SPA/public client), required resource access (API permissions), app roles, exposed API scopes, owners, and — only when requested — App Role Assignments.
+These cmdlets copy a fixed set of settings, listed below. Anything not listed is not copied: check it on the destination after cloning.
+
+| Object | Copied settings |
+| --- | --- |
+| Application | display name, sign-in audience, notes, tags, fallback public client, redirect URIs (Web, SPA, public client), Web home page and logout URLs, implicit grant settings, required resource access (API permissions), app roles, group membership claims, optional claims |
+| Exposed API | permission scopes, pre-authorized client applications, known client applications, requested access token version, mapped claims |
+| Service Principal | tags, homepage, "Assignment required", enabled state |
+| Owners | owners of the application and of the Service Principal |
+| App Role Assignments | users and groups assigned to the app, only with `-IncludeAppRoleAssignments` |
+
+- Added, never removed: owners and App Role Assignments. Those the destination already has and the source doesn't are kept, so an environment's own owners stay in place; `Compare-EnterpriseApplication` still lists them as differences.
+- Not supported: SAML and password-based single sign-on. Their signing certificates and SSO settings are not copied; Nebula.Core warns when the source uses them, and you must configure single sign-on on the destination yourself.
+- Not copied: identifier URIs (Application ID URI), because they must be unique in the tenant. Nebula.Core warns with the source value so you can set a new one on the destination.
 - Never copied: client secrets and certificates. Microsoft Graph never returns their values, so Nebula.Core can only capture and report their metadata (display name, key ID, expiry). You must create new credentials on the destination app yourself after cloning it.
 :::
 
@@ -57,7 +69,7 @@ Export-EnterpriseApplication -ApplicationName "Contoso Test App" -OutputPath .\c
 ```
 
 ## Import-EnterpriseApplication
-Create or update an Enterprise Application from a JSON snapshot file produced by `Export-EnterpriseApplication`. If no app with `-TargetDisplayName` exists it is created; if it exists, it is updated in place.
+Create or update an Enterprise Application from a JSON snapshot file produced by `Export-EnterpriseApplication`. If no app with `-TargetDisplayName` exists it is created; if it exists, it is updated in place. The file must be a complete version 1 snapshot: a file from another tool, a partial file or another schema version is refused before anything is changed.
 
 **Syntax**
 

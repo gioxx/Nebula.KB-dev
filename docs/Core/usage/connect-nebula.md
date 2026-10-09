@@ -75,7 +75,7 @@ Connect-Nebula [-UserPrincipalName <String>] [-GraphScopes <String[]>] [-GraphTe
 | `GraphScopes` | String[] | Graph delegated scopes to request. | No | `User.Read.All` |
 | `GraphTenantId` | String | Tenant ID/domain for Graph. | No | - |
 | `GraphDeviceCode` | Switch | Use device code instead of browser for Graph. | No | `False` |
-| `GraphLoginHint` | String | UPN passed as `-LoginHint` to `Connect-MgGraph`, so the WAM broker can resolve the target account without repeated prompts. | No | `UserPrincipalName` |
+| `GraphLoginHint` | String | UPN passed as `-LoginHint` to `Connect-MgGraph`, so the WAM broker can resolve the target account without repeated prompts. Without it and without `-UserPrincipalName`, an active Graph session keeps its own account; otherwise the Windows identity is used. Needs Microsoft.Graph.Authentication 2.39.0 or later; older versions sign in without the hint. | No | `UserPrincipalName` |
 | `AutoInstall` | Switch | Auto-install missing modules. | No | `False` |
 | `ForceReconnect` | Switch | Skip health checks and reconnect both services. | No | `False` |
 | `SkipGraph` | Switch | Connect only EXO, skip Graph entirely. | No | `False` |
@@ -86,7 +86,7 @@ Connect-Nebula -GraphScopes 'User.Read.All','Directory.Read.All' -AutoInstall
 ```
 
 :::tip[Repeated Graph auth prompts during bulk operations]
-If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is related WAM broker friction from the known Exchange Online/Graph assembly clash, not a normal re-auth. `-GraphDeviceCode` is **not** a reliable workaround for it — in practice it can fail with `Authentication timed out after 120 seconds due to inactivity` instead of prompting a code. Close every PowerShell window (not just disconnect) and re-run plain `Connect-Nebula` in a fresh process instead. Since 1.2.3, Nebula.Core bulk functions send Microsoft Graph requests in batches of 20, so when this happens you get at most one prompt per batch instead of one per item. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background and unattended/bulk-script alternatives (app-only certificate auth).
+If a healthy, already-connected Graph session keeps popping a WAM account-picker on individual delegated Graph operations (for example, running many license or group changes in a loop), this is related WAM broker friction from the known Exchange Online/Graph assembly clash, not a normal re-auth. `-GraphDeviceCode` is **not** a reliable workaround for it — in practice it can fail with `Authentication timed out after 120 seconds due to inactivity` instead of prompting a code. Close every PowerShell window (not just disconnect) and re-run plain `Connect-Nebula` in a fresh process instead. Since 1.3.0, Nebula.Core bulk functions send Microsoft Graph requests in batches of 20, so when this happens you get at most one prompt per batch instead of one per item. See [Exchange Online and Microsoft Graph PowerShell assembly clash](https://kb.gioxx.org/news/exchange-online-graph-assembly-clash) for background and unattended/bulk-script alternatives (app-only certificate auth).
 :::
 
 :::note[Automatic update function]
@@ -134,7 +134,7 @@ Get-NebulaConnections [-SkipHealthCheck]
 | `SkipHealthCheck` | Switch | Skip the health probes and only report whether session contexts are present. | No | `False` |
 
 ## Update-NebulaConnections
-Explicit refresh entry point for connection status checks. It runs the same health probes as `Get-NebulaConnections` and, unless `-SkipHealthCheck` is used, reconnects any service found disconnected or unhealthy (stale/broken session), reusing the detected user and, for Microsoft Graph, the scopes already granted to the current session. Use it when your intent is to "refresh/revive" current sessions.
+Explicit refresh entry point for connection status checks. It runs the same health probes as `Get-NebulaConnections` and, unless `-SkipHealthCheck` is used, reconnects any service found disconnected or unhealthy (stale/broken session), reusing the account each session already uses (falling back to the detected Windows identity when there is no session) and, for Microsoft Graph, the scopes already granted to the current session. Use it when your intent is to "refresh/revive" current sessions.
 
 **Syntax**
 

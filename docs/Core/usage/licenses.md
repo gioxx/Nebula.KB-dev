@@ -58,7 +58,9 @@ Add-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicenseCat
 | `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.3.0 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
+
+Licenses the user already has are skipped with a warning: they don't use a seat, and the service plans disabled for that user stay disabled.
 
 **Examples**
 ```powershell
@@ -230,7 +232,7 @@ Get-UserMsolAccountSku <UserPrincipalName> [-Clipboard] [-CheckAvailability] [-F
 | `Clipboard` | Switch | Copy the resolved license names (fallback: `SkuPartNumber`) to the clipboard as `"License1","License2"`. | No | `False` |
 | `CheckAvailability` | Switch | Show tenant available seat counts for the assigned SKUs. | No | `False` |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.3.0 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 **Example**
 ```powershell
@@ -319,7 +321,7 @@ Remove-UserMsolAccountSku <UserPrincipalName> -License <String[]> [-ForceLicense
 | `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `License` | String[] | Friendly name, SKU part number, or SKU ID. Accepts multiple values. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.3.0 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 ```powershell
 Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalogRefresh] [-ShowErrorDetails]
@@ -330,7 +332,7 @@ Remove-UserMsolAccountSku -UserPrincipalName <String> -All [-ForceLicenseCatalog
 | `UserPrincipalName` (`User`, `UPN`) | String | Target user UPN, object ID, or short identifier. | Yes | - |
 | `All` | Switch | Remove all assigned licenses. | Yes | - |
 | `ForceLicenseCatalogRefresh` | Switch | Redownload license catalog cache. | No | `False` |
-| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.2.3 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
+| `ShowErrorDetails` | Switch | Kept for compatibility. Since 1.3.0 error messages always include the Microsoft Graph error detail, so this switch has no effect. | No | `False` |
 
 **Examples**
 ```powershell
