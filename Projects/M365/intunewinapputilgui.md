@@ -19,9 +19,10 @@ Besides filling in the `-c`, `-s` and `-o` switches for you, the GUI downloads a
 
 ![IntuneWinAppUtil GUI main window](https://raw.githubusercontent.com/gioxx/IntuneWinAppUtilGUI/main/Assets/screenshot.png)
 
-:::tip What's new in 1.1.0
-- The **Setup File** field accepts any file type, not only EXE and MSI: PowerShell (`.ps1`), `.bat` and `.cmd` scripts, MSIX packages and so on. See [Packaging scripts and other file types](#packaging-scripts-and-other-file-types).
-- Typing in the **Source Folder** field no longer lags: the folder scan used for auto-detection now waits until you stop typing and runs in the background.
+:::tip What's new in 1.1.x
+- **1.1.2**: if one of the module's scripts fails to load, the import now stops with an error naming the file, instead of carrying on with functions missing.
+- **1.1.1**: the module works again in Windows PowerShell 5.1, the PowerShell built into Windows (versions 1.0.7 to 1.1.0 failed to import there). If you use 5.1, update with `Update-Module IntuneWinAppUtilGUI`.
+- **1.1.0**: the **Setup File** field accepts any file type, not only EXE and MSI: PowerShell (`.ps1`), `.bat` and `.cmd` scripts, MSIX packages and so on. See [Packaging scripts and other file types](#packaging-scripts-and-other-file-types). Typing in the **Source Folder** field no longer lags: the folder scan used for auto-detection now waits until you stop typing and runs in the background.
 :::
 
 ## Demo and repository
@@ -44,7 +45,7 @@ Besides filling in the `-c`, `-s` and `-o` switches for you, the GUI downloads a
 
 ## Requirements
 - Windows 10 or later (Windows 11 recommended).
-- PowerShell 7 recommended; Windows PowerShell 5.1 is the minimum declared by the module manifest.
+- PowerShell 7 recommended; Windows PowerShell 5.1 is supported (use version 1.1.1 or later).
 - .NET Framework 4.7.2 or later (usually already present on supported systems).
 - Internet access to GitHub only if you let the GUI download `IntuneWinAppUtil.exe`, and to the PowerShell Gallery for the update check.
 
